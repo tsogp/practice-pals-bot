@@ -1,36 +1,49 @@
 import telebot
 import phrases_ru as phrases
+import constants
 
 import bottoken
+from database import Database
 
 bot = telebot.TeleBot(bottoken.TOKEN, parse_mode=None)
 
 
-def main_menu(chat_id):
-    """Main bot_menu"""
+def show_main_menu(chat_id: int):
+    """Main bot menu"""
     menu = telebot.types.InlineKeyboardMarkup()  # Create inline-keyboard
     # Add all functions into menu
     for i in range(len(phrases.main_menu_list)):
         menu.add(telebot.types.InlineKeyboardButton(
             text=phrases.main_menu_list[i],
-            callback_data=f'main_menu_{i + 1}'))
+            callback_data=constants.MAIN_MENU_PREFIX + str(i)))
 
     bot.send_message(chat_id, text=phrases.main_menu_title, reply_markup=menu)
 
 
-@bot.message_handler(commands=['menu'])
-def menu(message):
+@bot.message_handler(commands=['main_menu'])
+def main_menu(message):
     """Show main menu"""
-    main_menu(message.chat.id)
+    show_main_menu(message.chat.id)
 
 
 @bot.callback_query_handler(func=lambda call: True)
 def query_handler(call):
     """Inline-keyboards button's click handler"""
+
+    users_active_menu_id = Database.get_users_menu_id_by_telegram_id(call.message.chat.id)
+
     bot.answer_callback_query(callback_query_id=call.id, text='')
-    if call.data == 'main_menu_1':
-        bot.send_message(call.message.chat.id,
-                         text="OK")
+
+    if users_active_menu_id == constants.MAIN_MENU_ID:
+        if call.data == constants.MAIN_MENU_PREFIX + "0":
+            bot.send_message(call.message.chat.id,
+                             text="OK")
+        elif call.data == constants.MAIN_MENU_PREFIX + "1":
+            bot.send_message(call.message.chat.id,
+                             text=phrases.not_ready_yet)
+        elif call.data == constants.MAIN_MENU_PREFIX + "2":
+            bot.send_message(call.message.chat.id,
+                             text=phrases.not_ready_yet)
 
 
 @bot.message_handler(commands=['start'])
@@ -38,7 +51,7 @@ def start(message):
     bot.send_message(message.chat.id,
                      text=phrases.welcome_message,
                      reply_markup=telebot.types.ReplyKeyboardRemove())
-    main_menu(message.chat.id)
+    show_main_menu(message.chat.id)
 
 
 if __name__ == '__main__':  # Run

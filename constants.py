@@ -1,0 +1,2 @@
+MAIN_MENU_ID = 0
+MAIN_MENU_PREFIX = "main_menu_"
