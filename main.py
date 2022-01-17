@@ -1,44 +1,18 @@
 import telebot
 import phrases_ru as phrases
 import constants
+import keyboards
 
 import bottoken
 from database import Database
 
-
-def create_keyboard_do_not_specify():
-    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
-                                                 resize_keyboard=True)
-    keyboard.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
-    return keyboard
-
-
-def create_keyboard_spoken_languages():
-    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
-                                                 resize_keyboard=True)
-    for language in phrases.spoken_languages:
-        keyboard.add(telebot.types.KeyboardButton(text=language))
-    keyboard.add(telebot.types.KeyboardButton(text=phrases.finish_typing))
-    keyboard.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
-    return keyboard
-
-
-def create_keyboard_programming_languages():
-    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
-                                                 resize_keyboard=True)
-    for language in phrases.programming_languages:
-        keyboard.add(telebot.types.KeyboardButton(text=language))
-    keyboard.add(telebot.types.KeyboardButton(text=phrases.finish_typing))
-    keyboard.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
-    return keyboard
-
-
 bot = telebot.TeleBot(bottoken.TOKEN, parse_mode=None)
 database = Database()
 
-keyboard_do_not_specify = create_keyboard_do_not_specify()
-keyboard_spoken_languages = create_keyboard_spoken_languages()
-keyboard_programming_languages = create_keyboard_programming_languages()
+keyboard_do_not_specify = keyboards.create_keyboard_do_not_specify()
+keyboard_spoken_languages = keyboards.create_keyboard_with_multiple_choice(items_list=phrases.spoken_languages)
+keyboard_programming_languages = keyboards.create_keyboard_with_multiple_choice(
+    items_list=phrases.programming_languages)
 
 
 def show_main_menu(chat_id: int):
