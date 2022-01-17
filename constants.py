@@ -9,6 +9,6 @@ class RegistationItemsIds:
     AGE = 2
     SPOKEN_LANGUAGES = 3
     PROGRAMMING_LANGUAGES = 4
-
+    INTERESTS = 5
 
 MAIN_MENU_PREFIX = "main_menu_"

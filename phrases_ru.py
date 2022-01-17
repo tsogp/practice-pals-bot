@@ -30,4 +30,8 @@ spoken_languages = ["Русский", "Английский"]
 
 programming_languages = ["Python", "C", "C++", "Java"]
 
+interests = ["Front-end", "Back-end", "ML", "Big Data"]
+
 finish_typing = 'Закончить и перейти на следующий пункт'
+
+finish_registration = "Регистрация завершена!"

@@ -13,6 +13,7 @@ keyboard_do_not_specify = keyboards.create_keyboard_do_not_specify()
 keyboard_spoken_languages = keyboards.create_keyboard_with_multiple_choice(items_list=phrases.spoken_languages)
 keyboard_programming_languages = keyboards.create_keyboard_with_multiple_choice(
     items_list=phrases.programming_languages)
+keyboard_interests = keyboards.create_keyboard_with_multiple_choice(items_list=phrases.interests)
 
 
 def show_main_menu(chat_id: int):
@@ -121,27 +122,43 @@ def processing_all_text_messages(message):
             if users_message == phrases.do_not_specify:
                 database.write_empty_users_registration_item(telegram_id=message.chat.id,
                                                              item=constants.RegistationItemsIds.SPOKEN_LANGUAGES)
-            elif users_message == phrases.finish_typing:
-                database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
-                bot.send_message(message.chat.id, text=phrases.enter_your_programming_languages,
-                                 reply_markup=keyboard_programming_languages)
-            else:
+            elif users_message != phrases.finish_typing:
                 database.write_users_registration_item(telegram_id=message.chat.id,
                                                        item=constants.RegistationItemsIds.SPOKEN_LANGUAGES,
                                                        value=users_message)
+
+            if users_message in (phrases.do_not_specify, phrases.finish_typing):
+                database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
+                bot.send_message(message.chat.id, text=phrases.enter_your_programming_languages,
+                                 reply_markup=keyboard_programming_languages)
 
         elif users_registration_item_id == constants.RegistationItemsIds.PROGRAMMING_LANGUAGES:
             if users_message == phrases.do_not_specify:
                 database.write_empty_users_registration_item(telegram_id=message.chat.id,
                                                              item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES)
-            elif users_message == phrases.finish_typing:
-                database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
-                bot.send_message(message.chat.id, text=phrases.enter_your_interests,
-                                 reply_markup=keyboard_programming_languages)
-            else:
+            elif users_message != phrases.finish_typing:
                 database.write_users_registration_item(telegram_id=message.chat.id,
                                                        item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES,
                                                        value=users_message)
+
+            if users_message in (phrases.do_not_specify, phrases.finish_typing):
+                database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
+                bot.send_message(message.chat.id, text=phrases.enter_your_interests,
+                                 reply_markup=keyboard_interests)
+
+        elif users_registration_item_id == constants.RegistationItemsIds.INTERESTS:
+            if users_message == phrases.do_not_specify:
+                database.write_empty_users_registration_item(telegram_id=message.chat.id,
+                                                             item=constants.RegistationItemsIds.INTERESTS)
+            elif users_message != phrases.finish_typing:
+                database.write_users_registration_item(telegram_id=message.chat.id,
+                                                       item=constants.RegistationItemsIds.INTERESTS,
+                                                       value=users_message)
+
+            if users_message in (phrases.do_not_specify, phrases.finish_typing):
+                database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
+                bot.send_message(message.chat.id, text=phrases.finish_registration,
+                                 reply_markup=telebot.types.ReplyKeyboardRemove())
 
     else:
         bot.send_message(message.chat.id, text="Bla-bla-bla")
