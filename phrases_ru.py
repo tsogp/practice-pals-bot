@@ -16,4 +16,8 @@ enter_your_first_name = "Введите Ваше имя"
 
 enter_your_last_name = "Введите Вашу фамилию"
 
+enter_your_age = "Введите Ваш возраст"
+
+enter_your_spoken_languages = "Укажите языки, которыми вы владеете"
+
 do_not_specify = "Не хочу указывать"

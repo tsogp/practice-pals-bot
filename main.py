@@ -76,17 +76,46 @@ def start(message):
 def processing_all_text_messages(message):
     users_message = message.text
 
-    if database.get_users_menu_id(telegram_id=message.chat.id) == constants.REGISTRATION_MENU_ID:
-        if database.get_users_registration_point_id(telegram_id=message.chat.id) == constants.REGISTRATION_ITEM_NAME:
+    users_menu_id = database.get_users_menu_id(telegram_id=message.chat.id)
+    users_registration_item_id = database.get_users_registration_item_id(telegram_id=message.chat.id)
+
+    if users_menu_id == constants.REGISTRATION_MENU_ID:
+        if users_registration_item_id == constants.REGISTRATION_ITEM_FIRST_NAME:
             if users_message == phrases.do_not_specify:
                 database.write_empty_users_registration_item(telegram_id=message.chat.id,
-                                                             item=constants.REGISTRATION_ITEM_NAME)
+                                                             item=constants.REGISTRATION_ITEM_FIRST_NAME)
             else:
                 database.write_users_registration_item(telegram_id=message.chat.id,
-                                                       item=constants.REGISTRATION_ITEM_NAME,
+                                                       item=constants.REGISTRATION_ITEM_FIRST_NAME,
                                                        value=users_message)
+
             database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
             bot.send_message(message.chat.id, text=phrases.enter_your_last_name)
+
+        elif users_registration_item_id == constants.REGISTRATION_ITEM_LAST_NAME:
+            if users_message == phrases.do_not_specify:
+                database.write_empty_users_registration_item(telegram_id=message.chat.id,
+                                                             item=constants.REGISTRATION_ITEM_LAST_NAME)
+            else:
+                database.write_users_registration_item(telegram_id=message.chat.id,
+                                                       item=constants.REGISTRATION_ITEM_LAST_NAME,
+                                                       value=users_message)
+
+            database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
+            bot.send_message(message.chat.id, text=phrases.enter_your_age)
+
+        elif users_registration_item_id == constants.REGISTRATION_ITEM_AGE:
+            if users_message == phrases.do_not_specify:
+                database.write_empty_users_registration_item(telegram_id=message.chat.id,
+                                                             item=constants.REGISTRATION_ITEM_AGE)
+            else:
+                database.write_users_registration_item(telegram_id=message.chat.id,
+                                                       item=constants.REGISTRATION_ITEM_AGE,
+                                                       value=users_message)
+
+            database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
+            bot.send_message(message.chat.id, text=phrases.enter_your_spoken_languages)
+
     else:
         bot.send_message(message.chat.id, text="Bla-bla-bla")
 

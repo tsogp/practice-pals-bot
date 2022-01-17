@@ -1,13 +1,13 @@
 class Database:
 
     def get_users_menu_id(self, telegram_id: int):
-        return 1
+        return self.__menu_id
 
-    def get_users_registration_point_id(self, telegram_id: int):
-        return 0
+    def get_users_registration_item_id(self, telegram_id: int):
+        return self.__registration_item_id
 
     def is_registrated(self, telegram_id: int):
-        return False
+        return self.__is_registrated
 
     def write_users_registration_item(self, telegram_id: int, item: int, value: str):
         pass
@@ -16,7 +16,9 @@ class Database:
         pass
 
     def switch_user_to_next_registration_item(self, telegram_id: int):
-        pass
+        self.__registration_item_id += 1
 
     def __init__(self):
-        pass
+        self.__is_registrated = False
+        self.__menu_id = 1
+        self.__registration_item_id = 0
