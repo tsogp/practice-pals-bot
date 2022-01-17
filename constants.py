@@ -1,10 +1,13 @@
-# Ids of menu
-MAIN_MENU_ID = 0
-REGISTRATION_MENU_ID = 1
+class MenuIds:
+    MAIN_MENU = 0
+    REGISTRATION_MENU = 1
 
-# Ids of the registration menu items
-REGISTRATION_ITEM_FIRST_NAME = 0
-REGISTRATION_ITEM_LAST_NAME = 1
-REGISTRATION_ITEM_AGE = 2
+
+class RegistationItemsIds:
+    FIRST_NAME = 0
+    LAST_NAME = 1
+    AGE = 2
+    SPOKEN_LANGUAGES = 3
+
 
 MAIN_MENU_PREFIX = "main_menu_"

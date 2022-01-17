@@ -18,6 +18,12 @@ enter_your_last_name = "Введите Вашу фамилию"
 
 enter_your_age = "Введите Ваш возраст"
 
-enter_your_spoken_languages = "Укажите языки, которыми вы владеете"
+enter_your_spoken_languages = "Укажите языки, которыми вы владеете (можно указывать несколько)"
+
+enter_your_programming_languages = "Укажите языки программирования, которыми вы владеете (можно указывать несколько)"
 
 do_not_specify = "Не хочу указывать"
+
+spoken_languages = ["Русский", "Английский"]
+
+finish_typing = 'Закончить и перейти на следующий пункт'
