@@ -22,8 +22,12 @@ enter_your_spoken_languages = "Укажите языки, которыми вы 
 
 enter_your_programming_languages = "Укажите языки программирования, которыми вы владеете (можно указывать несколько)"
 
+enter_your_interests = "Укажите темы, которыми вы интересуетесь"
+
 do_not_specify = "Не хочу указывать"
 
 spoken_languages = ["Русский", "Английский"]
+
+programming_languages = ["Python", "C", "C++", "Java"]
 
 finish_typing = 'Закончить и перейти на следующий пункт'

@@ -8,6 +8,7 @@ class RegistationItemsIds:
     LAST_NAME = 1
     AGE = 2
     SPOKEN_LANGUAGES = 3
+    PROGRAMMING_LANGUAGES = 4
 
 
 MAIN_MENU_PREFIX = "main_menu_"

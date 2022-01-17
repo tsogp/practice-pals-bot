@@ -5,19 +5,40 @@ import constants
 import bottoken
 from database import Database
 
+
+def create_keyboard_do_not_specify():
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
+                                                 resize_keyboard=True)
+    keyboard.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
+    return keyboard
+
+
+def create_keyboard_spoken_languages():
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
+                                                 resize_keyboard=True)
+    for language in phrases.spoken_languages:
+        keyboard.add(telebot.types.KeyboardButton(text=language))
+    keyboard.add(telebot.types.KeyboardButton(text=phrases.finish_typing))
+    keyboard.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
+    return keyboard
+
+
+def create_keyboard_programming_languages():
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2,
+                                                 resize_keyboard=True)
+    for language in phrases.programming_languages:
+        keyboard.add(telebot.types.KeyboardButton(text=language))
+    keyboard.add(telebot.types.KeyboardButton(text=phrases.finish_typing))
+    keyboard.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
+    return keyboard
+
+
 bot = telebot.TeleBot(bottoken.TOKEN, parse_mode=None)
 database = Database()
 
-keyboard_do_not_specify = telebot.types.ReplyKeyboardMarkup(row_width=2,
-                                                            resize_keyboard=True)
-keyboard_do_not_specify.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
-
-keyboard_spoken_languages = telebot.types.ReplyKeyboardMarkup(row_width=2,
-                                                              resize_keyboard=True)
-for language in phrases.spoken_languages:
-    keyboard_spoken_languages.add(telebot.types.KeyboardButton(text=language))
-keyboard_spoken_languages.add(telebot.types.KeyboardButton(text=phrases.finish_typing))
-keyboard_spoken_languages.add(telebot.types.KeyboardButton(text=phrases.do_not_specify))
+keyboard_do_not_specify = create_keyboard_do_not_specify()
+keyboard_spoken_languages = create_keyboard_spoken_languages()
+keyboard_programming_languages = create_keyboard_programming_languages()
 
 
 def show_main_menu(chat_id: int):
@@ -129,12 +150,24 @@ def processing_all_text_messages(message):
             elif users_message == phrases.finish_typing:
                 database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
                 bot.send_message(message.chat.id, text=phrases.enter_your_programming_languages,
-                                 reply_markup=keyboard_spoken_languages)
+                                 reply_markup=keyboard_programming_languages)
             else:
                 database.write_users_registration_item(telegram_id=message.chat.id,
                                                        item=constants.RegistationItemsIds.SPOKEN_LANGUAGES,
                                                        value=users_message)
 
+        elif users_registration_item_id == constants.RegistationItemsIds.PROGRAMMING_LANGUAGES:
+            if users_message == phrases.do_not_specify:
+                database.write_empty_users_registration_item(telegram_id=message.chat.id,
+                                                             item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES)
+            elif users_message == phrases.finish_typing:
+                database.switch_user_to_next_registration_item(telegram_id=message.chat.id)
+                bot.send_message(message.chat.id, text=phrases.enter_your_interests,
+                                 reply_markup=keyboard_programming_languages)
+            else:
+                database.write_users_registration_item(telegram_id=message.chat.id,
+                                                       item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES,
+                                                       value=users_message)
 
     else:
         bot.send_message(message.chat.id, text="Bla-bla-bla")
