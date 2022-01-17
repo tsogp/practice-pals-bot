@@ -96,12 +96,12 @@ class Bot:
     @staticmethod
     def __processing_registration_item_first_name(users_message, chat_id):
         if users_message == phrases.do_not_specify:
-            Bot.__database.write_empty_users_registration_item(telegram_id=chat_id,
-                                                               item=constants.RegistationItemsIds.FIRST_NAME)
+            Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
+                                                            item=constants.RegistationItemsIds.FIRST_NAME)
         else:
-            Bot.__database.write_users_registration_item(telegram_id=chat_id,
-                                                         item=constants.RegistationItemsIds.FIRST_NAME,
-                                                         value=users_message)
+            Bot.__database.set_users_registration_item(telegram_id=chat_id,
+                                                       item=constants.RegistationItemsIds.FIRST_NAME,
+                                                       value=users_message)
 
         Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
         Bot.__bot.send_message(chat_id, text=phrases.enter_your_last_name)
@@ -109,12 +109,12 @@ class Bot:
     @staticmethod
     def __processing_registration_item_last_name(users_message, chat_id):
         if users_message == phrases.do_not_specify:
-            Bot.__database.write_empty_users_registration_item(telegram_id=chat_id,
-                                                               item=constants.RegistationItemsIds.LAST_NAME)
+            Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
+                                                            item=constants.RegistationItemsIds.LAST_NAME)
         else:
-            Bot.__database.write_users_registration_item(telegram_id=chat_id,
-                                                         item=constants.RegistationItemsIds.LAST_NAME,
-                                                         value=users_message)
+            Bot.__database.set_users_registration_item(telegram_id=chat_id,
+                                                       item=constants.RegistationItemsIds.LAST_NAME,
+                                                       value=users_message)
 
         Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
         Bot.__bot.send_message(chat_id, text=phrases.enter_your_age)
@@ -122,12 +122,12 @@ class Bot:
     @staticmethod
     def __processing_registration_item_age(users_message, chat_id):
         if users_message == phrases.do_not_specify:
-            Bot.__database.write_empty_users_registration_item(telegram_id=chat_id,
-                                                               item=constants.RegistationItemsIds.AGE)
+            Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
+                                                            item=constants.RegistationItemsIds.AGE)
         else:
-            Bot.__database.write_users_registration_item(telegram_id=chat_id,
-                                                         item=constants.RegistationItemsIds.AGE,
-                                                         value=users_message)
+            Bot.__database.set_users_registration_item(telegram_id=chat_id,
+                                                       item=constants.RegistationItemsIds.AGE,
+                                                       value=users_message)
 
         Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
         Bot.__bot.send_message(chat_id, text=phrases.enter_your_spoken_languages,
@@ -136,12 +136,12 @@ class Bot:
     @staticmethod
     def __processing_registration_item_spoken_language(users_message, chat_id):
         if users_message == phrases.do_not_specify:
-            Bot.__database.write_empty_users_registration_item(telegram_id=chat_id,
-                                                               item=constants.RegistationItemsIds.SPOKEN_LANGUAGES)
+            Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
+                                                            item=constants.RegistationItemsIds.SPOKEN_LANGUAGES)
         elif users_message != phrases.finish_typing:
-            Bot.__database.write_users_registration_item(telegram_id=chat_id,
-                                                         item=constants.RegistationItemsIds.SPOKEN_LANGUAGES,
-                                                         value=users_message)
+            Bot.__database.append_to_users_registration_item(telegram_id=chat_id,
+                                                             item=constants.RegistationItemsIds.SPOKEN_LANGUAGES,
+                                                             value=users_message)
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
@@ -151,12 +151,12 @@ class Bot:
     @staticmethod
     def __processing_registration_item_programming_language(users_message, chat_id):
         if users_message == phrases.do_not_specify:
-            Bot.__database.write_empty_users_registration_item(telegram_id=chat_id,
-                                                               item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES)
+            Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
+                                                            item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES)
         elif users_message != phrases.finish_typing:
-            Bot.__database.write_users_registration_item(telegram_id=chat_id,
-                                                         item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES,
-                                                         value=users_message)
+            Bot.__database.append_to_users_registration_item(telegram_id=chat_id,
+                                                             item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES,
+                                                             value=users_message)
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
@@ -166,14 +166,15 @@ class Bot:
     @staticmethod
     def __processing_registration_item_interests(users_message, chat_id):
         if users_message == phrases.do_not_specify:
-            Bot.__database.write_empty_users_registration_item(telegram_id=chat_id,
-                                                               item=constants.RegistationItemsIds.INTERESTS)
+            Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
+                                                            item=constants.RegistationItemsIds.INTERESTS)
         elif users_message != phrases.finish_typing:
-            Bot.__database.write_users_registration_item(telegram_id=chat_id,
-                                                         item=constants.RegistationItemsIds.INTERESTS,
-                                                         value=users_message)
+            Bot.__database.append_to_users_registration_item(telegram_id=chat_id,
+                                                             item=constants.RegistationItemsIds.INTERESTS,
+                                                             value=users_message)
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
             Bot.__bot.send_message(chat_id, text=phrases.finish_registration,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
+            print(Bot.__database.data)
