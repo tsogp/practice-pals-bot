@@ -6,6 +6,7 @@ import bottoken
 from database import Database
 
 bot = telebot.TeleBot(bottoken.TOKEN, parse_mode=None)
+database = Database()
 
 
 def show_main_menu(chat_id: int):
@@ -30,14 +31,17 @@ def main_menu(message):
 def query_handler(call):
     """Inline-keyboards button's click handler"""
 
-    users_active_menu_id = Database.get_users_menu_id_by_telegram_id(call.message.chat.id)
+    users_active_menu_id = database.get_users_menu_id_by_telegram_id(call.message.chat.id)
 
     bot.answer_callback_query(callback_query_id=call.id, text='')
 
     if users_active_menu_id == constants.MAIN_MENU_ID:
         if call.data == constants.MAIN_MENU_PREFIX + "0":
+
             bot.send_message(call.message.chat.id,
                              text="OK")
+
+
         elif call.data == constants.MAIN_MENU_PREFIX + "1":
             bot.send_message(call.message.chat.id,
                              text=phrases.not_ready_yet)
@@ -46,12 +50,20 @@ def query_handler(call):
                              text=phrases.not_ready_yet)
 
 
+def check_registration(user_id):
+    if database.is_registrated(user_id):
+        show_main_menu(user_id)
+    else:
+        bot.send_message(user_id, text=phrases.user_not_registered_yet)
+
+
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id,
                      text=phrases.welcome_message,
                      reply_markup=telebot.types.ReplyKeyboardRemove())
-    show_main_menu(message.chat.id)
+
+    check_registration(message.chat.id)
 
 
 if __name__ == '__main__':  # Run

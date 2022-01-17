@@ -1,6 +1,6 @@
 # File with phrases for the interface in Russian
 
-welcome_message = "Привет! Я Practice Pals Bot. Помогу тебе найти друзей по интересам в IT-сфере"
+welcome_message = "Привет! Я Practice Pals Bot. Помогу Вам найти друзей по интересам в IT-сфере"
 
 main_menu_title = "Главное меню бота:"
 
@@ -9,3 +9,5 @@ main_menu_list = ["Найти единомышленников",
                   "Найти людей в свой проект"]
 
 not_ready_yet = "Выбранный пункт меню пока не доступен"
+
+user_not_registered_yet = "Похоже, Вы пользуйтесь этим ботом первый раз. Пожалуйста, запоните данные о себе, чтобы продолжить"
