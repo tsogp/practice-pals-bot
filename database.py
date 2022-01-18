@@ -5,19 +5,19 @@ class Database:
         self.__menu_id = 1
         self.__registration_item_id = 0
         self.__data = dict()
-        # self.__fill_data()
+        self.__fill_data()
 
     @property
     def data(self):
         return self.__data
 
     def __fill_data(self):
-        self.__data[0] = "name"
-        self.__data[1] = "last name"
-        self.__data[2] = "age"
-        self.__data[3] = "lang"
-        self.__data[4] = "pr lang"
-        self.__data[5] = "int"
+        self.__data[0] = "None"
+        self.__data[1] = "None"
+        self.__data[2] = "None"
+        self.__data[3] = "None"
+        self.__data[4] = "None"
+        self.__data[5] = "None"
 
     def set_users_menu_id(self, telegram_id: int, new_menu_id: int):
         self.__menu_id = new_menu_id
