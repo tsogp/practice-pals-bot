@@ -39,6 +39,28 @@ class Bot:
             Bot.__bot.send_message(user_id, text=phrases.enter_your_first_name,
                                    reply_markup=Keyboards.keyboard_do_not_specify)
 
+    @staticmethod
+    def __show_users_profile(user_id):
+        profile_str = ""
+        profile_str += (f"*{phrases.profile_items[0]}:* " +
+                        Bot.__database.get_users_profile_item(user_id, constants.RegistationItemsIds.FIRST_NAME) + "\n")
+        profile_str += (f"*{phrases.profile_items[1]}:* " +
+                        Bot.__database.get_users_profile_item(user_id, constants.RegistationItemsIds.LAST_NAME) + "\n")
+        profile_str += (f"*{phrases.profile_items[2]}:* " +
+                        Bot.__database.get_users_profile_item(user_id, constants.RegistationItemsIds.AGE) + "\n")
+        profile_str += (f"*{phrases.profile_items[3]}:* " +
+                        Bot.__database.get_users_profile_item(user_id,
+                                                              constants.RegistationItemsIds.SPOKEN_LANGUAGES) + "\n")
+        profile_str += (f"*{phrases.profile_items[4]}:* " +
+                        Bot.__database.get_users_profile_item(user_id,
+                                                              constants.RegistationItemsIds.PROGRAMMING_LANGUAGES) + "\n")
+        profile_str += (f"*{phrases.profile_items[5]}:* " +
+                        Bot.__database.get_users_profile_item(user_id, constants.RegistationItemsIds.INTERESTS) + "\n")
+        Bot.__bot.send_message(user_id, text=phrases.your_profile)
+        Bot.__bot.send_message(user_id, text=profile_str, parse_mode="Markdown",
+                               reply_markup=Keyboards.keyboard_ok_edit)
+        Bot.__database.set_users_menu_id(user_id, constants.MenuIds.CHECK_PROFILE_MENU)
+
     @__bot.callback_query_handler(func=lambda call: True)
     @staticmethod
     def __query_handler(call):
@@ -66,7 +88,6 @@ class Bot:
         Bot.__bot.send_message(message.chat.id,
                                text=phrases.welcome_message,
                                reply_markup=telebot.types.ReplyKeyboardRemove())
-
         Bot.__check_registration(message.chat.id)
 
     @__bot.message_handler(content_types=["text"])
@@ -90,6 +111,17 @@ class Bot:
                 Bot.__processing_registration_item_programming_language(users_message, chat_id=message.chat.id)
             elif users_registration_item_id == constants.RegistationItemsIds.INTERESTS:
                 Bot.__processing_registration_item_interests(users_message, chat_id=message.chat.id)
+        elif users_menu_id == constants.MenuIds.CHECK_PROFILE_MENU:
+            print(1)
+            if users_message == phrases.ok_edit[0]:
+                Bot.__database.set_users_menu_id(message.chat.id, constants.MenuIds.MAIN_MENU)
+                Bot.__show_main_menu(message.chat.id)
+                print(2)
+            elif users_message == phrases.ok_edit[1]:
+                Bot.__bot.send_message(message.chat.id, text=phrases.not_ready_yet)
+                Bot.__database.set_users_menu_id(message.chat.id, constants.MenuIds.MAIN_MENU)
+                Bot.__show_main_menu(message.chat.id)
+                print(3)
         else:
             Bot.__bot.send_message(message.chat.id, text="Bla-bla-bla")
 
@@ -177,4 +209,5 @@ class Bot:
             Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
             Bot.__bot.send_message(chat_id, text=phrases.finish_registration,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
-            print(Bot.__database.data)
+            Bot.__show_users_profile(chat_id)
+            # print(Bot.__database.data)

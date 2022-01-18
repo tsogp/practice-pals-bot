@@ -11,6 +11,13 @@ class Keyboards:
         return keyboard
 
     @staticmethod
+    def __create_keyboard_ok_edit():
+        keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        keyboard.add(telebot.types.KeyboardButton(text=phrases.ok_edit[0]),
+                     telebot.types.KeyboardButton(text=phrases.ok_edit[1]))
+        return keyboard
+
+    @staticmethod
     def __create_keyboard_with_multiple_choice(items_list: list):
         keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
 
@@ -28,3 +35,4 @@ class Keyboards:
     keyboard_spoken_languages = __create_keyboard_with_multiple_choice(items_list=phrases.spoken_languages)
     keyboard_programming_languages = __create_keyboard_with_multiple_choice(items_list=phrases.programming_languages)
     keyboard_interests = __create_keyboard_with_multiple_choice(items_list=phrases.interests)
+    keyboard_ok_edit = __create_keyboard_ok_edit()
