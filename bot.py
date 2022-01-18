@@ -160,10 +160,12 @@ class Bot:
         if users_message == phrases.do_not_specify:
             Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
                                                             item=constants.RegistationItemsIds.SPOKEN_LANGUAGES)
-        elif users_message != phrases.finish_typing:
+        elif users_message in phrases.spoken_languages:
             Bot.__database.append_to_users_registration_item(telegram_id=chat_id,
                                                              item=constants.RegistationItemsIds.SPOKEN_LANGUAGES,
                                                              value=users_message)
+        elif users_message != phrases.finish_typing:
+            Bot.__bot.send_message(chat_id, text=phrases.select_from_the_list)
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
@@ -175,10 +177,12 @@ class Bot:
         if users_message == phrases.do_not_specify:
             Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
                                                             item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES)
-        elif users_message != phrases.finish_typing:
+        elif users_message in phrases.programming_languages:
             Bot.__database.append_to_users_registration_item(telegram_id=chat_id,
                                                              item=constants.RegistationItemsIds.PROGRAMMING_LANGUAGES,
                                                              value=users_message)
+        elif users_message != phrases.finish_typing:
+            Bot.__bot.send_message(chat_id, text=phrases.select_from_the_list)
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
@@ -190,10 +194,12 @@ class Bot:
         if users_message == phrases.do_not_specify:
             Bot.__database.set_null_users_registration_item(telegram_id=chat_id,
                                                             item=constants.RegistationItemsIds.INTERESTS)
-        elif users_message != phrases.finish_typing:
+        elif users_message in phrases.interests:
             Bot.__database.append_to_users_registration_item(telegram_id=chat_id,
                                                              item=constants.RegistationItemsIds.INTERESTS,
                                                              value=users_message)
+        elif users_message != phrases.finish_typing:
+            Bot.__bot.send_message(chat_id, text=phrases.select_from_the_list)
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.switch_user_to_next_registration_item(telegram_id=chat_id)
