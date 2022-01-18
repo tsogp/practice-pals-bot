@@ -2,7 +2,7 @@
 
 welcome_message = "Привет! Я Practice Pals Bot. Помогу Вам найти друзей по интересам в IT-сфере"
 
-main_menu_title = "Главное меню бота:"
+main_menu_title = "Главное меню бота"
 
 main_menu_list = ["Найти единомышленников",
                   "Найти проект",

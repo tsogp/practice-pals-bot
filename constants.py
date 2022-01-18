@@ -13,9 +13,4 @@ class RegistationItemsIds:
     INTERESTS = 5
 
 
-class CheckProfileItemsIds:
-    OK = 0
-    EDIT = 1
-
-
 MAIN_MENU_PREFIX = "main_menu_"

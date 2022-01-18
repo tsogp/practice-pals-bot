@@ -17,22 +17,19 @@ class Bot:
 
     @staticmethod
     def __show_main_menu(chat_id: int):
-        menu = telebot.types.InlineKeyboardMarkup()  # Create inline-keyboard
-        # Add all functions into menu
-        for i in range(len(phrases.main_menu_list)):
-            menu.add(telebot.types.InlineKeyboardButton(
-                text=phrases.main_menu_list[i],
-                callback_data=constants.MAIN_MENU_PREFIX + str(i)))
-        Bot.__bot.send_message(chat_id, text=phrases.main_menu_title, reply_markup=menu)
+        Bot.__bot.send_message(chat_id, text=phrases.main_menu_title,
+                               reply_markup=Keyboards.keyboard_main_menu)
 
     @__bot.message_handler(commands=['main_menu'])
     @staticmethod
     def __main_menu(message):
+        Bot.__database.set_users_menu_id(message.chat.id, constants.MenuIds.MAIN_MENU)
         Bot.__show_main_menu(message.chat.id)
 
     @staticmethod
     def __check_registration(user_id):
         if Bot.__database.is_registrated(user_id):
+            Bot.__database.set_users_menu_id(user_id, constants.MenuIds.MAIN_MENU)
             Bot.__show_main_menu(user_id)
         else:
             Bot.__bot.send_message(user_id, text=phrases.user_not_registered_yet)
@@ -61,27 +58,6 @@ class Bot:
                                reply_markup=Keyboards.keyboard_ok_edit)
         Bot.__database.set_users_menu_id(user_id, constants.MenuIds.CHECK_PROFILE_MENU)
 
-    @__bot.callback_query_handler(func=lambda call: True)
-    @staticmethod
-    def __query_handler(call):
-        """Inline-keyboards button's click handler"""
-
-        users_active_menu_id = Bot.__database.get_users_menu_id(call.message.chat.id)
-
-        Bot.__bot.answer_callback_query(callback_query_id=call.id, text='')
-
-        if users_active_menu_id == constants.MenuIds.MAIN_MENU:
-            if call.data == constants.MAIN_MENU_PREFIX + "0":
-                Bot.__bot.send_message(call.message.chat.id,
-                                       text="OK")
-
-            elif call.data == constants.MAIN_MENU_PREFIX + "1":
-                Bot.__bot.send_message(call.message.chat.id,
-                                       text=phrases.not_ready_yet)
-            elif call.data == constants.MAIN_MENU_PREFIX + "2":
-                Bot.__bot.send_message(call.message.chat.id,
-                                       text=phrases.not_ready_yet)
-
     @__bot.message_handler(commands=['start'])
     @staticmethod
     def start(message):
@@ -94,36 +70,50 @@ class Bot:
     @staticmethod
     def __processing_all_text_messages(message):
         users_message = message.text
-
         users_menu_id = Bot.__database.get_users_menu_id(telegram_id=message.chat.id)
-        users_registration_item_id = Bot.__database.get_users_registration_item_id(telegram_id=message.chat.id)
-
         if users_menu_id == constants.MenuIds.REGISTRATION_MENU:
-            if users_registration_item_id == constants.RegistationItemsIds.FIRST_NAME:
-                Bot.__processing_registration_item_first_name(users_message, chat_id=message.chat.id)
-            elif users_registration_item_id == constants.RegistationItemsIds.LAST_NAME:
-                Bot.__processing_registration_item_last_name(users_message, chat_id=message.chat.id)
-            elif users_registration_item_id == constants.RegistationItemsIds.AGE:
-                Bot.__processing_registration_item_age(users_message, chat_id=message.chat.id)
-            elif users_registration_item_id == constants.RegistationItemsIds.SPOKEN_LANGUAGES:
-                Bot.__processing_registration_item_spoken_language(users_message, chat_id=message.chat.id)
-            elif users_registration_item_id == constants.RegistationItemsIds.PROGRAMMING_LANGUAGES:
-                Bot.__processing_registration_item_programming_language(users_message, chat_id=message.chat.id)
-            elif users_registration_item_id == constants.RegistationItemsIds.INTERESTS:
-                Bot.__processing_registration_item_interests(users_message, chat_id=message.chat.id)
+            Bot.__processing_registration_menu_items(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.CHECK_PROFILE_MENU:
-            print(1)
-            if users_message == phrases.ok_edit[0]:
-                Bot.__database.set_users_menu_id(message.chat.id, constants.MenuIds.MAIN_MENU)
-                Bot.__show_main_menu(message.chat.id)
-                print(2)
-            elif users_message == phrases.ok_edit[1]:
-                Bot.__bot.send_message(message.chat.id, text=phrases.not_ready_yet)
-                Bot.__database.set_users_menu_id(message.chat.id, constants.MenuIds.MAIN_MENU)
-                Bot.__show_main_menu(message.chat.id)
-                print(3)
+            Bot.__processing_check_profile_menu_items(users_message, message.chat.id)
+        elif users_menu_id == constants.MenuIds.MAIN_MENU:
+            Bot.__processing_main_menu_items(users_message, message.chat.id)
         else:
             Bot.__bot.send_message(message.chat.id, text="Bla-bla-bla")
+
+    @staticmethod
+    def __processing_main_menu_items(users_message, chat_id):
+        if users_message == phrases.main_menu_list[0]:
+            Bot.__bot.send_message(chat_id, text=phrases.not_ready_yet)
+        elif users_message == phrases.main_menu_list[1]:
+            Bot.__bot.send_message(chat_id, text=phrases.not_ready_yet)
+        elif users_message == phrases.main_menu_list[2]:
+            Bot.__bot.send_message(chat_id, text=phrases.not_ready_yet)
+
+    @staticmethod
+    def __processing_check_profile_menu_items(users_message, chat_id):
+        if users_message == phrases.ok_edit[0]:
+            Bot.__database.set_users_menu_id(chat_id, constants.MenuIds.MAIN_MENU)
+            Bot.__show_main_menu(chat_id)
+        elif users_message == phrases.ok_edit[1]:
+            Bot.__bot.send_message(chat_id, text=phrases.not_ready_yet)
+            Bot.__database.set_users_menu_id(chat_id, constants.MenuIds.MAIN_MENU)
+            Bot.__show_main_menu(chat_id)
+
+    @staticmethod
+    def __processing_registration_menu_items(users_message, chat_id):
+        users_registration_item_id = Bot.__database.get_users_registration_item_id(telegram_id=chat_id)
+        if users_registration_item_id == constants.RegistationItemsIds.FIRST_NAME:
+            Bot.__processing_registration_item_first_name(users_message, chat_id=chat_id)
+        elif users_registration_item_id == constants.RegistationItemsIds.LAST_NAME:
+            Bot.__processing_registration_item_last_name(users_message, chat_id=chat_id)
+        elif users_registration_item_id == constants.RegistationItemsIds.AGE:
+            Bot.__processing_registration_item_age(users_message, chat_id=chat_id)
+        elif users_registration_item_id == constants.RegistationItemsIds.SPOKEN_LANGUAGES:
+            Bot.__processing_registration_item_spoken_language(users_message, chat_id=chat_id)
+        elif users_registration_item_id == constants.RegistationItemsIds.PROGRAMMING_LANGUAGES:
+            Bot.__processing_registration_item_programming_language(users_message, chat_id=chat_id)
+        elif users_registration_item_id == constants.RegistationItemsIds.INTERESTS:
+            Bot.__processing_registration_item_interests(users_message, chat_id=chat_id)
 
     @staticmethod
     def __processing_registration_item_first_name(users_message, chat_id):
@@ -210,4 +200,3 @@ class Bot:
             Bot.__bot.send_message(chat_id, text=phrases.finish_registration,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_profile(chat_id)
-            # print(Bot.__database.data)
