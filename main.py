@@ -1,5 +1,4 @@
 import telebot
-
 import bottoken
 
 bot = telebot.TeleBot(bottoken.TOKEN, parse_mode=None)
