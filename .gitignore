@@ -127,8 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+bottoken.py
 
 # PyCharm folder
 .idea/
 
-bottoken.py
