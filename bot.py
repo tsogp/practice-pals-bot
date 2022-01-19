@@ -141,18 +141,18 @@ class Bot:
     @staticmethod
     def __processing_registration_item_age(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.AGE)
+            Bot.__database.set_null_users_registration_item(user_id, item=constants.ProfileItemsIds.AGE)
         elif users_message.isdigit():
             Bot.__database.set_users_registration_item(user_id,
                                                        item=constants.ProfileItemsIds.AGE,
                                                        value=users_message)
+        else:
+            Bot.__bot.send_message(user_id, text=phrases.enter_correct_age)
 
+        if users_message == phrases.do_not_specify or users_message.isdigit():
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.SPOKEN_LANGUAGES)
             Bot.__bot.send_message(user_id, text=phrases.enter_your_spoken_languages,
                                    reply_markup=Keyboards.keyboard_spoken_languages)
-        else:
-            Bot.__bot.send_message(user_id, text=phrases.enter_correct_age)
 
     @staticmethod
     def __processing_registration_item_spoken_language(users_message: str, user_id: int):
