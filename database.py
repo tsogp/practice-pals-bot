@@ -15,9 +15,9 @@ class Database:
         self.__data[0] = "None"
         self.__data[1] = "None"
         self.__data[2] = "None"
-        self.__data[3] = "None"
-        self.__data[4] = "None"
-        self.__data[5] = "None"
+        self.__data[3] = ""
+        self.__data[4] = ""
+        self.__data[5] = ""
 
     def set_users_menu_id(self, telegram_id: int, new_menu_id: int):
         self.__menu_id = new_menu_id
