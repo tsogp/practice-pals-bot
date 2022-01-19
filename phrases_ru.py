@@ -1,4 +1,5 @@
 # File with phrases for the interface in Russian
+import constants
 
 welcome_message = "Привет! Я Practice Pals Bot. Помогу Вам найти друзей по интересам в IT-сфере"
 
@@ -38,8 +39,15 @@ finish_registration = "\U0001F3C1 Регистрация завершена!"
 
 your_profile = "\U0001F600 Ваш профиль:"
 
-profile_items = ["Имя", "Фамилия", "Возраст", "Языки", "Языки программирования", "Интересы"]
+profile_items = {constants.ProfileItemsIds.FIRST_NAME: "Имя",
+                 constants.ProfileItemsIds.LAST_NAME: "Фамилия",
+                 constants.ProfileItemsIds.AGE: "Возраст",
+                 constants.ProfileItemsIds.SPOKEN_LANGUAGES: "Языки",
+                 constants.ProfileItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
+                 constants.ProfileItemsIds.INTERESTS: "Интересы"}
 
 ok_edit = ["\U00002705 Всё верно", "\U0000270F Редактировать"]
 
 select_from_the_list = "Пожалуйста, выберите один или несколько пунктов из списка"
+
+call_main_menu = "/main_menu, чтобы перейти в главное меню бота"

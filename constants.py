@@ -4,13 +4,15 @@ class MenuIds:
     CHECK_PROFILE_MENU = 2
 
 
-class RegistationItemsIds:
+class ProfileItemsIds:
     FIRST_NAME = 0
     LAST_NAME = 1
     AGE = 2
     SPOKEN_LANGUAGES = 3
     PROGRAMMING_LANGUAGES = 4
     INTERESTS = 5
+
+    ITEMS_IDS = (FIRST_NAME, LAST_NAME, AGE, SPOKEN_LANGUAGES, PROGRAMMING_LANGUAGES, INTERESTS)
 
 
 MAIN_MENU_PREFIX = "main_menu_"
