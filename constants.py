@@ -5,6 +5,7 @@ class MenuIds:
 
 
 class ProfileItemsIds:
+    NULL = -1
     FIRST_NAME = 0
     LAST_NAME = 1
     AGE = 2

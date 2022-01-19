@@ -46,5 +46,5 @@ class Database:
     def set_null_users_registration_item(self, user_id: int, item: int):
         self.__data[item] = "None"
 
-    def switch_user_to_next_registration_item(self, user_id: int):
-        self.__registration_item_id += 1
+    def set_users_registration_item_id(self, user_id: int, registration_item_id: int):
+        self.__registration_item_id = registration_item_id
