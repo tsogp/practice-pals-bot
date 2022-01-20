@@ -1,57 +1,54 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Enum, create_engine
+from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 
 import choice_fields as mp # multiple choice
 
-engine = create_engine('sqlite:///testdb.db', echo=True)
-Base = declarative_base()
+class DB():
+    def __init__(self):
+        self.metadata = MetaData()
+        self.engine = create_engine('sqlite:///testdb.db', echo=True)
 
-class Account(Base):
-    __tablename__ = 'account'
+        self.account = Table(
+            'Account',
+            self.metadata,
+            Column('id', Integer, primary_key=True),
+            Column('telegram_login', String(255), unique=True, nullable=False)
+        )
 
-    id = Column(Integer, primary_key=True)
-    telegram_login = Column(String(100), unique=True)
+        self.potentialprofiles = Table(
+            'PotentialProfiles',
+            self.metadata,
+            Column('id', Integer, primary_key=True),
+            Column('account_id', Integer, ForeignKey('Account.id')),
+            Column('requested_account_id', Integer, nullable=False), 
+            Column('is_viewed', Boolean, nullable=False)
+        )
 
-    def __repr__(self):
-        return "<Account(id='%s', telegram_login='%s')>" % (self.id, self.telegram_login)
+        self.searchparameters = Table(
+            'SearchParameters',
+            self.metadata,
+            Column('id', Integer, primary_key=True),
+            Column('account_id', Integer, ForeignKey('Account.id'), nullable=False),
+            Column('age', Enum(mp.PreferedAge)),
+            Column('spoken_languages', Enum(mp.SpokenLanguages)),
+            Column('programming_languages', Enum(mp.ProgrammingLanguages)),
+        )
 
-class PotentialProfiles(Base):
-    __tablename__ = 'potentialprofiles'
+        self.profile = Table(
+            'Profile',
+            self.metadata,
+            Column('id', Integer, primary_key=True),
+            Column('account_id', Integer, ForeignKey('Account.id'), nullable=False),
+            Column('first_name', String(255), nullable=False),
+            Column('last_name', String(255)),
+            Column('age', Integer),
+            Column('photo_url', String(255), unique=True),
+            Column('spoken_languages', Enum(mp.SpokenLanguages)),
+            Column('programming_languages', Enum(mp.ProgrammingLanguages)),
+            Column('about_me', String(2000))
+        )
 
-    id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey(Account.id))
-    requested_account_id = Column(Integer)
-    is_viewed = Column(Boolean)
+        self.metadata.create_all(self.engine)
 
-    def __repr__(self):
-        return "<PotentialProfiles(id='%s', account_id='%s', requested_account_id='%s')>" % (self.id, self.account_id, self.requested_account_id)
+DATABASE = DB()
 
-class SearchParameters(Base):
-    __tablename__ = 'searchparameters'
-
-    id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey(Account.id))
-    age = Column(Enum(mp.PreferedAge))
-    spoken_languages = Column(Enum(mp.SpokenLanguages))
-    programming_languages = Column(Enum(mp.ProgrammingLanguages))
-
-    def __repr__(self):
-        return "<SearchParameters(id='%s', account_id='%s')>" % (self.id, self.account_id)
-
-class Profile(Base):
-    __tablename__ = 'profile'
-
-    id = Column(Integer, primary_key=True)
-    account_id = Column(Integer, ForeignKey(Account.id))
-    first_name = Column(String(50))
-    last_name = Column(String(50))
-    age = Column(Integer)
-    photo_url = Column(Integer, unique=True)
-    spoken_languages = Column(Enum(mp.SpokenLanguages))
-    programming_languages = Column(Enum(mp.ProgrammingLanguages))
-    about_me = Column(String(1000))
-
-    def __repr__(self):
-        return "<Profile(id='%s', account_id='%s')>" % (self.id, self.account_id)
-
-Base.metadata.create_all(engine)
