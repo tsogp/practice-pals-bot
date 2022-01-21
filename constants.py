@@ -1,19 +1,20 @@
-class MenuIds:
-    MAIN_MENU = 0
-    REGISTRATION_MENU = 1
-    CHECK_PROFILE_MENU = 2
+import enum
 
 
-class ProfileItemsIds:
-    NULL = -1
-    FIRST_NAME = 0
-    LAST_NAME = 1
-    AGE = 2
-    SPOKEN_LANGUAGES = 3
-    PROGRAMMING_LANGUAGES = 4
-    INTERESTS = 5
+class MenuIds(enum.Enum):
+    MAIN_MENU = enum.auto()
+    REGISTRATION_MENU = enum.auto()
+    CHECK_PROFILE_MENU = enum.auto()
 
-    ITEMS_IDS = (FIRST_NAME, LAST_NAME, AGE, SPOKEN_LANGUAGES, PROGRAMMING_LANGUAGES, INTERESTS)
+
+class ProfileItemsIds(enum.Enum):
+    NULL = enum.auto()
+    FIRST_NAME = enum.auto()
+    LAST_NAME = enum.auto()
+    AGE = enum.auto()
+    SPOKEN_LANGUAGES = enum.auto()
+    PROGRAMMING_LANGUAGES = enum.auto()
+    INTERESTS = enum.auto()
 
 
 MAIN_MENU_PREFIX = "main_menu_"

@@ -41,12 +41,12 @@ finish_registration = "\U0001F3C1 Регистрация завершена!"
 
 your_profile = "\U0001F600 Ваш профиль:"
 
-profile_items = {constants.ProfileItemsIds.FIRST_NAME: "Имя",
-                 constants.ProfileItemsIds.LAST_NAME: "Фамилия",
-                 constants.ProfileItemsIds.AGE: "Возраст",
-                 constants.ProfileItemsIds.SPOKEN_LANGUAGES: "Языки",
-                 constants.ProfileItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
-                 constants.ProfileItemsIds.INTERESTS: "Интересы"}
+profile_items = {constants.ProfileItemsIds.FIRST_NAME.value: "Имя",
+                 constants.ProfileItemsIds.LAST_NAME.value: "Фамилия",
+                 constants.ProfileItemsIds.AGE.value: "Возраст",
+                 constants.ProfileItemsIds.SPOKEN_LANGUAGES.value: "Языки",
+                 constants.ProfileItemsIds.PROGRAMMING_LANGUAGES.value: "Языки программирования",
+                 constants.ProfileItemsIds.INTERESTS.value: "Интересы"}
 
 ok_edit = ["\U00002705 Всё верно", "\U0000270F Редактировать"]
 
