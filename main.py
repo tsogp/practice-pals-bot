@@ -1,12 +1,5 @@
-import telebot
-import bottoken
+from bot import Bot
 
-bot = telebot.TeleBot(bottoken.TOKEN, parse_mode=None)
+if __name__ == '__main__':
+    Bot.run()
 
-
-@bot.message_handler(commands=['start'])
-def welcome(message):
-    bot.reply_to(message, "Добрый день!")
-
-
-bot.infinity_polling()
