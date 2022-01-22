@@ -147,7 +147,7 @@ class Bot:
         if users_message == phrases.ok_edit[0]:
             Bot.__activate_search_menu(user_id)
         elif users_message == phrases.ok_edit[1]:
-            Bot.__bot.send_message(user_id, text=phrases.user_not_registered_yet)
+            Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
             Bot.__activate_search_menu(user_id)
 
     @staticmethod
