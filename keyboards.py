@@ -11,10 +11,10 @@ class Keyboards:
         return keyboard
 
     @staticmethod
-    def __create_keyboard_ok_edit():
+    def __create_keyboard_ok_edit(ok: str, edit: str):
         keyboard = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-        keyboard.add(telebot.types.KeyboardButton(text=phrases.ok_edit[0]),
-                     telebot.types.KeyboardButton(text=phrases.ok_edit[1]))
+        keyboard.add(telebot.types.KeyboardButton(text=ok),
+                     telebot.types.KeyboardButton(text=edit))
         return keyboard
 
     @staticmethod
@@ -45,7 +45,7 @@ class Keyboards:
                                                                            skip_button=phrases.do_not_specify)
     profile_interests = __create_keyboard_with_multiple_choice(items_list=phrases.interests,
                                                                skip_button=phrases.do_not_specify)
-    profile_ok_edit = __create_keyboard_ok_edit()
+    profile_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
     main_menu = __create_keyboard_main_menu()
     search_parameters_does_not_matter = __create_keyboard_with_one_button(phrases.does_not_matter)
     search_parameters_age_groups = __create_keyboard_with_multiple_choice(items_list=phrases.age_groups,
@@ -57,3 +57,4 @@ class Keyboards:
         skip_button=phrases.does_not_matter)
     search_parameters_interests = __create_keyboard_with_multiple_choice(items_list=phrases.interests,
                                                                          skip_button=phrases.does_not_matter)
+    search_parameters_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])

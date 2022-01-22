@@ -67,3 +67,12 @@ enter_interests = "Укажите интересы:"
 does_not_matter = "\U0000274C Не имеет значения"
 
 age_groups = ["до 14 лет", "от 14 до 18 лет", "от 18 до 22 лет", "старше 22 лет"]
+
+finish_enter_search_parameters = "\U0001F3C1 Заполнение параметров для поиска единомышленников завершено!"
+
+your_search_parameters = "Ваши параметры для поиска единомышленников:"
+
+search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Возрастная группа",
+                           constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: "Языки",
+                           constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
+                           constants.SearchParametersItemsIds.INTERESTS: "Интересы"}

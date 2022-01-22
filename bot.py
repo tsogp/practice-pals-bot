@@ -94,6 +94,28 @@ class Bot:
         return profile_str
 
     @staticmethod
+    def __show_users_search_parameters(user_id: int):
+        """
+        Send a message to the user with his search_parameters
+        """
+        Bot.__database.set_users_menu_id(user_id, constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU)
+        Bot.__bot.send_message(user_id, text=phrases.your_search_parameters)
+        Bot.__bot.send_message(user_id, text=Bot.__generate_string_with_users_search_parameters(user_id),
+                               parse_mode="Markdown",
+                               reply_markup=Keyboards.search_parameters_ok_edit)
+
+    @staticmethod
+    def __generate_string_with_users_search_parameters(user_id: int):
+        search_parameters_str = ""
+        search_parameters_items_ids = [member for member in constants.SearchParametersItemsIds if
+                                       member.name != "NULL"]
+        for search_parameters_item_id in search_parameters_items_ids:
+            search_parameters_str += (f"*{phrases.search_parameters_items[search_parameters_item_id]}:* " +
+                                      Bot.__database.get_users_search_parameter_item(user_id,
+                                                                                     search_parameters_item_id) + "\n")
+        return search_parameters_str
+
+    @staticmethod
     def __processing_main_menu_items(users_message: str, user_id: int):
         if users_message == phrases.main_menu_list[0]:
             Bot.__check_search_parameters(user_id)
@@ -301,5 +323,6 @@ class Bot:
         if users_message in (phrases.does_not_matter, phrases.finish_typing):
             Bot.__database.set_users_search_parameter_item_id(user_id,
                                                               constants.SearchParametersItemsIds.NULL)
-            Bot.__bot.send_message(user_id, text="OK",
-                                   reply_markup=Keyboards.search_parameters_interests)
+            Bot.__bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
+                                   reply_markup=telebot.types.ReplyKeyboardRemove())
+            Bot.__show_users_search_parameters(user_id)

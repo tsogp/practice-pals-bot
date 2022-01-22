@@ -18,6 +18,10 @@ class Database:
     def profile(self):
         return self.__profile
 
+    @property
+    def search_parameters(self):
+        return self.__search_parameters
+
     def __fill_profile(self):
         self.__profile[constants.ProfileItemsIds.FIRST_NAME.value] = "None"
         self.__profile[constants.ProfileItemsIds.LAST_NAME.value] = "None"
@@ -27,7 +31,10 @@ class Database:
         self.__profile[constants.ProfileItemsIds.INTERESTS.value] = ""
 
     def __fill_search_parameters(self):
-        self.__profile[constants.SearchParametersItemsIds.AGE_GROUP.value] = "None"
+        self.__search_parameters[constants.SearchParametersItemsIds.AGE_GROUP] = ""
+        self.__search_parameters[constants.SearchParametersItemsIds.SPOKEN_LANGUAGES] = ""
+        self.__search_parameters[constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES] = ""
+        self.__search_parameters[constants.SearchParametersItemsIds.INTERESTS] = ""
 
     def set_users_menu_id(self, user_id: int, new_menu_id: constants.MenuIds):
         self.__menu_id = new_menu_id
@@ -77,3 +84,6 @@ class Database:
             self.__search_parameters[item] = self.__search_parameters[item] + value + " "
         else:
             self.__search_parameters[item] = value
+
+    def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds):
+        return self.__search_parameters[item]

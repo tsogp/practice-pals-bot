@@ -6,6 +6,7 @@ class MenuIds(enum.Enum):
     REGISTRATION_MENU = enum.auto()
     CHECK_PROFILE_MENU = enum.auto()
     SEARCH_PARAMETERS_MENU = enum.auto()
+    CHECK_SEARCH_PARAMETERS_MENU = enum.auto()
 
 
 class ProfileItemsIds(enum.Enum):
@@ -24,6 +25,5 @@ class SearchParametersItemsIds(enum.Enum):
     SPOKEN_LANGUAGES = enum.auto()
     PROGRAMMING_LANGUAGES = enum.auto()
     INTERESTS = enum.auto()
-
 
 MAIN_MENU_PREFIX = "main_menu_"
