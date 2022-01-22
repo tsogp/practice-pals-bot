@@ -21,6 +21,9 @@ class ProfileItemsIds(enum.Enum):
 class SearchParametersItemsIds(enum.Enum):
     NULL = enum.auto()
     AGE_GROUP = enum.auto()
+    SPOKEN_LANGUAGES = enum.auto()
+    PROGRAMMING_LANGUAGES = enum.auto()
+    INTERESTS = enum.auto()
 
 
 MAIN_MENU_PREFIX = "main_menu_"

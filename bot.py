@@ -225,6 +225,12 @@ class Bot:
         users_search_parameter_item_id = Bot.__database.get_users_search_parameter_item_id(user_id)
         if users_search_parameter_item_id == constants.SearchParametersItemsIds.AGE_GROUP:
             Bot.__processing_search_parameter_item_age_group(users_message, user_id)
+        elif users_search_parameter_item_id == constants.SearchParametersItemsIds.SPOKEN_LANGUAGES:
+            Bot.__processing_search_parameter_item_spoken_languages(users_message, user_id)
+        elif users_search_parameter_item_id == constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES:
+            Bot.__processing_search_parameter_item_programming_languages(users_message, user_id)
+        elif users_search_parameter_item_id == constants.SearchParametersItemsIds.INTERESTS:
+            Bot.__processing_search_parameter_item_interests(users_message, user_id)
 
     @staticmethod
     def __processing_search_parameter_item_age_group(users_message: str, user_id: int):
@@ -239,6 +245,61 @@ class Bot:
             Bot.__bot.send_message(user_id, text=phrases.select_from_the_list)
 
         if users_message in (phrases.does_not_matter, phrases.finish_typing):
-            Bot.__database.set_users_search_parameter_item_id(user_id, constants.SearchParametersItemsIds.NULL)
+            Bot.__database.set_users_search_parameter_item_id(user_id,
+                                                              constants.SearchParametersItemsIds.SPOKEN_LANGUAGES)
             Bot.__bot.send_message(user_id, text=phrases.enter_spoken_languages,
                                    reply_markup=Keyboards.search_parameters_spoken_languages)
+
+    @staticmethod
+    def __processing_search_parameter_item_spoken_languages(users_message: str, user_id: int):
+        if users_message == phrases.does_not_matter:
+            Bot.__database.set_null_users_search_parameter_item(user_id,
+                                                                item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES)
+        elif users_message in phrases.spoken_languages:
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
+                                                                 value=users_message)
+        elif users_message != phrases.finish_typing:
+            Bot.__bot.send_message(user_id, text=phrases.select_from_the_list)
+
+        if users_message in (phrases.does_not_matter, phrases.finish_typing):
+            Bot.__database.set_users_search_parameter_item_id(user_id,
+                                                              constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
+            Bot.__bot.send_message(user_id, text=phrases.enter_programming_languages,
+                                   reply_markup=Keyboards.search_parameters_programming_languages)
+
+    @staticmethod
+    def __processing_search_parameter_item_programming_languages(users_message: str, user_id: int):
+        if users_message == phrases.does_not_matter:
+            Bot.__database.set_null_users_search_parameter_item(user_id,
+                                                                item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
+        elif users_message in phrases.programming_languages:
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
+                                                                 value=users_message)
+        elif users_message != phrases.finish_typing:
+            Bot.__bot.send_message(user_id, text=phrases.select_from_the_list)
+
+        if users_message in (phrases.does_not_matter, phrases.finish_typing):
+            Bot.__database.set_users_search_parameter_item_id(user_id,
+                                                              constants.SearchParametersItemsIds.INTERESTS)
+            Bot.__bot.send_message(user_id, text=phrases.enter_interests,
+                                   reply_markup=Keyboards.search_parameters_interests)
+
+    @staticmethod
+    def __processing_search_parameter_item_interests(users_message: str, user_id: int):
+        if users_message == phrases.does_not_matter:
+            Bot.__database.set_null_users_search_parameter_item(user_id,
+                                                                item=constants.SearchParametersItemsIds.INTERESTS)
+        elif users_message in phrases.interests:
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.INTERESTS,
+                                                                 value=users_message)
+        elif users_message != phrases.finish_typing:
+            Bot.__bot.send_message(user_id, text=phrases.select_from_the_list)
+
+        if users_message in (phrases.does_not_matter, phrases.finish_typing):
+            Bot.__database.set_users_search_parameter_item_id(user_id,
+                                                              constants.SearchParametersItemsIds.NULL)
+            Bot.__bot.send_message(user_id, text="OK",
+                                   reply_markup=Keyboards.search_parameters_interests)

@@ -52,3 +52,8 @@ class Keyboards:
                                                                           skip_button=phrases.does_not_matter)
     search_parameters_spoken_languages = __create_keyboard_with_multiple_choice(items_list=phrases.spoken_languages,
                                                                                 skip_button=phrases.does_not_matter)
+    search_parameters_programming_languages = __create_keyboard_with_multiple_choice(
+        items_list=phrases.programming_languages,
+        skip_button=phrases.does_not_matter)
+    search_parameters_interests = __create_keyboard_with_multiple_choice(items_list=phrases.interests,
+                                                                         skip_button=phrases.does_not_matter)
