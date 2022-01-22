@@ -23,12 +23,12 @@ class Database:
         return self.__search_parameters
 
     def __fill_profile(self):
-        self.__profile[constants.ProfileItemsIds.FIRST_NAME.value] = "None"
-        self.__profile[constants.ProfileItemsIds.LAST_NAME.value] = "None"
-        self.__profile[constants.ProfileItemsIds.AGE.value] = "None"
-        self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES.value] = ""
-        self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES.value] = ""
-        self.__profile[constants.ProfileItemsIds.INTERESTS.value] = ""
+        self.__profile[constants.ProfileItemsIds.FIRST_NAME] = "None"
+        self.__profile[constants.ProfileItemsIds.LAST_NAME] = "None"
+        self.__profile[constants.ProfileItemsIds.AGE] = "None"
+        self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES] = ""
+        self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES] = ""
+        self.__profile[constants.ProfileItemsIds.INTERESTS] = ""
 
     def __fill_search_parameters(self):
         self.__search_parameters[constants.SearchParametersItemsIds.AGE_GROUP] = ""

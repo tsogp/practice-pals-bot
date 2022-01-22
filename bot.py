@@ -87,7 +87,7 @@ class Bot:
     @staticmethod
     def __generate_string_with_users_profile(user_id: int):
         profile_str = ""
-        profile_items_ids = [member.value for member in constants.ProfileItemsIds if member.name != "NULL"]
+        profile_items_ids = [member for member in constants.ProfileItemsIds if member.name != "NULL"]
         for profile_item_id in profile_items_ids:
             profile_str += (f"*{phrases.profile_items[profile_item_id]}:* " +
                             Bot.__database.get_users_profile_item(user_id, profile_item_id) + "\n")
