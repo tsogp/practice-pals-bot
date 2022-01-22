@@ -58,4 +58,8 @@ user_have_not_search_parameters_yet = "Пожалуйста, укажите па
 
 enter_age_group_for_search = "Укажите возраст:"
 
+enter_spoken_languages = "Укажите языки:"
+
 does_not_matter = "\U0000274C Не имеет значения"
+
+age_groups = ["до 14 лет", "от 14 до 18 лет", "от 18 до 22 лет", "старше 22 лет"]

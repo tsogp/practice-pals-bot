@@ -40,6 +40,8 @@ class Bot:
             Bot.__processing_check_profile_menu_items(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.MAIN_MENU:
             Bot.__processing_main_menu_items(users_message, message.chat.id)
+        elif users_menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU:
+            Bot.__processing_search_parameters_menu_items(users_message, message.chat.id)
         else:
             Bot.__bot.send_message(message.chat.id, text=phrases.call_main_menu)
 
@@ -50,7 +52,7 @@ class Bot:
         else:  # Start registration procedure
             Bot.__bot.send_message(user_id, text=phrases.user_not_registered_yet)
             Bot.__bot.send_message(user_id, text=phrases.enter_your_first_name,
-                                   reply_markup=Keyboards.keyboard_do_not_specify)
+                                   reply_markup=Keyboards.profile_do_not_specify)
             Bot.__database.set_users_menu_id(user_id, constants.MenuIds.REGISTRATION_MENU)
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.FIRST_NAME)
 
@@ -61,15 +63,15 @@ class Bot:
         else:  # Start filling search parameters procedure
             Bot.__bot.send_message(user_id, text=phrases.user_have_not_search_parameters_yet)
             Bot.__bot.send_message(user_id, text=phrases.enter_age_group_for_search,
-                                   reply_markup=Keyboards.keyboard_does_not_matter)
+                                   reply_markup=Keyboards.search_parameters_age_groups)
             Bot.__database.set_users_menu_id(user_id, constants.MenuIds.SEARCH_PARAMETERS_MENU)
-            Bot.__database.set_users_search_parameters_item_id(user_id, constants.SearchParametersItemsIds.AGE_GROUP)
+            Bot.__database.set_users_search_parameter_item_id(user_id, constants.SearchParametersItemsIds.AGE_GROUP)
 
     @staticmethod
     def __activate_main_menu(user_id: int):
         Bot.__database.set_users_menu_id(user_id, constants.MenuIds.MAIN_MENU)
         Bot.__bot.send_message(user_id, text=phrases.main_menu_title,
-                               reply_markup=Keyboards.keyboard_main_menu)
+                               reply_markup=Keyboards.main_menu)
 
     @staticmethod
     def __show_users_profile(user_id: int):
@@ -80,7 +82,7 @@ class Bot:
         Bot.__bot.send_message(user_id, text=phrases.your_profile)
         Bot.__bot.send_message(user_id, text=Bot.__generate_string_with_users_profile(user_id),
                                parse_mode="Markdown",
-                               reply_markup=Keyboards.keyboard_ok_edit)
+                               reply_markup=Keyboards.profile_ok_edit)
 
     @staticmethod
     def __generate_string_with_users_profile(user_id: int):
@@ -164,7 +166,7 @@ class Bot:
         if users_message == phrases.do_not_specify or users_message.isdigit():
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.SPOKEN_LANGUAGES)
             Bot.__bot.send_message(user_id, text=phrases.enter_your_spoken_languages,
-                                   reply_markup=Keyboards.keyboard_spoken_languages)
+                                   reply_markup=Keyboards.profile_spoken_languages)
 
     @staticmethod
     def __processing_registration_item_spoken_language(users_message: str, user_id: int):
@@ -181,7 +183,7 @@ class Bot:
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.PROGRAMMING_LANGUAGES)
             Bot.__bot.send_message(user_id, text=phrases.enter_your_programming_languages,
-                                   reply_markup=Keyboards.keyboard_programming_languages)
+                                   reply_markup=Keyboards.profile_programming_languages)
 
     @staticmethod
     def __processing_registration_item_programming_language(users_message: str, user_id: int):
@@ -198,7 +200,7 @@ class Bot:
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.INTERESTS)
             Bot.__bot.send_message(user_id, text=phrases.enter_your_interests,
-                                   reply_markup=Keyboards.keyboard_interests)
+                                   reply_markup=Keyboards.profile_interests)
 
     @staticmethod
     def __processing_registration_item_interests(users_message: str, user_id: int):
@@ -217,3 +219,26 @@ class Bot:
             Bot.__bot.send_message(user_id, text=phrases.finish_registration,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_profile(user_id)
+
+    @staticmethod
+    def __processing_search_parameters_menu_items(users_message: str, user_id: int):
+        users_search_parameter_item_id = Bot.__database.get_users_search_parameter_item_id(user_id)
+        if users_search_parameter_item_id == constants.SearchParametersItemsIds.AGE_GROUP:
+            Bot.__processing_search_parameter_item_age_group(users_message, user_id)
+
+    @staticmethod
+    def __processing_search_parameter_item_age_group(users_message: str, user_id: int):
+        if users_message == phrases.does_not_matter:
+            Bot.__database.set_null_users_search_parameter_item(user_id,
+                                                                item=constants.SearchParametersItemsIds.AGE_GROUP)
+        elif users_message in phrases.age_groups:
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.AGE_GROUP,
+                                                                 value=users_message)
+        elif users_message != phrases.finish_typing:
+            Bot.__bot.send_message(user_id, text=phrases.select_from_the_list)
+
+        if users_message in (phrases.does_not_matter, phrases.finish_typing):
+            Bot.__database.set_users_search_parameter_item_id(user_id, constants.SearchParametersItemsIds.NULL)
+            Bot.__bot.send_message(user_id, text=phrases.enter_spoken_languages,
+                                   reply_markup=Keyboards.search_parameters_spoken_languages)
