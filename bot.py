@@ -55,6 +55,17 @@ class Bot:
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.FIRST_NAME)
 
     @staticmethod
+    def __check_search_parameters(user_id: int):
+        if Bot.__database.are_search_parameters_filled(user_id):
+            Bot.__bot.send_message(user_id, text="ОК", reply_markup=telebot.types.ReplyKeyboardRemove())
+        else:  # Start filling search parameters procedure
+            Bot.__bot.send_message(user_id, text=phrases.user_have_not_search_parameters_yet)
+            Bot.__bot.send_message(user_id, text=phrases.enter_age_group_for_search,
+                                   reply_markup=Keyboards.keyboard_does_not_matter)
+            Bot.__database.set_users_menu_id(user_id, constants.MenuIds.SEARCH_PARAMETERS_MENU)
+            Bot.__database.set_users_search_parameters_item_id(user_id, constants.SearchParametersItemsIds.AGE_GROUP)
+
+    @staticmethod
     def __activate_main_menu(user_id: int):
         Bot.__database.set_users_menu_id(user_id, constants.MenuIds.MAIN_MENU)
         Bot.__bot.send_message(user_id, text=phrases.main_menu_title,
@@ -83,7 +94,7 @@ class Bot:
     @staticmethod
     def __processing_main_menu_items(users_message: str, user_id: int):
         if users_message == phrases.main_menu_list[0]:
-            Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
+            Bot.__check_search_parameters(user_id)
         elif users_message == phrases.main_menu_list[1]:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
         elif users_message == phrases.main_menu_list[2]:
