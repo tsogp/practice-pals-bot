@@ -37,11 +37,13 @@ class Bot:
         if users_menu_id == constants.MenuIds.REGISTRATION_MENU:
             Bot.__processing_registration_menu_items(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.CHECK_PROFILE_MENU:
-            Bot.__processing_check_profile_menu_items(users_message, message.chat.id)
+            Bot.__processing_check_profile_items_menu(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.MAIN_MENU:
             Bot.__processing_main_menu_items(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU:
             Bot.__processing_search_parameters_menu_items(users_message, message.chat.id)
+        elif users_menu_id == constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU:
+            Bot.__processing_check_search_parameters_items_menu(users_message, message.chat.id)
         else:
             Bot.__bot.send_message(message.chat.id, text=phrases.call_main_menu)
 
@@ -125,12 +127,19 @@ class Bot:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
 
     @staticmethod
-    def __processing_check_profile_menu_items(users_message: str, user_id: int):
+    def __processing_check_profile_items_menu(users_message: str, user_id: int):
         if users_message == phrases.ok_edit[0]:
             Bot.__activate_main_menu(user_id)
         elif users_message == phrases.ok_edit[1]:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
             Bot.__activate_main_menu(user_id)
+
+    @staticmethod
+    def __processing_check_search_parameters_items_menu(users_message: str, user_id: int):
+        if users_message == phrases.ok_edit[0]:
+            Bot.__bot.send_message(user_id, text="OK", reply_markup=telebot.types.ReplyKeyboardRemove())
+        elif users_message == phrases.ok_edit[1]:
+            Bot.__bot.send_message(user_id, text="OK № 2", reply_markup=telebot.types.ReplyKeyboardRemove())
 
     @staticmethod
     def __processing_registration_menu_items(users_message: str, user_id: int):
