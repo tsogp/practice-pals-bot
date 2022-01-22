@@ -44,6 +44,8 @@ class Bot:
             Bot.__processing_search_parameters_menu_items(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU:
             Bot.__processing_check_search_parameters_items_menu(users_message, message.chat.id)
+        elif users_menu_id == constants.MenuIds.SEARCH_MENU:
+            Bot.__processing_search_menu_items(users_message, message.chat.id)
         else:
             Bot.__bot.send_message(message.chat.id, text=phrases.call_main_menu)
 
@@ -74,6 +76,12 @@ class Bot:
         Bot.__database.set_users_menu_id(user_id, constants.MenuIds.MAIN_MENU)
         Bot.__bot.send_message(user_id, text=phrases.main_menu_title,
                                reply_markup=Keyboards.main_menu)
+
+    @staticmethod
+    def __activate_search_menu(user_id: int):
+        Bot.__database.set_users_menu_id(user_id, constants.MenuIds.SEARCH_MENU)
+        Bot.__bot.send_message(user_id, text=phrases.search_menu_title,
+                               reply_markup=Keyboards.search_menu)
 
     @staticmethod
     def __show_users_profile(user_id: int):
@@ -137,9 +145,10 @@ class Bot:
     @staticmethod
     def __processing_check_search_parameters_items_menu(users_message: str, user_id: int):
         if users_message == phrases.ok_edit[0]:
-            Bot.__bot.send_message(user_id, text="OK", reply_markup=telebot.types.ReplyKeyboardRemove())
+            Bot.__activate_search_menu(user_id)
         elif users_message == phrases.ok_edit[1]:
-            Bot.__bot.send_message(user_id, text="OK № 2", reply_markup=telebot.types.ReplyKeyboardRemove())
+            Bot.__bot.send_message(user_id, text=phrases.user_not_registered_yet)
+            Bot.__activate_search_menu(user_id)
 
     @staticmethod
     def __processing_registration_menu_items(users_message: str, user_id: int):
@@ -335,3 +344,12 @@ class Bot:
             Bot.__bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_search_parameters(user_id)
+
+    @staticmethod
+    def __processing_search_menu_items(users_message: str, user_id: int):
+        if users_message == phrases.search_menu_list[0]:
+            Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
+        elif users_message == phrases.search_menu_list[1]:
+            Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
+        elif users_message == phrases.search_menu_list[2]:
+            Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)

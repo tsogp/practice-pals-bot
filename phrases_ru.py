@@ -76,3 +76,9 @@ search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Воз
                            constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: "Языки",
                            constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
                            constants.SearchParametersItemsIds.INTERESTS: "Интересы"}
+
+search_menu_title = "Вы находитесь в меню поиска единомышленников"
+
+search_menu_list = ["Искать единомышленников",
+                    "Редактировать параметры поиска",
+                    "Редактировать профиль"]

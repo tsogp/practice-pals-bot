@@ -18,10 +18,10 @@ class Keyboards:
         return keyboard
 
     @staticmethod
-    def __create_keyboard_main_menu():
+    def __create_menu_with_items_only_from_list(items_list):
         keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        for i in range(len(phrases.main_menu_list)):
-            keyboard.add(telebot.types.KeyboardButton(text=phrases.main_menu_list[i]))
+        for item in items_list:
+            keyboard.add(telebot.types.KeyboardButton(text=item))
         return keyboard
 
     @staticmethod
@@ -46,7 +46,7 @@ class Keyboards:
     profile_interests = __create_keyboard_with_multiple_choice(items_list=phrases.interests,
                                                                skip_button=phrases.do_not_specify)
     profile_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
-    main_menu = __create_keyboard_main_menu()
+    main_menu = __create_menu_with_items_only_from_list(phrases.main_menu_list)
     search_parameters_does_not_matter = __create_keyboard_with_one_button(phrases.does_not_matter)
     search_parameters_age_groups = __create_keyboard_with_multiple_choice(items_list=phrases.age_groups,
                                                                           skip_button=phrases.does_not_matter)
@@ -58,3 +58,4 @@ class Keyboards:
     search_parameters_interests = __create_keyboard_with_multiple_choice(items_list=phrases.interests,
                                                                          skip_button=phrases.does_not_matter)
     search_parameters_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
+    search_menu = __create_menu_with_items_only_from_list(items_list=phrases.search_menu_list)
