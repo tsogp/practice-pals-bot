@@ -5,11 +5,11 @@ import constants
 class Database:
 
     def __init__(self):
-        self.__is_registered = True
-        self.__menu_id = 1
+        self.__is_registered = False
+        self.__menu_id = constants.MenuIds.MAIN_MENU
         self.__are_search_parameters_filled = False
-        self.__registration_item_id = 0
-        self.__search_parameter_item_id = 0
+        self.__registration_item_id = constants.ProfileItemsIds.NULL
+        self.__search_parameter_item_id = constants.SearchParametersItemsIds.NULL
         self.__profile = dict()
         self.__fill_profile()
         self.__search_parameters = dict()
