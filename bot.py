@@ -68,7 +68,7 @@ class Bot:
     @staticmethod
     def __check_search_parameters(user_id: int):
         if Bot.__database.are_search_parameters_filled(user_id):
-            Bot.__bot.send_message(user_id, text="ОК", reply_markup=telebot.types.ReplyKeyboardRemove())
+            Bot.__activate_search_menu(user_id)
         else:  # Start filling search parameters procedure
             Bot.__bot.send_message(user_id, text=phrases.user_have_not_search_parameters_yet)
             Bot.__bot.send_message(user_id, text=phrases.enter_age_group_for_search,
