@@ -41,15 +41,44 @@ finish_registration = "\U0001F3C1 Регистрация завершена!"
 
 your_profile = "\U0001F600 Ваш профиль:"
 
-profile_items = {constants.ProfileItemsIds.FIRST_NAME.value: "Имя",
-                 constants.ProfileItemsIds.LAST_NAME.value: "Фамилия",
-                 constants.ProfileItemsIds.AGE.value: "Возраст",
-                 constants.ProfileItemsIds.SPOKEN_LANGUAGES.value: "Языки",
-                 constants.ProfileItemsIds.PROGRAMMING_LANGUAGES.value: "Языки программирования",
-                 constants.ProfileItemsIds.INTERESTS.value: "Интересы"}
+profile_items = {constants.ProfileItemsIds.FIRST_NAME: "Имя",
+                 constants.ProfileItemsIds.LAST_NAME: "Фамилия",
+                 constants.ProfileItemsIds.AGE: "Возраст",
+                 constants.ProfileItemsIds.SPOKEN_LANGUAGES: "Языки",
+                 constants.ProfileItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
+                 constants.ProfileItemsIds.INTERESTS: "Интересы"}
 
 ok_edit = ["\U00002705 Всё верно", "\U0000270F Редактировать"]
 
 select_from_the_list = "Пожалуйста, выберите один или несколько пунктов из списка"
 
 call_main_menu = "/main_menu, чтобы перейти в главное меню бота"
+
+user_have_not_search_parameters_yet = "Пожалуйста, укажите параметры для поиска единомышленников"
+
+enter_age_group_for_search = "Укажите возраст:"
+
+enter_spoken_languages = "Укажите языки:"
+
+enter_programming_languages = "Укажите языки программирования:"
+
+enter_interests = "Укажите интересы:"
+
+does_not_matter = "\U0000274C Не имеет значения"
+
+age_groups = ["до 14 лет", "от 14 до 18 лет", "от 18 до 22 лет", "старше 22 лет"]
+
+finish_enter_search_parameters = "\U0001F3C1 Заполнение параметров для поиска единомышленников завершено!"
+
+your_search_parameters = "Ваши параметры для поиска единомышленников:"
+
+search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Возрастная группа",
+                           constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: "Языки",
+                           constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
+                           constants.SearchParametersItemsIds.INTERESTS: "Интересы"}
+
+search_menu_title = "Вы находитесь в меню поиска единомышленников"
+
+search_menu_list = ["\U0001F50E Искать единомышленников",
+                    "\U0001F4C4 Редактировать параметры поиска",
+                    "\U0001F600 Редактировать профиль"]
