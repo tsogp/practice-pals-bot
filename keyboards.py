@@ -1,3 +1,4 @@
+# File with telegram's keyboards objects for bot
 import telebot
 import phrases_ru as phrases
 

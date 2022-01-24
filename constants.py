@@ -1,7 +1,11 @@
+# File with constants for bot
 import enum
 
 
 class MenuIds(enum.Enum):
+    """
+    IDs of bots menus
+    """
     MAIN_MENU = enum.auto()
     REGISTRATION_MENU = enum.auto()
     CHECK_PROFILE_MENU = enum.auto()
@@ -11,6 +15,9 @@ class MenuIds(enum.Enum):
 
 
 class ProfileItemsIds(enum.Enum):
+    """
+    IDs of user's profile items
+    """
     NULL = enum.auto()
     FIRST_NAME = enum.auto()
     LAST_NAME = enum.auto()
@@ -21,11 +28,11 @@ class ProfileItemsIds(enum.Enum):
 
 
 class SearchParametersItemsIds(enum.Enum):
+    """
+    IDs of user's search parameters items
+    """
     NULL = enum.auto()
     AGE_GROUP = enum.auto()
     SPOKEN_LANGUAGES = enum.auto()
     PROGRAMMING_LANGUAGES = enum.auto()
     INTERESTS = enum.auto()
-
-
-MAIN_MENU_PREFIX = "main_menu_"

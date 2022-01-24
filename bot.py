@@ -17,7 +17,10 @@ class Bot:
 
     @__bot.message_handler(commands=['start'])
     @staticmethod
-    def start(message):
+    def __start(message):
+        """
+        Processing the command "/start"
+        """
         Bot.__bot.send_message(message.chat.id,
                                text=phrases.welcome_message,
                                reply_markup=telebot.types.ReplyKeyboardRemove())
@@ -26,7 +29,9 @@ class Bot:
     @__bot.message_handler(commands=['main_menu'])
     @staticmethod
     def __main_menu(message):
-        Bot.__database.set_users_menu_id(message.chat.id, constants.MenuIds.MAIN_MENU)
+        """
+        Processing the command "/main_menu"
+        """
         Bot.__activate_main_menu(message.chat.id)
 
     @__bot.message_handler(content_types=["text"])
