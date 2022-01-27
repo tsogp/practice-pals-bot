@@ -40,3 +40,5 @@ class SearchParametersItemsIds(enum.Enum):
 
 
 PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"
+
+MAXIMUM_NUMBER_OF_LIKES = 3

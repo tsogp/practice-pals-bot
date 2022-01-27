@@ -88,3 +88,7 @@ skip_profile = "\U0001F50E Искать ещё"
 go_to_main_menu = "\U0001F3E0 Вернуться в главное меню"
 
 candidates_profiles = "Профили согласно вашим критериям поиска: "
+
+telegram_login = "Telegram login: "
+
+likes_blocked = "Вы исчерпали кол-во лайков, доступное бесплатно"

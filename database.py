@@ -20,6 +20,8 @@ class Database:
         self.__telegram_id = None
         self.__telegram_login = "@yu_leo"
 
+        self.__remaining_number_of_likes = constants.MAXIMUM_NUMBER_OF_LIKES
+
     @property
     def profile(self):
         return self.__profile
@@ -107,3 +109,9 @@ class Database:
 
     def get_users_telegram_login_by_id(self, user_id: int):
         return self.__telegram_login
+
+    def dec_remaining_number_of_likes(self, user_id: int):
+        self.__remaining_number_of_likes -= 1
+
+    def get_remaining_number_of_likes(self, user_id: int):
+        return self.__remaining_number_of_likes

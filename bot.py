@@ -55,6 +55,10 @@ class Bot:
         else:
             Bot.__bot.send_message(message.chat.id, text=phrases.call_main_menu)
 
+    @staticmethod
+    def __is_like_acceptable(user_id: int):
+        return Bot.__database.get_remaining_number_of_likes(user_id) > 0
+
     @__bot.callback_query_handler(func=lambda call: True)
     @staticmethod
     def query_handler(call):
@@ -64,10 +68,16 @@ class Bot:
         if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
             if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
                 candidate_id = Bot.__database.get_users_shown_profile_id(call.message.chat.id)
-                if candidate_id is not None:
+                if candidate_id is None:
+                    return
+                if Bot.__is_like_acceptable(call.message.chat.id):
                     candidate_login = Bot.__database.get_users_telegram_login_by_id(candidate_id)
-                    Bot.__bot.send_message(call.message.chat.id, text="Login: " + candidate_login)
-                    Bot.__database.set_users_shown_profile_id(call.message.chat.id, None)
+                    Bot.__bot.send_message(call.message.chat.id, text=phrases.telegram_login + candidate_login)
+                    Bot.__database.dec_remaining_number_of_likes(call.message.chat.id)
+                else:
+                    Bot.__bot.send_message(call.message.chat.id, text=phrases.likes_blocked)
+                Bot.__database.set_users_shown_profile_id(call.message.chat.id, None)
+
             elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
                 Bot.__show_candidates_profile(call.message.chat.id)
             elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
