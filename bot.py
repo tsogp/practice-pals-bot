@@ -63,9 +63,11 @@ class Bot:
         Bot.__bot.answer_callback_query(callback_query_id=call.id, text='')
         if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
             if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
-                candidate_id = Bot.__database.get_users_telegram_login_by_id(call.message.chat.id)
-                candidate_login = Bot.__database.get_users_telegram_login_by_id(candidate_id)
-                Bot.__bot.send_message(call.message.chat.id, text="Login: " + candidate_login)
+                candidate_id = Bot.__database.get_users_shown_profile_id(call.message.chat.id)
+                if candidate_id is not None:
+                    candidate_login = Bot.__database.get_users_telegram_login_by_id(candidate_id)
+                    Bot.__bot.send_message(call.message.chat.id, text="Login: " + candidate_login)
+                    Bot.__database.set_users_shown_profile_id(call.message.chat.id, None)
             elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
                 Bot.__show_candidates_profile(call.message.chat.id)
             elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":

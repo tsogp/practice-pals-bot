@@ -99,7 +99,7 @@ class Database:
     def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds):
         return self.__search_parameters[item]
 
-    def set_users_shown_profile_id(self, user_id: int, candidate_id: int):
+    def set_users_shown_profile_id(self, user_id: int, candidate_id):
         self.__shown_profile_id = candidate_id
 
     def get_users_shown_profile_id(self, user_id: int):
