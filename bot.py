@@ -52,10 +52,24 @@ class Bot:
             Bot.__processing_check_search_parameters_items_menu(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.SEARCH_MENU:
             Bot.__processing_search_menu_items(users_message, message.chat.id)
-        elif users_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
-            Bot.__processing_profile_reactions_menu_items(users_message, message.chat.id)
         else:
             Bot.__bot.send_message(message.chat.id, text=phrases.call_main_menu)
+
+    @__bot.callback_query_handler(func=lambda call: True)
+    @staticmethod
+    def query_handler(call):
+        """Inline-keyboards button's click handler"""
+        users_active_menu_id = Bot.__database.get_users_menu_id(call.message.chat.id)
+        Bot.__bot.answer_callback_query(callback_query_id=call.id, text='')
+        if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
+            if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
+                candidate_id = Bot.__database.get_users_telegram_login_by_id(call.message.chat.id)
+                candidate_login = Bot.__database.get_users_telegram_login_by_id(candidate_id)
+                Bot.__bot.send_message(call.message.chat.id, text="Login: " + candidate_login)
+            elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
+                Bot.__show_candidates_profile(call.message.chat.id)
+            elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
+                Bot.__activate_main_menu(call.message.chat.id)
 
     @staticmethod
     def __check_registration(user_id: int):
@@ -358,6 +372,8 @@ class Bot:
     def __processing_search_menu_items(users_message: str, user_id: int):
         if users_message == phrases.search_menu_list[0]:
             Bot.__database.set_users_menu_id(user_id, constants.MenuIds.PROFILE_REACTIONS_MENU)
+            Bot.__bot.send_message(user_id, text=phrases.candidates_profiles,
+                                   reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_candidates_profile(user_id)
         elif users_message == phrases.search_menu_list[1]:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
@@ -369,16 +385,5 @@ class Bot:
         candidate_id = search.Search.get_candidate_id(user_id)
         Bot.__bot.send_message(user_id, text=Bot.__generate_string_with_users_profile(candidate_id),
                                parse_mode="Markdown",
-                               reply_markup=Keyboards.search_action_menu)
+                               reply_markup=Keyboards.profile_reaction_menu)
         Bot.__database.set_users_shown_profile_id(user_id, candidate_id)
-
-    @staticmethod
-    def __processing_profile_reactions_menu_items(users_message: str, user_id: int):
-        if users_message == phrases.get_contact:
-            candidate_id = Bot.__database.get_users_telegram_login_by_id(user_id)
-            candidate_login = Bot.__database.get_users_telegram_login_by_id(candidate_id)
-            Bot.__bot.send_message(user_id, text="Login: " + candidate_login)
-        elif users_message == phrases.skip_profile:
-            Bot.__show_candidates_profile(user_id)
-        elif users_message == phrases.go_to_main_menu:
-            Bot.__activate_main_menu(user_id)

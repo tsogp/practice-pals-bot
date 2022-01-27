@@ -37,3 +37,6 @@ class SearchParametersItemsIds(enum.Enum):
     SPOKEN_LANGUAGES = enum.auto()
     PROGRAMMING_LANGUAGES = enum.auto()
     INTERESTS = enum.auto()
+
+
+PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"

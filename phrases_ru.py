@@ -86,3 +86,5 @@ search_menu_list = ["\U0001F50E Искать единомышленников",
 get_contact = "\U0001F44D Начать общение"
 skip_profile = "\U0001F50E Искать ещё"
 go_to_main_menu = "\U0001F3E0 Вернуться в главное меню"
+
+candidates_profiles = "Профили согласно вашим критериям поиска: "
