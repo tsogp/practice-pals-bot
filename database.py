@@ -5,7 +5,7 @@ import constants
 class Database:
 
     def __init__(self):
-        self.__is_registered = True
+        self.__is_registered = False
         self.__menu_id = constants.MenuIds.MAIN_MENU
         self.__are_search_parameters_filled = True
         self.__registration_item_id = constants.ProfileItemsIds.NULL
@@ -59,10 +59,10 @@ class Database:
     def is_registered(self, user_id: int):
         return self.__is_registered
 
-    def register_user(self, user_id: int):
+    def register_user(self, user_id: int, user_name: str):
         self.__is_registered = True
         self.__telegram_id = user_id
-        self.__telegram_login = "@yu_leo"
+        self.__telegram_login = "@" + user_name
 
     def are_search_parameters_filled(self, user_id: int):
         return self.__are_search_parameters_filled

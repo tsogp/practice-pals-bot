@@ -41,7 +41,7 @@ class Bot:
         users_message = message.text
         users_menu_id = Bot.__database.get_users_menu_id(message.chat.id)
         if users_menu_id == constants.MenuIds.REGISTRATION_MENU:
-            Bot.__processing_registration_menu_items(users_message, message.chat.id)
+            Bot.__processing_registration_menu_items(users_message, message.chat.id, message.from_user.username)
         elif users_menu_id == constants.MenuIds.CHECK_PROFILE_MENU:
             Bot.__processing_check_profile_items_menu(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.MAIN_MENU:
@@ -185,7 +185,7 @@ class Bot:
             Bot.__activate_search_menu(user_id)
 
     @staticmethod
-    def __processing_registration_menu_items(users_message: str, user_id: int):
+    def __processing_registration_menu_items(users_message: str, user_id: int, user_name: str):
         users_registration_item_id = Bot.__database.get_users_registration_item_id(user_id)
         if users_registration_item_id == constants.ProfileItemsIds.FIRST_NAME:
             Bot.__processing_registration_item_first_name(users_message, user_id)
@@ -198,7 +198,7 @@ class Bot:
         elif users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES:
             Bot.__processing_registration_item_programming_language(users_message, user_id)
         elif users_registration_item_id == constants.ProfileItemsIds.INTERESTS:
-            Bot.__processing_registration_item_interests(users_message, user_id)
+            Bot.__processing_registration_item_interests(users_message, user_id, user_name)
 
     @staticmethod
     def __processing_registration_item_first_name(users_message: str, user_id: int):
@@ -277,7 +277,7 @@ class Bot:
                                    reply_markup=Keyboards.profile_interests)
 
     @staticmethod
-    def __processing_registration_item_interests(users_message: str, user_id: int):
+    def __processing_registration_item_interests(users_message: str, user_id: int, user_name: str):
         if users_message == phrases.do_not_specify:
             Bot.__database.set_null_users_registration_item(user_id,
                                                             item=constants.ProfileItemsIds.INTERESTS)
@@ -290,7 +290,7 @@ class Bot:
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
-            Bot.__database.register_user(user_id)
+            Bot.__database.register_user(user_id, user_name)
             Bot.__bot.send_message(user_id, text=phrases.finish_registration,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_profile(user_id)
