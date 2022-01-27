@@ -5,15 +5,20 @@ import constants
 class Database:
 
     def __init__(self):
-        self.__is_registered = False
+        self.__is_registered = True
         self.__menu_id = constants.MenuIds.MAIN_MENU
-        self.__are_search_parameters_filled = False
+        self.__are_search_parameters_filled = True
         self.__registration_item_id = constants.ProfileItemsIds.NULL
         self.__search_parameter_item_id = constants.SearchParametersItemsIds.NULL
         self.__profile = dict()
         self.__fill_profile()
         self.__search_parameters = dict()
         self.__fill_search_parameters()
+
+        self.__shown_profile_id = None
+
+        self.__telegram_id = None
+        self.__telegram_login = "@yu_leo"
 
     @property
     def profile(self):
@@ -52,6 +57,11 @@ class Database:
     def is_registered(self, user_id: int):
         return self.__is_registered
 
+    def register_user(self, user_id: int):
+        self.__is_registered = True
+        self.__telegram_id = user_id
+        self.__telegram_login = "@yu_leo"
+
     def are_search_parameters_filled(self, user_id: int):
         return self.__are_search_parameters_filled
 
@@ -88,3 +98,12 @@ class Database:
 
     def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds):
         return self.__search_parameters[item]
+
+    def set_users_shown_profile_id(self, user_id: int, candidate_id: int):
+        self.__shown_profile_id = candidate_id
+
+    def get_users_shown_profile_id(self, user_id: int):
+        return self.__shown_profile_id
+
+    def get_users_telegram_login_by_id(self, user_id: int):
+        return self.__telegram_login

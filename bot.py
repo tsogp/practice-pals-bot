@@ -1,6 +1,7 @@
 import telebot
 import phrases_ru as phrases
 import constants
+import search
 from keyboards import Keyboards
 
 import bottoken
@@ -51,6 +52,8 @@ class Bot:
             Bot.__processing_check_search_parameters_items_menu(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.SEARCH_MENU:
             Bot.__processing_search_menu_items(users_message, message.chat.id)
+        elif users_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
+            Bot.__processing_profile_reactions_menu_items(users_message, message.chat.id)
         else:
             Bot.__bot.send_message(message.chat.id, text=phrases.call_main_menu)
 
@@ -261,6 +264,7 @@ class Bot:
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
+            Bot.__database.register_user(user_id)
             Bot.__bot.send_message(user_id, text=phrases.finish_registration,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_profile(user_id)
@@ -353,8 +357,28 @@ class Bot:
     @staticmethod
     def __processing_search_menu_items(users_message: str, user_id: int):
         if users_message == phrases.search_menu_list[0]:
-            Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
+            Bot.__database.set_users_menu_id(user_id, constants.MenuIds.PROFILE_REACTIONS_MENU)
+            Bot.__show_candidates_profile(user_id)
         elif users_message == phrases.search_menu_list[1]:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
         elif users_message == phrases.search_menu_list[2]:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
+
+    @staticmethod
+    def __show_candidates_profile(user_id: int):
+        candidate_id = search.Search.get_candidate_id(user_id)
+        Bot.__bot.send_message(user_id, text=Bot.__generate_string_with_users_profile(candidate_id),
+                               parse_mode="Markdown",
+                               reply_markup=Keyboards.search_action_menu)
+        Bot.__database.set_users_shown_profile_id(user_id, candidate_id)
+
+    @staticmethod
+    def __processing_profile_reactions_menu_items(users_message: str, user_id: int):
+        if users_message == phrases.get_contact:
+            candidate_id = Bot.__database.get_users_telegram_login_by_id(user_id)
+            candidate_login = Bot.__database.get_users_telegram_login_by_id(candidate_id)
+            Bot.__bot.send_message(user_id, text="Login: " + candidate_login)
+        elif users_message == phrases.skip_profile:
+            Bot.__show_candidates_profile(user_id)
+        elif users_message == phrases.go_to_main_menu:
+            Bot.__activate_main_menu(user_id)

@@ -60,3 +60,6 @@ class Keyboards:
                                                                          skip_button=phrases.does_not_matter)
     search_parameters_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
     search_menu = __create_menu_with_items_only_from_list(items_list=phrases.search_menu_list)
+
+    search_action_menu = __create_menu_with_items_only_from_list(
+        [phrases.get_contact, phrases.skip_profile, phrases.go_to_main_menu])
