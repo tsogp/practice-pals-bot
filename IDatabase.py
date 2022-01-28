@@ -178,7 +178,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def get_number_of_likes(self, user_id: int):
+    def get_number_of_likes(self, user_id: int) -> int:
         """
         :param user_id: Telegram's id of user we work with
         :return: value of "number_of_likes" field
