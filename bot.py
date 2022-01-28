@@ -203,8 +203,9 @@ class Bot:
     @staticmethod
     def __processing_registration_item_first_name(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.FIRST_NAME)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.FIRST_NAME,
+                                                       value=None)
         else:
             Bot.__database.set_users_registration_item(user_id,
                                                        item=constants.ProfileItemsIds.FIRST_NAME,
@@ -216,8 +217,9 @@ class Bot:
     @staticmethod
     def __processing_registration_item_last_name(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.LAST_NAME)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.LAST_NAME,
+                                                       value=None)
         else:
             Bot.__database.set_users_registration_item(user_id,
                                                        item=constants.ProfileItemsIds.LAST_NAME,
@@ -229,7 +231,7 @@ class Bot:
     @staticmethod
     def __processing_registration_item_age(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id, item=constants.ProfileItemsIds.AGE)
+            Bot.__database.set_users_registration_item(user_id, item=constants.ProfileItemsIds.AGE, value=None)
         elif users_message.isdigit():
             Bot.__database.set_users_registration_item(user_id,
                                                        item=constants.ProfileItemsIds.AGE,
@@ -245,8 +247,9 @@ class Bot:
     @staticmethod
     def __processing_registration_item_spoken_language(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.SPOKEN_LANGUAGES)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
+                                                       value=None)
         elif users_message in phrases.spoken_languages:
             Bot.__database.append_to_users_registration_item(user_id,
                                                              item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
@@ -262,8 +265,8 @@ class Bot:
     @staticmethod
     def __processing_registration_item_programming_language(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
         elif users_message in phrases.programming_languages:
             Bot.__database.append_to_users_registration_item(user_id,
                                                              item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
@@ -279,8 +282,8 @@ class Bot:
     @staticmethod
     def __processing_registration_item_interests(users_message: str, user_id: int, user_name: str):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.INTERESTS)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.INTERESTS, value=None)
         elif users_message in phrases.interests:
             Bot.__database.append_to_users_registration_item(user_id,
                                                              item=constants.ProfileItemsIds.INTERESTS,
@@ -310,8 +313,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_age_group(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.AGE_GROUP)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.AGE_GROUP,
+                                                                 value=None)
         elif users_message in phrases.age_groups:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.AGE_GROUP,
@@ -328,8 +332,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_spoken_languages(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
+                                                                 value=None)
         elif users_message in phrases.spoken_languages:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
@@ -346,8 +351,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_programming_languages(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
+                                                                 value=None)
         elif users_message in phrases.programming_languages:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
@@ -364,8 +370,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_interests(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.INTERESTS)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.INTERESTS,
+                                                                 value=None)
         elif users_message in phrases.interests:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.INTERESTS,

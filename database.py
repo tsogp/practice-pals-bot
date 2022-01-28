@@ -1,5 +1,6 @@
 # File with fake database class
 import constants
+from typing import Optional
 
 
 class Database:
@@ -70,8 +71,11 @@ class Database:
     def set_search_parameters_filled(self, user_id: int):
         self.__are_search_parameters_filled = True
 
-    def set_users_registration_item(self, user_id: int, item: constants.ProfileItemsIds, value: str):
-        self.__profile[item] = value
+    def set_users_registration_item(self, user_id: int, item: constants.ProfileItemsIds, value: Optional[str]):
+        if value is None:
+            self.__profile[item] = "None"
+        else:
+            self.__profile[item] = value
 
     def get_users_profile_item(self, user_id: int, item: int):
         return self.__profile[item]
@@ -82,9 +86,6 @@ class Database:
         else:
             self.__profile[item] = value
 
-    def set_null_users_registration_item(self, user_id: int, item: constants.ProfileItemsIds):
-        self.__profile[item] = "None"
-
     def set_users_search_parameter_item_id(self, user_id: int,
                                            search_parameter_item_id: constants.SearchParametersItemsIds):
         self.__search_parameter_item_id = search_parameter_item_id
@@ -92,14 +93,18 @@ class Database:
     def get_users_search_parameter_item_id(self, user_id: int):
         return self.__search_parameter_item_id
 
-    def set_null_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds):
-        self.__search_parameters[item] = "None"
-
-    def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds, value: str):
+    def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds,
+                                              value: Optional[str]):
         if item in self.__search_parameters:
-            self.__search_parameters[item] = self.__search_parameters[item] + value + " "
+            if value is None:
+                self.__search_parameters[item] = "None"
+            else:
+                self.__search_parameters[item] = self.__search_parameters[item] + value + " "
         else:
-            self.__search_parameters[item] = value
+            if value is None:
+                self.__search_parameters[item] = "None"
+            else:
+                self.__search_parameters[item] = value
 
     def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds):
         return self.__search_parameters[item]
