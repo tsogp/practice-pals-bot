@@ -1,6 +1,7 @@
 import telebot
 import phrases_ru as phrases
 import constants
+import search
 from keyboards import Keyboards
 
 import bottoken
@@ -40,7 +41,7 @@ class Bot:
         users_message = message.text
         users_menu_id = Bot.__database.get_users_menu_id(message.chat.id)
         if users_menu_id == constants.MenuIds.REGISTRATION_MENU:
-            Bot.__processing_registration_menu_items(users_message, message.chat.id)
+            Bot.__processing_registration_menu_items(users_message, message.chat.id, message.from_user.username)
         elif users_menu_id == constants.MenuIds.CHECK_PROFILE_MENU:
             Bot.__processing_check_profile_items_menu(users_message, message.chat.id)
         elif users_menu_id == constants.MenuIds.MAIN_MENU:
@@ -53,6 +54,34 @@ class Bot:
             Bot.__processing_search_menu_items(users_message, message.chat.id)
         else:
             Bot.__bot.send_message(message.chat.id, text=phrases.call_main_menu)
+
+    @staticmethod
+    def __is_like_acceptable(user_id: int):
+        return Bot.__database.get_remaining_number_of_likes(user_id) > 0
+
+    @__bot.callback_query_handler(func=lambda call: True)
+    @staticmethod
+    def query_handler(call):
+        """Inline-keyboards button's click handler"""
+        users_active_menu_id = Bot.__database.get_users_menu_id(call.message.chat.id)
+        Bot.__bot.answer_callback_query(callback_query_id=call.id, text='')
+        if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
+            if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
+                candidate_id = Bot.__database.get_users_shown_profile_id(call.message.chat.id)
+                if candidate_id is None:
+                    return
+                if Bot.__is_like_acceptable(call.message.chat.id):
+                    candidate_login = Bot.__database.get_users_telegram_login_by_id(candidate_id)
+                    Bot.__bot.send_message(call.message.chat.id, text=phrases.telegram_login + candidate_login)
+                    Bot.__database.dec_remaining_number_of_likes(call.message.chat.id)
+                else:
+                    Bot.__bot.send_message(call.message.chat.id, text=phrases.likes_blocked)
+                Bot.__database.set_users_shown_profile_id(call.message.chat.id, None)
+
+            elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
+                Bot.__show_candidates_profile(call.message.chat.id)
+            elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
+                Bot.__activate_main_menu(call.message.chat.id)
 
     @staticmethod
     def __check_registration(user_id: int):
@@ -156,7 +185,7 @@ class Bot:
             Bot.__activate_search_menu(user_id)
 
     @staticmethod
-    def __processing_registration_menu_items(users_message: str, user_id: int):
+    def __processing_registration_menu_items(users_message: str, user_id: int, user_name: str):
         users_registration_item_id = Bot.__database.get_users_registration_item_id(user_id)
         if users_registration_item_id == constants.ProfileItemsIds.FIRST_NAME:
             Bot.__processing_registration_item_first_name(users_message, user_id)
@@ -169,13 +198,14 @@ class Bot:
         elif users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES:
             Bot.__processing_registration_item_programming_language(users_message, user_id)
         elif users_registration_item_id == constants.ProfileItemsIds.INTERESTS:
-            Bot.__processing_registration_item_interests(users_message, user_id)
+            Bot.__processing_registration_item_interests(users_message, user_id, user_name)
 
     @staticmethod
     def __processing_registration_item_first_name(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.FIRST_NAME)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.FIRST_NAME,
+                                                       value=None)
         else:
             Bot.__database.set_users_registration_item(user_id,
                                                        item=constants.ProfileItemsIds.FIRST_NAME,
@@ -187,8 +217,9 @@ class Bot:
     @staticmethod
     def __processing_registration_item_last_name(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.LAST_NAME)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.LAST_NAME,
+                                                       value=None)
         else:
             Bot.__database.set_users_registration_item(user_id,
                                                        item=constants.ProfileItemsIds.LAST_NAME,
@@ -200,7 +231,7 @@ class Bot:
     @staticmethod
     def __processing_registration_item_age(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id, item=constants.ProfileItemsIds.AGE)
+            Bot.__database.set_users_registration_item(user_id, item=constants.ProfileItemsIds.AGE, value=None)
         elif users_message.isdigit():
             Bot.__database.set_users_registration_item(user_id,
                                                        item=constants.ProfileItemsIds.AGE,
@@ -216,8 +247,9 @@ class Bot:
     @staticmethod
     def __processing_registration_item_spoken_language(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.SPOKEN_LANGUAGES)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
+                                                       value=None)
         elif users_message in phrases.spoken_languages:
             Bot.__database.append_to_users_registration_item(user_id,
                                                              item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
@@ -233,8 +265,8 @@ class Bot:
     @staticmethod
     def __processing_registration_item_programming_language(users_message: str, user_id: int):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
         elif users_message in phrases.programming_languages:
             Bot.__database.append_to_users_registration_item(user_id,
                                                              item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
@@ -248,10 +280,10 @@ class Bot:
                                    reply_markup=Keyboards.profile_interests)
 
     @staticmethod
-    def __processing_registration_item_interests(users_message: str, user_id: int):
+    def __processing_registration_item_interests(users_message: str, user_id: int, user_name: str):
         if users_message == phrases.do_not_specify:
-            Bot.__database.set_null_users_registration_item(user_id,
-                                                            item=constants.ProfileItemsIds.INTERESTS)
+            Bot.__database.set_users_registration_item(user_id,
+                                                       item=constants.ProfileItemsIds.INTERESTS, value=None)
         elif users_message in phrases.interests:
             Bot.__database.append_to_users_registration_item(user_id,
                                                              item=constants.ProfileItemsIds.INTERESTS,
@@ -261,6 +293,7 @@ class Bot:
 
         if users_message in (phrases.do_not_specify, phrases.finish_typing):
             Bot.__database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
+            Bot.__database.register_user(user_id, user_name)
             Bot.__bot.send_message(user_id, text=phrases.finish_registration,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_profile(user_id)
@@ -280,8 +313,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_age_group(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.AGE_GROUP)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.AGE_GROUP,
+                                                                 value=None)
         elif users_message in phrases.age_groups:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.AGE_GROUP,
@@ -298,8 +332,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_spoken_languages(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
+                                                                 value=None)
         elif users_message in phrases.spoken_languages:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
@@ -316,8 +351,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_programming_languages(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
+                                                                 value=None)
         elif users_message in phrases.programming_languages:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
@@ -334,8 +370,9 @@ class Bot:
     @staticmethod
     def __processing_search_parameter_item_interests(users_message: str, user_id: int):
         if users_message == phrases.does_not_matter:
-            Bot.__database.set_null_users_search_parameter_item(user_id,
-                                                                item=constants.SearchParametersItemsIds.INTERESTS)
+            Bot.__database.append_to_users_search_parameter_item(user_id,
+                                                                 item=constants.SearchParametersItemsIds.INTERESTS,
+                                                                 value=None)
         elif users_message in phrases.interests:
             Bot.__database.append_to_users_search_parameter_item(user_id,
                                                                  item=constants.SearchParametersItemsIds.INTERESTS,
@@ -346,6 +383,7 @@ class Bot:
         if users_message in (phrases.does_not_matter, phrases.finish_typing):
             Bot.__database.set_users_search_parameter_item_id(user_id,
                                                               constants.SearchParametersItemsIds.NULL)
+            Bot.__database.set_search_parameters_filled(user_id)
             Bot.__bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_search_parameters(user_id)
@@ -353,8 +391,19 @@ class Bot:
     @staticmethod
     def __processing_search_menu_items(users_message: str, user_id: int):
         if users_message == phrases.search_menu_list[0]:
-            Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
+            Bot.__database.set_users_menu_id(user_id, constants.MenuIds.PROFILE_REACTIONS_MENU)
+            Bot.__bot.send_message(user_id, text=phrases.candidates_profiles,
+                                   reply_markup=telebot.types.ReplyKeyboardRemove())
+            Bot.__show_candidates_profile(user_id)
         elif users_message == phrases.search_menu_list[1]:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
         elif users_message == phrases.search_menu_list[2]:
             Bot.__bot.send_message(user_id, text=phrases.not_ready_yet)
+
+    @staticmethod
+    def __show_candidates_profile(user_id: int):
+        candidate_id = search.Search.get_candidate_id(user_id)
+        Bot.__bot.send_message(user_id, text=Bot.__generate_string_with_users_profile(candidate_id),
+                               parse_mode="Markdown",
+                               reply_markup=Keyboards.profile_reaction_menu)
+        Bot.__database.set_users_shown_profile_id(user_id, candidate_id)

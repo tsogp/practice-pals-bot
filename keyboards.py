@@ -1,5 +1,7 @@
 # File with telegram's keyboards objects for bot
 import telebot
+
+import constants
 import phrases_ru as phrases
 
 
@@ -39,6 +41,15 @@ class Keyboards:
         keyboard.add(telebot.types.KeyboardButton(text=skip_button))
         return keyboard
 
+    @staticmethod
+    def __create_profile_reactions_inline_keyboard(items_list: list, prefix: str):
+        keyboard = telebot.types.InlineKeyboardMarkup(row_width=2)  # Create inline-keyboard
+        for i in range(len(items_list)):
+            keyboard.add(telebot.types.InlineKeyboardButton(
+                text=items_list[i],
+                callback_data=prefix + str(i)))
+        return keyboard
+
     profile_do_not_specify = __create_keyboard_with_one_button(phrases.do_not_specify)
     profile_spoken_languages = __create_keyboard_with_multiple_choice(items_list=phrases.spoken_languages,
                                                                       skip_button=phrases.do_not_specify)
@@ -60,3 +71,6 @@ class Keyboards:
                                                                          skip_button=phrases.does_not_matter)
     search_parameters_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
     search_menu = __create_menu_with_items_only_from_list(items_list=phrases.search_menu_list)
+
+    profile_reaction_menu = __create_profile_reactions_inline_keyboard(
+        [phrases.get_contact, phrases.skip_profile, phrases.go_to_main_menu], constants.PROFILE_REACTIONS_MENU_PREFIX)

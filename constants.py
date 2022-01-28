@@ -12,6 +12,7 @@ class MenuIds(enum.Enum):
     SEARCH_PARAMETERS_MENU = enum.auto()
     CHECK_SEARCH_PARAMETERS_MENU = enum.auto()
     SEARCH_MENU = enum.auto()
+    PROFILE_REACTIONS_MENU = enum.auto()
 
 
 class ProfileItemsIds(enum.Enum):
@@ -36,3 +37,8 @@ class SearchParametersItemsIds(enum.Enum):
     SPOKEN_LANGUAGES = enum.auto()
     PROGRAMMING_LANGUAGES = enum.auto()
     INTERESTS = enum.auto()
+
+
+PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"
+
+MAXIMUM_NUMBER_OF_LIKES = 3
