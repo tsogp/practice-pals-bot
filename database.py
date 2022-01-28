@@ -7,7 +7,7 @@ class Database:
     def __init__(self):
         self.__is_registered = False
         self.__menu_id = constants.MenuIds.MAIN_MENU
-        self.__are_search_parameters_filled = True
+        self.__are_search_parameters_filled = False
         self.__registration_item_id = constants.ProfileItemsIds.NULL
         self.__search_parameter_item_id = constants.SearchParametersItemsIds.NULL
         self.__profile = dict()
@@ -66,6 +66,9 @@ class Database:
 
     def are_search_parameters_filled(self, user_id: int):
         return self.__are_search_parameters_filled
+
+    def set_search_parameters_filled(self, user_id: int):
+        self.__are_search_parameters_filled = True
 
     def set_users_registration_item(self, user_id: int, item: constants.ProfileItemsIds, value: str):
         self.__profile[item] = value

@@ -376,6 +376,7 @@ class Bot:
         if users_message in (phrases.does_not_matter, phrases.finish_typing):
             Bot.__database.set_users_search_parameter_item_id(user_id,
                                                               constants.SearchParametersItemsIds.NULL)
+            Bot.__database.set_search_parameters_filled(user_id)
             Bot.__bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
                                    reply_markup=telebot.types.ReplyKeyboardRemove())
             Bot.__show_users_search_parameters(user_id)
