@@ -92,3 +92,5 @@ candidates_profiles = "Профили согласно вашим критери
 telegram_login = "Telegram login: "
 
 likes_blocked = "Вы исчерпали кол-во лайков, доступное бесплатно"
+
+item_is_not_specified = "Не указано"

@@ -96,7 +96,7 @@ class IDatabase(ABC):
     # SEARCH PARAMETERS
 
     @abstractmethod
-    def are_search_parameters_filled(self, user_id: int) -> None:
+    def are_search_parameters_filled(self, user_id: int) -> bool:
         """
         :param user_id: Telegram's id of user we work with
         :return: value of "are_search_parameters_filled" field (has the user filled in the search parameters) for user
@@ -162,7 +162,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def set_users_last_shown_profile_id(self, user_id: int, candidate_id: int) -> None:
+    def set_users_last_shown_profile_id(self, user_id: int, candidate_id: Optional[int]) -> None:
         """
         :param user_id: Telegram's id of user we work with
         :param candidate_id: id of the last profile shown to the user

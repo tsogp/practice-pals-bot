@@ -1,15 +1,17 @@
 import telebot
+
 import phrases_ru as phrases
 import constants
 import search
 from keyboards import Keyboards
-
 import bottoken
-from database import Database
+
+from IDatabase import IDatabase
+from FakeDatabase import FakeDatabase
 from User import User
 
 bot = telebot.TeleBot(bottoken.TOKEN)  # Main bot object
-database = Database()
+database: IDatabase = FakeDatabase()
 
 
 def start_bot():
@@ -36,7 +38,7 @@ def main_menu(message):
 
 
 def is_like_acceptable(user_id: int):
-    return database.get_remaining_number_of_likes(user_id) > 0
+    return database.get_number_of_likes(user_id) < constants.MAXIMUM_NUMBER_OF_LIKES
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -46,16 +48,16 @@ def query_handler(call):
     bot.answer_callback_query(callback_query_id=call.id, text='')
     if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
         if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
-            candidate_id = database.get_users_shown_profile_id(call.message.chat.id)
+            candidate_id = database.get_users_last_shown_profile_id(call.message.chat.id)
             if candidate_id is None:
                 return
             if is_like_acceptable(call.message.chat.id):
                 candidate_login = database.get_users_telegram_login_by_id(candidate_id)
                 bot.send_message(call.message.chat.id, text=phrases.telegram_login + candidate_login)
-                database.dec_remaining_number_of_likes(call.message.chat.id)
+                database.inc_number_of_likes(call.message.chat.id)
             else:
                 bot.send_message(call.message.chat.id, text=phrases.likes_blocked)
-            database.set_users_shown_profile_id(call.message.chat.id, None)
+            database.set_users_last_shown_profile_id(call.message.chat.id, None)
 
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
             show_candidates_profile(call.message.chat.id)
@@ -112,8 +114,9 @@ def generate_string_with_users_profile(user_id: int):
     profile_str = ""
     profile_items_ids = [member for member in constants.ProfileItemsIds if member.name != "NULL"]
     for profile_item_id in profile_items_ids:
+        raw_value = database.get_users_profile_item(user_id, profile_item_id)
         profile_str += (f"*{phrases.profile_items[profile_item_id]}:* " +
-                        database.get_users_profile_item(user_id, profile_item_id) + "\n")
+                        (raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")) + "\n")
     return profile_str
 
 
@@ -189,13 +192,13 @@ def processing_registration_item_first_name(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.FIRST_NAME,
-                                             value=None)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.FIRST_NAME,
+                                        value=None)
     else:
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.FIRST_NAME,
-                                             value=users_message)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.FIRST_NAME,
+                                        value=users_message)
 
     database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.LAST_NAME)
     bot.send_message(user_id, text=phrases.enter_your_last_name)
@@ -209,13 +212,13 @@ def processing_registration_item_last_name(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.LAST_NAME,
-                                             value=None)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.LAST_NAME,
+                                        value=None)
     else:
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.LAST_NAME,
-                                             value=users_message)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.LAST_NAME,
+                                        value=users_message)
 
     database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.AGE)
     bot.send_message(user_id, text=phrases.enter_your_age)
@@ -229,11 +232,11 @@ def processing_registration_item_age(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_registration_item(user_id, item=constants.ProfileItemsIds.AGE, value=None)
+        database.set_users_profile_item(user_id, item=constants.ProfileItemsIds.AGE, value=None)
     elif users_message.isdigit():
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.AGE,
-                                             value=users_message)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.AGE,
+                                        value=users_message)
     else:
         bot.send_message(user_id, text=phrases.enter_correct_age)
 
@@ -251,13 +254,13 @@ def processing_registration_item_spoken_language(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
-                                             value=None)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
+                                        value=None)
     elif users_message in phrases.spoken_languages:
-        database.append_to_users_registration_item(user_id,
-                                                   item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
-                                                   value=users_message)
+        database.append_to_users_profile_item(user_id,
+                                              item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
+                                              value=users_message)
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -275,12 +278,12 @@ def processing_registration_item_programming_language(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
     elif users_message in phrases.programming_languages:
-        database.append_to_users_registration_item(user_id,
-                                                   item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
-                                                   value=users_message)
+        database.append_to_users_profile_item(user_id,
+                                              item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
+                                              value=users_message)
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -298,12 +301,12 @@ def processing_registration_item_interests(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_registration_item(user_id,
-                                             item=constants.ProfileItemsIds.INTERESTS, value=None)
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.INTERESTS, value=None)
     elif users_message in phrases.interests:
-        database.append_to_users_registration_item(user_id,
-                                                   item=constants.ProfileItemsIds.INTERESTS,
-                                                   value=users_message)
+        database.append_to_users_profile_item(user_id,
+                                              item=constants.ProfileItemsIds.INTERESTS,
+                                              value=users_message)
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -440,4 +443,4 @@ def show_candidates_profile(user_id: int):
     bot.send_message(user_id, text=generate_string_with_users_profile(candidate_id),
                      parse_mode="Markdown",
                      reply_markup=Keyboards.profile_reaction_menu)
-    database.set_users_shown_profile_id(user_id, candidate_id)
+    database.set_users_last_shown_profile_id(user_id, candidate_id)

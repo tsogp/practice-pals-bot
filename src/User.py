@@ -1,9 +1,9 @@
-import database
+from IDatabase import IDatabase
 import constants
 
 
 class User:
-    def __init__(self, database: database.Database, user_id: int):
+    def __init__(self, database: IDatabase, user_id: int):
         self.__database = database
         self.__id = user_id
         self.__menu_id = self.__database.get_users_menu_id(self.__id)
