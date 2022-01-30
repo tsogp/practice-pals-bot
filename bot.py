@@ -6,136 +6,10 @@ from keyboards import Keyboards
 
 import bottoken
 from database import Database
+from User import User
 
 bot = telebot.TeleBot(bottoken.TOKEN)  # Main bot object
 database = Database()
-
-
-class Check:
-
-    @staticmethod
-    def is_user_in_main_menu(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        return users_menu_id == constants.MenuIds.MAIN_MENU
-
-    @staticmethod
-    def is_user_in_null_menu(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        return users_menu_id == constants.MenuIds.NULL
-
-    @staticmethod
-    def is_user_in_check_profile_items_menu(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        return users_menu_id == constants.MenuIds.CHECK_PROFILE_MENU
-
-    @staticmethod
-    def is_user_in_check_search_parameters_items_menu(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        return users_menu_id == constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU
-
-    @staticmethod
-    def is_user_in_registration_menu(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_registration_item_id = database.get_users_registration_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.REGISTRATION_MENU
-        check_registration_item_id = users_registration_item_id == constants.ProfileItemsIds.NULL
-        return check_menu_id and check_registration_item_id
-
-    @staticmethod
-    def is_user_in_registration_item_first_name(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_registration_item_id = database.get_users_registration_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.REGISTRATION_MENU
-        check_registration_item_id = users_registration_item_id == constants.ProfileItemsIds.FIRST_NAME
-        return check_menu_id and check_registration_item_id
-
-    @staticmethod
-    def is_user_in_registration_item_last_name(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_registration_item_id = database.get_users_registration_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.REGISTRATION_MENU
-        check_registration_item_id = users_registration_item_id == constants.ProfileItemsIds.LAST_NAME
-        return check_menu_id and check_registration_item_id
-
-    @staticmethod
-    def is_user_in_registration_item_age(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_registration_item_id = database.get_users_registration_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.REGISTRATION_MENU
-        check_registration_item_id = users_registration_item_id == constants.ProfileItemsIds.AGE
-        return check_menu_id and check_registration_item_id
-
-    @staticmethod
-    def is_user_in_registration_item_spoken_language(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_registration_item_id = database.get_users_registration_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.REGISTRATION_MENU
-        check_registration_item_id = users_registration_item_id == constants.ProfileItemsIds.SPOKEN_LANGUAGES
-        return check_menu_id and check_registration_item_id
-
-    @staticmethod
-    def is_user_in_registration_item_programming_language(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_registration_item_id = database.get_users_registration_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.REGISTRATION_MENU
-        check_registration_item_id = users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES
-        return check_menu_id and check_registration_item_id
-
-    @staticmethod
-    def is_user_in_registration_item_interests(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_registration_item_id = database.get_users_registration_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.REGISTRATION_MENU
-        check_registration_item_id = users_registration_item_id == constants.ProfileItemsIds.INTERESTS
-        return check_menu_id and check_registration_item_id
-
-    @staticmethod
-    def is_user_in_search_parameter_item_age_group(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_search_parameter_item_id = database.get_users_search_parameter_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU
-        check_search_parameter_item_id = users_search_parameter_item_id == constants.SearchParametersItemsIds.AGE_GROUP
-        return check_menu_id and check_search_parameter_item_id
-
-    @staticmethod
-    def is_user_in_search_parameter_item_spoken_languages(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_search_parameter_item_id = database.get_users_search_parameter_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU
-        check_search_parameter_item_id = users_search_parameter_item_id == constants.SearchParametersItemsIds.SPOKEN_LANGUAGES
-        return check_menu_id and check_search_parameter_item_id
-
-    @staticmethod
-    def is_user_in_search_parameter_item_programming_languages(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_search_parameter_item_id = database.get_users_search_parameter_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU
-        check_search_parameter_item_id = users_search_parameter_item_id == constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES
-        return check_menu_id and check_search_parameter_item_id
-
-    @staticmethod
-    def is_user_in_search_parameter_item_interests(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        users_search_parameter_item_id = database.get_users_search_parameter_item_id(user_id)
-
-        check_menu_id = users_menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU
-        check_search_parameter_item_id = users_search_parameter_item_id == constants.SearchParametersItemsIds.INTERESTS
-        return check_menu_id and check_search_parameter_item_id
-
-    @staticmethod
-    def is_user_in_search_menu(user_id: int):
-        users_menu_id = database.get_users_menu_id(user_id)
-        return users_menu_id == constants.MenuIds.SEARCH_MENU
 
 
 def start_bot():
@@ -265,7 +139,7 @@ def generate_string_with_users_search_parameters(user_id: int):
     return search_parameters_str
 
 
-@bot.message_handler(content_types=["text"], func=lambda message: Check.is_user_in_main_menu(message.chat.id))
+@bot.message_handler(content_types=["text"], func=lambda message: User(database, message.chat.id).is_in_main_menu())
 def processing_main_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
@@ -279,7 +153,7 @@ def processing_main_menu_items(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_check_profile_items_menu(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_check_profile_items_menu())
 def processing_check_profile_items_menu(message):
     users_message = message.text
     user_id = message.chat.id
@@ -292,7 +166,7 @@ def processing_check_profile_items_menu(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_check_search_parameters_items_menu(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_check_search_parameters_items_menu())
 def processing_check_search_parameters_items_menu(message):
     users_message = message.text
     user_id = message.chat.id
@@ -305,7 +179,7 @@ def processing_check_search_parameters_items_menu(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_registration_item_first_name(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_registration_item_first_name())
 def processing_registration_item_first_name(message):
     users_message = message.text
     user_id = message.chat.id
@@ -324,7 +198,7 @@ def processing_registration_item_first_name(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_registration_item_last_name(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_registration_item_last_name())
 def processing_registration_item_last_name(message):
     users_message = message.text
     user_id = message.chat.id
@@ -343,7 +217,7 @@ def processing_registration_item_last_name(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_registration_item_age(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_registration_item_age())
 def processing_registration_item_age(message):
     users_message = message.text
     user_id = message.chat.id
@@ -364,7 +238,7 @@ def processing_registration_item_age(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_registration_item_spoken_language(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_registration_item_spoken_languages())
 def processing_registration_item_spoken_language(message):
     users_message = message.text
     user_id = message.chat.id
@@ -387,7 +261,8 @@ def processing_registration_item_spoken_language(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_registration_item_programming_language(message.chat.id))
+                     func=lambda message: User(database,
+                                               message.chat.id).is_in_registration_item_programming_languages())
 def processing_registration_item_programming_language(message):
     users_message = message.text
     user_id = message.chat.id
@@ -409,7 +284,7 @@ def processing_registration_item_programming_language(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_registration_item_interests(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_registration_item_interests())
 def processing_registration_item_interests(message):
     users_message = message.text
     user_id = message.chat.id
@@ -433,7 +308,7 @@ def processing_registration_item_interests(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_search_parameter_item_age_group(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_search_parameter_item_age_group())
 def processing_search_parameter_item_age_group(message):
     users_message = message.text
     user_id = message.chat.id
@@ -457,7 +332,8 @@ def processing_search_parameter_item_age_group(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_search_parameter_item_spoken_languages(message.chat.id))
+                     func=lambda message: User(database,
+                                               message.chat.id).is_in_search_parameter_item_spoken_languages())
 def processing_search_parameter_item_spoken_languages(message):
     users_message = message.text
     user_id = message.chat.id
@@ -481,7 +357,8 @@ def processing_search_parameter_item_spoken_languages(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_search_parameter_item_programming_languages(message.chat.id))
+                     func=lambda message: User(database,
+                                               message.chat.id).is_in_search_parameter_item_programming_languages())
 def processing_search_parameter_item_programming_languages(message):
     users_message = message.text
     user_id = message.chat.id
@@ -505,7 +382,7 @@ def processing_search_parameter_item_programming_languages(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_search_parameter_item_interests(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_search_parameter_item_interests())
 def processing_search_parameter_item_interests(message):
     users_message = message.text
     user_id = message.chat.id
@@ -531,7 +408,7 @@ def processing_search_parameter_item_interests(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: Check.is_user_in_search_menu(message.chat.id))
+                     func=lambda message: User(database, message.chat.id).is_in_search_menu())
 def processing_search_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
