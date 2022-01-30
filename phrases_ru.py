@@ -1,7 +1,7 @@
 # File with phrases for the interface in Russian
 import constants
 
-welcome_message = "Привет! Я Practice Pals Bot. Помогу Вам найти друзей по интересам в IT-сфере"
+welcome_message = "Привет! Я Practice Pals Bot Помогу Вам найти друзей по интересам в IT-сфере"
 
 main_menu_title = "Вы находитесь в главном меню бота"
 
