@@ -136,9 +136,10 @@ def generate_string_with_users_search_parameters(user_id: int):
     search_parameters_items_ids = [member for member in constants.SearchParametersItemsIds if
                                    member.name != "NULL"]
     for search_parameters_item_id in search_parameters_items_ids:
+        raw_value = database.get_users_search_parameter_item(user_id, search_parameters_item_id)
         search_parameters_str += (f"*{phrases.search_parameters_items[search_parameters_item_id]}:* " +
-                                  database.get_users_search_parameter_item(user_id,
-                                                                           search_parameters_item_id) + "\n")
+                                  (raw_value if raw_value is not None else (
+                                          "_" + phrases.item_is_not_specified + "_")) + "\n")
     return search_parameters_str
 
 
