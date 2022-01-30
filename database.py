@@ -6,7 +6,7 @@ from typing import Optional
 class Database:
 
     def __init__(self):
-        self.__is_registered = False
+        self.__is_registered = True
         self.__menu_id = constants.MenuIds.MAIN_MENU
         self.__are_search_parameters_filled = False
         self.__registration_item_id = constants.ProfileItemsIds.NULL

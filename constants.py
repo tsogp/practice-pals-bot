@@ -13,6 +13,7 @@ class MenuIds(enum.Enum):
     CHECK_SEARCH_PARAMETERS_MENU = enum.auto()
     SEARCH_MENU = enum.auto()
     PROFILE_REACTIONS_MENU = enum.auto()
+    NULL = enum.auto()
 
 
 class ProfileItemsIds(enum.Enum):
