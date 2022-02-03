@@ -10,12 +10,15 @@ from IDatabase import IDatabase
 from FakeDatabase import FakeDatabase
 from User import User
 
-bot = telebot.TeleBot(bottoken.TOKEN)  # Main bot object
-database: IDatabase = FakeDatabase()
+bot = telebot.TeleBot(bottoken.TOKEN)  # Telegram bot object
+database: IDatabase = FakeDatabase()  # Database for bot
 User.set_database(database)
 
 
-def start_bot():
+def run_bot() -> None:
+    """
+    Call to run bot
+    """
     bot.polling(none_stop=True)
 
 

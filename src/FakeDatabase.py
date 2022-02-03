@@ -8,7 +8,7 @@ import constants
 
 class FakeDatabase(IDatabase):
     """
-    Fake database for development (do not use in production"
+    Fake database for development (do not use in production)"
     """
 
     def __init__(self):
