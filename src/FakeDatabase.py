@@ -127,12 +127,18 @@ class FakeDatabase(IDatabase):
 
 
 class NavigationItems(enum.Enum):
+    """
+    Items for table 'navigation' which contains info about users position in menu's tree
+    """
     MENU_ID = enum.auto()
     REGISTRATION_ITEM_ID = enum.auto()
     SEARCH_PARAMETER_ITEM_ID = enum.auto()
 
 
 class PotentialRelationshipItems(enum.Enum):
+    """
+    Items for table 'potential_relationship' which contains info about profiles that can be shown to the user
+    """
     SENDER_ACCOUNT_ID = enum.auto()
     REQUESTED_ACCOUNT_ID = enum.auto()
     IS_VIEWED = enum.auto()
