@@ -37,10 +37,6 @@ def main_menu(message):
     activate_main_menu(message.chat.id)
 
 
-def is_like_acceptable(user_id: int):
-    return database.get_number_of_likes(user_id) < constants.MAXIMUM_NUMBER_OF_LIKES
-
-
 @bot.callback_query_handler(func=lambda call: True)
 def query_handler(call):
     """Inline-keyboards button's click handler"""
@@ -51,7 +47,7 @@ def query_handler(call):
             candidate_id = database.get_users_last_shown_profile_id(call.message.chat.id)
             if candidate_id is None:
                 return
-            if is_like_acceptable(call.message.chat.id):
+            if User(database, call.message.chat.id).is_like_acceptable():
                 candidate_login = database.get_users_telegram_login_by_id(candidate_id)
                 bot.send_message(call.message.chat.id, text=phrases.telegram_login + candidate_login)
                 database.inc_number_of_likes(call.message.chat.id)
@@ -105,19 +101,9 @@ def show_users_profile(user_id: int):
     """
     database.set_users_menu_id(user_id, constants.MenuIds.CHECK_PROFILE_MENU)
     bot.send_message(user_id, text=phrases.your_profile)
-    bot.send_message(user_id, text=generate_string_with_users_profile(user_id),
+    bot.send_message(user_id, text=User(database, user_id).get_profile(),
                      parse_mode="Markdown",
                      reply_markup=Keyboards.profile_ok_edit)
-
-
-def generate_string_with_users_profile(user_id: int):
-    profile_str = ""
-    profile_items_ids = [member for member in constants.ProfileItemsIds if member.name != "NULL"]
-    for profile_item_id in profile_items_ids:
-        raw_value = database.get_users_profile_item(user_id, profile_item_id)
-        profile_str += (f"*{phrases.profile_items[profile_item_id]}:* " +
-                        (raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")) + "\n")
-    return profile_str
 
 
 def show_users_search_parameters(user_id: int):
@@ -126,21 +112,9 @@ def show_users_search_parameters(user_id: int):
     """
     database.set_users_menu_id(user_id, constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU)
     bot.send_message(user_id, text=phrases.your_search_parameters)
-    bot.send_message(user_id, text=generate_string_with_users_search_parameters(user_id),
+    bot.send_message(user_id, text=User(database, user_id).get_search_parameters(),
                      parse_mode="Markdown",
                      reply_markup=Keyboards.search_parameters_ok_edit)
-
-
-def generate_string_with_users_search_parameters(user_id: int):
-    search_parameters_str = ""
-    search_parameters_items_ids = [member for member in constants.SearchParametersItemsIds if
-                                   member.name != "NULL"]
-    for search_parameters_item_id in search_parameters_items_ids:
-        raw_value = database.get_users_search_parameter_item(user_id, search_parameters_item_id)
-        search_parameters_str += (f"*{phrases.search_parameters_items[search_parameters_item_id]}:* " +
-                                  (raw_value if raw_value is not None else (
-                                          "_" + phrases.item_is_not_specified + "_")) + "\n")
-    return search_parameters_str
 
 
 @bot.message_handler(content_types=["text"],
@@ -441,7 +415,7 @@ def processing_search_menu_items(message):
 
 def show_candidates_profile(user_id: int):
     candidate_id = search.Search.get_candidate_id(user_id)
-    bot.send_message(user_id, text=generate_string_with_users_profile(candidate_id),
+    bot.send_message(user_id, text=User(database, candidate_id).get_profile(),
                      parse_mode="Markdown",
                      reply_markup=Keyboards.profile_reaction_menu)
     database.set_users_last_shown_profile_id(user_id, candidate_id)

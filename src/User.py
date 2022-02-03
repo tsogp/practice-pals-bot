@@ -1,5 +1,6 @@
 from IDatabase import IDatabase
 import constants
+import phrases_ru as phrases
 
 
 class User:
@@ -22,3 +23,27 @@ class User:
         check_menu_id = self.__menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU
         check_search_parameter_item_id = self.__search_parameter_item_id == search_parameters_item_id
         return check_menu_id and check_search_parameter_item_id
+
+    def is_like_acceptable(self):
+        return self.__database.get_number_of_likes(self.__id) < constants.MAXIMUM_NUMBER_OF_LIKES
+
+    def get_profile(self):
+        profile = ""
+        profile_items_ids = [member for member in constants.ProfileItemsIds if member.name != "NULL"]
+        for profile_item_id in profile_items_ids:
+            raw_value = self.__database.get_users_profile_item(self.__id, profile_item_id)
+            profile += (f"*{phrases.profile_items[profile_item_id]}:* " +
+                        (raw_value if raw_value is not None else (
+                                "_" + phrases.item_is_not_specified + "_")) + "\n")
+        return profile
+
+    def get_search_parameters(self):
+        search_parameters = ""
+        search_parameters_items_ids = [member for member in constants.SearchParametersItemsIds if
+                                       member.name != "NULL"]
+        for search_parameters_item_id in search_parameters_items_ids:
+            raw_value = self.__database.get_users_search_parameter_item(self.__id, search_parameters_item_id)
+            search_parameters += (f"*{phrases.search_parameters_items[search_parameters_item_id]}:* " +
+                                  (raw_value if raw_value is not None else (
+                                          "_" + phrases.item_is_not_specified + "_")) + "\n")
+        return search_parameters
