@@ -1,11 +1,22 @@
 # File with constants for bot
 import enum
+from typing import List
 
 
-class MenuIds(enum.Enum):
+class Ids(enum.Enum):
+    "Class for some ID's"
+
+    @classmethod
+    def get_all_not_null_ids(cls) -> List[enum.Enum]:
+        return [member for member in cls if member.name != "NULL"]
+
+
+@enum.unique
+class MenuIds(Ids):
     """
     IDs of bots menus
     """
+    NULL = enum.auto()
     MAIN_MENU = enum.auto()
     REGISTRATION_MENU = enum.auto()
     CHECK_PROFILE_MENU = enum.auto()
@@ -13,10 +24,10 @@ class MenuIds(enum.Enum):
     CHECK_SEARCH_PARAMETERS_MENU = enum.auto()
     SEARCH_MENU = enum.auto()
     PROFILE_REACTIONS_MENU = enum.auto()
-    NULL = enum.auto()
 
 
-class ProfileItemsIds(enum.Enum):
+@enum.unique
+class ProfileItemsIds(Ids):
     """
     IDs of user's profile items
     """
@@ -29,7 +40,8 @@ class ProfileItemsIds(enum.Enum):
     INTERESTS = enum.auto()
 
 
-class SearchParametersItemsIds(enum.Enum):
+@enum.unique
+class SearchParametersItemsIds(Ids):
     """
     IDs of user's search parameters items
     """

@@ -50,12 +50,14 @@ class User:
         :return: list of profile items and it's values in string with markdown
         """
         profile = ""
-        profile_items_ids = [member for member in constants.ProfileItemsIds if member.name != "NULL"]
+        profile_items_ids = constants.ProfileItemsIds.get_all_not_null_ids()
+
         for profile_item_id in profile_items_ids:
+            title = f"*{phrases.profile_items[profile_item_id]}:* "
             raw_value = User.__DATABASE.get_users_profile_item(self.__id, profile_item_id)
-            profile += (f"*{phrases.profile_items[profile_item_id]}:* " +
-                        (raw_value if raw_value is not None else (
-                                "_" + phrases.item_is_not_specified + "_")) + "\n")
+            value = raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")
+            profile += title + value + "\n"
+
         return profile
 
     def get_search_parameters(self) -> str:
@@ -63,11 +65,12 @@ class User:
         :return: list of search parameters items and it's values in string with markdown
         """
         search_parameters = ""
-        search_parameters_items_ids = [member for member in constants.SearchParametersItemsIds if
-                                       member.name != "NULL"]
+        search_parameters_items_ids = constants.SearchParametersItemsIds.get_all_not_null_ids()
+
         for search_parameters_item_id in search_parameters_items_ids:
+            title = f"*{phrases.search_parameters_items[search_parameters_item_id]}:* "
             raw_value = User.__DATABASE.get_users_search_parameter_item(self.__id, search_parameters_item_id)
-            search_parameters += (f"*{phrases.search_parameters_items[search_parameters_item_id]}:* " +
-                                  (raw_value if raw_value is not None else (
-                                          "_" + phrases.item_is_not_specified + "_")) + "\n")
+            value = raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")
+            search_parameters += title + value + "\n"
+
         return search_parameters
