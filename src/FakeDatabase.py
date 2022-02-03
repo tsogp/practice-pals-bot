@@ -98,7 +98,7 @@ class FakeDatabase(IDatabase):
 
     def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds,
                                               value: Optional[str]) -> None:
-        self.__search_parameters[item] = value
+        self.__search_parameters[item] += value
 
     # OTHER USER DATA
 
