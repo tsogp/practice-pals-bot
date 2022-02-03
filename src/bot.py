@@ -12,6 +12,7 @@ from User import User
 
 bot = telebot.TeleBot(bottoken.TOKEN)  # Main bot object
 database: IDatabase = FakeDatabase()
+User.set_database(database)
 
 
 def start_bot():
@@ -47,7 +48,7 @@ def query_handler(call):
             candidate_id = database.get_users_last_shown_profile_id(call.message.chat.id)
             if candidate_id is None:
                 return
-            if User(database, call.message.chat.id).is_like_acceptable():
+            if User(call.message.chat.id).is_like_acceptable():
                 candidate_login = database.get_users_telegram_login_by_id(candidate_id)
                 bot.send_message(call.message.chat.id, text=phrases.telegram_login + candidate_login)
                 database.inc_number_of_likes(call.message.chat.id)
@@ -101,7 +102,7 @@ def show_users_profile(user_id: int):
     """
     database.set_users_menu_id(user_id, constants.MenuIds.CHECK_PROFILE_MENU)
     bot.send_message(user_id, text=phrases.your_profile)
-    bot.send_message(user_id, text=User(database, user_id).get_profile(),
+    bot.send_message(user_id, text=User(user_id).get_profile(),
                      parse_mode="Markdown",
                      reply_markup=Keyboards.profile_ok_edit)
 
@@ -112,13 +113,13 @@ def show_users_search_parameters(user_id: int):
     """
     database.set_users_menu_id(user_id, constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU)
     bot.send_message(user_id, text=phrases.your_search_parameters)
-    bot.send_message(user_id, text=User(database, user_id).get_search_parameters(),
+    bot.send_message(user_id, text=User(user_id).get_search_parameters(),
                      parse_mode="Markdown",
                      reply_markup=Keyboards.search_parameters_ok_edit)
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_menu(constants.MenuIds.MAIN_MENU))
+                     func=lambda message: User(message.chat.id).is_in_menu(constants.MenuIds.MAIN_MENU))
 def processing_main_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
@@ -132,7 +133,7 @@ def processing_main_menu_items(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_menu(
+                     func=lambda message: User(message.chat.id).is_in_menu(
                          constants.MenuIds.CHECK_PROFILE_MENU))
 def processing_check_profile_items_menu(message):
     users_message = message.text
@@ -146,7 +147,7 @@ def processing_check_profile_items_menu(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_menu(
+                     func=lambda message: User(message.chat.id).is_in_menu(
                          constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU))
 def processing_check_search_parameters_items_menu(message):
     users_message = message.text
@@ -160,7 +161,7 @@ def processing_check_search_parameters_items_menu(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_registration_item(
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
                          constants.ProfileItemsIds.FIRST_NAME))
 def processing_registration_item_first_name(message):
     users_message = message.text
@@ -180,7 +181,7 @@ def processing_registration_item_first_name(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_registration_item(
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
                          constants.ProfileItemsIds.LAST_NAME))
 def processing_registration_item_last_name(message):
     users_message = message.text
@@ -200,7 +201,7 @@ def processing_registration_item_last_name(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_registration_item(
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
                          constants.ProfileItemsIds.AGE))
 def processing_registration_item_age(message):
     users_message = message.text
@@ -222,7 +223,7 @@ def processing_registration_item_age(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_registration_item(
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
                          constants.ProfileItemsIds.SPOKEN_LANGUAGES))
 def processing_registration_item_spoken_language(message):
     users_message = message.text
@@ -246,7 +247,7 @@ def processing_registration_item_spoken_language(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_registration_item(
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
                          constants.ProfileItemsIds.PROGRAMMING_LANGUAGES))
 def processing_registration_item_programming_language(message):
     users_message = message.text
@@ -269,7 +270,7 @@ def processing_registration_item_programming_language(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_registration_item(
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
                          constants.ProfileItemsIds.INTERESTS))
 def processing_registration_item_interests(message):
     users_message = message.text
@@ -294,7 +295,7 @@ def processing_registration_item_interests(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_search_parameters_item(
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
                          constants.SearchParametersItemsIds.AGE_GROUP))
 def processing_search_parameter_item_age_group(message):
     users_message = message.text
@@ -319,7 +320,7 @@ def processing_search_parameter_item_age_group(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_search_parameters_item(
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
                          constants.SearchParametersItemsIds.SPOKEN_LANGUAGES))
 def processing_search_parameter_item_spoken_languages(message):
     users_message = message.text
@@ -344,7 +345,7 @@ def processing_search_parameter_item_spoken_languages(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_search_parameters_item(
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
                          constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES))
 def processing_search_parameter_item_programming_languages(message):
     users_message = message.text
@@ -369,7 +370,7 @@ def processing_search_parameter_item_programming_languages(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_search_parameters_item(
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
                          constants.SearchParametersItemsIds.INTERESTS))
 def processing_search_parameter_item_interests(message):
     users_message = message.text
@@ -396,7 +397,7 @@ def processing_search_parameter_item_interests(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(database, message.chat.id).is_in_menu(
+                     func=lambda message: User(message.chat.id).is_in_menu(
                          constants.MenuIds.SEARCH_MENU))
 def processing_search_menu_items(message):
     users_message = message.text
@@ -415,7 +416,7 @@ def processing_search_menu_items(message):
 
 def show_candidates_profile(user_id: int):
     candidate_id = search.Search.get_candidate_id(user_id)
-    bot.send_message(user_id, text=User(database, candidate_id).get_profile(),
+    bot.send_message(user_id, text=User(candidate_id).get_profile(),
                      parse_mode="Markdown",
                      reply_markup=Keyboards.profile_reaction_menu)
     database.set_users_last_shown_profile_id(user_id, candidate_id)
