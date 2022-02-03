@@ -258,7 +258,7 @@ def processing_registration_item_spoken_language(message):
         database.set_users_profile_item(user_id,
                                         item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
                                         value=None)
-    elif users_message in phrases.spoken_languages:
+    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
         database.append_to_users_profile_item(user_id,
                                               item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
                                               value=users_message)
@@ -281,7 +281,7 @@ def processing_registration_item_programming_language(message):
     if users_message == phrases.do_not_specify:
         database.set_users_profile_item(user_id,
                                         item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
-    elif users_message in phrases.programming_languages:
+    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
         database.append_to_users_profile_item(user_id,
                                               item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
                                               value=users_message)
@@ -304,7 +304,7 @@ def processing_registration_item_interests(message):
     if users_message == phrases.do_not_specify:
         database.set_users_profile_item(user_id,
                                         item=constants.ProfileItemsIds.INTERESTS, value=None)
-    elif users_message in phrases.interests:
+    elif phrases.Interests.is_member_of_enum(users_message):
         database.append_to_users_profile_item(user_id,
                                               item=constants.ProfileItemsIds.INTERESTS,
                                               value=users_message)
@@ -330,7 +330,7 @@ def processing_search_parameter_item_age_group(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.AGE_GROUP,
                                                        value=None)
-    elif users_message in phrases.age_groups:
+    elif phrases.AgeGroups.is_member_of_enum(users_message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.AGE_GROUP,
                                                        value=users_message)
@@ -355,7 +355,7 @@ def processing_search_parameter_item_spoken_languages(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
                                                        value=None)
-    elif users_message in phrases.spoken_languages:
+    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
                                                        value=users_message)
@@ -380,7 +380,7 @@ def processing_search_parameter_item_programming_languages(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
                                                        value=None)
-    elif users_message in phrases.programming_languages:
+    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
                                                        value=users_message)
@@ -405,7 +405,7 @@ def processing_search_parameter_item_interests(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.INTERESTS,
                                                        value=None)
-    elif users_message in phrases.interests:
+    elif phrases.Interests.is_member_of_enum(users_message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.INTERESTS,
                                                        value=users_message)

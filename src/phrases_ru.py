@@ -1,4 +1,7 @@
 # File with phrases for the interface in Russian
+from typing import List
+import enum
+
 import constants
 
 welcome_message = "Привет! Я Practice Pals Bot Помогу Вам найти друзей по интересам в IT-сфере"
@@ -28,12 +31,6 @@ enter_your_programming_languages = "Укажите языки программи
 enter_your_interests = "Укажите темы, которыми Вы интересуетесь"
 
 do_not_specify = "\U0000274C Не хочу указывать"
-
-spoken_languages = ["Русский", "Английский"]
-
-programming_languages = ["Python", "C", "C++", "Java"]
-
-interests = ["Front-end", "Back-end", "ML", "Big Data"]
 
 finish_typing = '\U000027A1 Закончить и перейти на следующий пункт'
 
@@ -66,8 +63,6 @@ enter_interests = "Укажите интересы:"
 
 does_not_matter = "\U0000274C Не имеет значения"
 
-age_groups = ["до 14 лет", "от 14 до 18 лет", "от 18 до 22 лет", "старше 22 лет"]
-
 finish_enter_search_parameters = "\U0001F3C1 Заполнение параметров для поиска единомышленников завершено!"
 
 your_search_parameters = "Ваши параметры для поиска единомышленников:"
@@ -94,3 +89,56 @@ telegram_login = "Telegram login: "
 likes_blocked = "Вы исчерпали кол-во лайков, доступное бесплатно"
 
 item_is_not_specified = "Не указано"
+
+
+@enum.unique
+class PossibleAnswers(enum.Enum):
+
+    @classmethod
+    def is_member_of_enum(cls, value: str) -> bool:
+        """
+        :return: does the enumeration contain a value
+        """
+        values = [member.value for name, member in cls.__members__.items()]
+        return value in values
+
+    @classmethod
+    def get_all_vales(cls) -> List[str]:
+        """
+        :return: list with all values of enum's constants
+        """
+        return [member.value for name, member in cls.__members__.items()]
+
+
+@enum.unique
+class SpokenLanguages(PossibleAnswers):
+    RUSSIAN = "Русский"
+    ENGLISH = "Английский"
+
+
+@enum.unique
+class ProgrammingLanguages(PossibleAnswers):
+    PYTHON = "Python"
+    C = "C"
+    CPP = "C++"
+    C_SHARP = "C#"
+    JAVA = "Java"
+    JAVA_SCRIPT = "Java Script"
+
+
+@enum.unique
+class Interests(PossibleAnswers):
+    FRONT_END = "Front-end"
+    BACK_END = "Back-end"
+    MACHINE_LEARNING = "Machine learning"
+    BIG_DATA = "Big data"
+    DEV_FOR_ANDROID = "Разработка под Android"
+    DEV_FOR_IOS = "Разработка под iOS"
+
+
+@enum.unique
+class AgeGroups(PossibleAnswers):
+    YOUNGER_THAN_14 = "до 14 лет"
+    FROM_14_TO_18 = "от 14 до 18 лет"
+    FROM_18_TO_25 = "от 18 до 25 лет"
+    OLDER_THAN_25 = "старше 25 лет"
