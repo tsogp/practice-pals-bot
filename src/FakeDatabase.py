@@ -25,25 +25,25 @@ class FakeDatabase(IDatabase):
         }
 
         self.__profile: dict = {
-            constants.ProfileItemsIds.FIRST_NAME: "",
-            constants.ProfileItemsIds.LAST_NAME: "",
-            constants.ProfileItemsIds.AGE: "",
-            constants.ProfileItemsIds.SPOKEN_LANGUAGES: "",
-            constants.ProfileItemsIds.PROGRAMMING_LANGUAGES: "",
-            constants.ProfileItemsIds.INTERESTS: ""
+            constants.ProfileItemsIds.FIRST_NAME: None,
+            constants.ProfileItemsIds.LAST_NAME: None,
+            constants.ProfileItemsIds.AGE: None,
+            constants.ProfileItemsIds.SPOKEN_LANGUAGES: [],
+            constants.ProfileItemsIds.PROGRAMMING_LANGUAGES: [],
+            constants.ProfileItemsIds.INTERESTS: []
         }
 
         self.__search_parameters: dict = {
-            constants.SearchParametersItemsIds.AGE_GROUP: "",
-            constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: "",
-            constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: "",
-            constants.SearchParametersItemsIds.INTERESTS: ""
+            constants.SearchParametersItemsIds.AGE_GROUP: [],
+            constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: [],
+            constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: [],
+            constants.SearchParametersItemsIds.INTERESTS: []
         }
 
         self.__potential_relationship: dict = {
-            PotentialRelationshipItems.SENDER_ACCOUNT_ID: "",
-            PotentialRelationshipItems.REQUESTED_ACCOUNT_ID: "",
-            PotentialRelationshipItems.IS_VIEWED: "",
+            PotentialRelationshipItems.SENDER_ACCOUNT_ID: None,
+            PotentialRelationshipItems.REQUESTED_ACCOUNT_ID: None,
+            PotentialRelationshipItems.IS_VIEWED: None,
         }
 
         self.__number_of_likes: int = 0
@@ -70,13 +70,19 @@ class FakeDatabase(IDatabase):
         self.__navigation[NavigationItems.REGISTRATION_ITEM_ID] = new_registration_item_id
 
     def get_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds) -> Optional[str]:
-        return self.__profile[item]
+        if self.__profile[item] is None:
+            return None
+        if item in (constants.ProfileItemsIds.SPOKEN_LANGUAGES, constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
+                    constants.ProfileItemsIds.INTERESTS):
+            return ", ".join(self.__profile[item])
+        else:
+            return self.__profile[item]
 
     def set_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds, value: Optional[str]) -> None:
         self.__profile[item] = value
 
     def append_to_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds, value: str) -> None:
-        self.__profile[item] += value
+        self.__profile[item].append(value)
 
     # SEARCH PARAMETERS
 
@@ -94,11 +100,13 @@ class FakeDatabase(IDatabase):
         self.__navigation[NavigationItems.SEARCH_PARAMETER_ITEM_ID] = new_search_parameter_item_id
 
     def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds) -> Optional[str]:
-        return self.__search_parameters[item]
+        if self.__search_parameters[item] is None:
+            return None
+        return ", ".join(self.__search_parameters[item])
 
     def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds,
                                               value: Optional[str]) -> None:
-        self.__search_parameters[item] += value
+        self.__search_parameters[item].append(value)
 
     # OTHER USER DATA
 
