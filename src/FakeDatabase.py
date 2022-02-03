@@ -28,16 +28,16 @@ class FakeDatabase(IDatabase):
             constants.ProfileItemsIds.FIRST_NAME: None,
             constants.ProfileItemsIds.LAST_NAME: None,
             constants.ProfileItemsIds.AGE: None,
-            constants.ProfileItemsIds.SPOKEN_LANGUAGES: [],
-            constants.ProfileItemsIds.PROGRAMMING_LANGUAGES: [],
-            constants.ProfileItemsIds.INTERESTS: []
+            constants.ProfileItemsIds.SPOKEN_LANGUAGES: set(),
+            constants.ProfileItemsIds.PROGRAMMING_LANGUAGES: set(),
+            constants.ProfileItemsIds.INTERESTS: set()
         }
 
         self.__search_parameters: dict = {
-            constants.SearchParametersItemsIds.AGE_GROUP: [],
-            constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: [],
-            constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: [],
-            constants.SearchParametersItemsIds.INTERESTS: []
+            constants.SearchParametersItemsIds.AGE_GROUP: set(),
+            constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: set(),
+            constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: set(),
+            constants.SearchParametersItemsIds.INTERESTS: set()
         }
 
         self.__potential_relationship: dict = {
@@ -82,7 +82,7 @@ class FakeDatabase(IDatabase):
         self.__profile[item] = value
 
     def append_to_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds, value: str) -> None:
-        self.__profile[item].append(value)
+        self.__profile[item].add(value)
 
     # SEARCH PARAMETERS
 
@@ -106,7 +106,7 @@ class FakeDatabase(IDatabase):
 
     def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds,
                                               value: Optional[str]) -> None:
-        self.__search_parameters[item].append(value)
+        self.__search_parameters[item].add(value)
 
     # OTHER USER DATA
 
