@@ -1,0 +1,425 @@
+import telebot
+
+import phrases_ru as phrases
+import constants
+import search
+from keyboards import Keyboards
+import bottoken
+
+from IDatabase import IDatabase
+from FakeDatabase import FakeDatabase
+from User import User
+
+bot = telebot.TeleBot(bottoken.TOKEN)  # Telegram bot object
+database: IDatabase = FakeDatabase()  # Database for bot
+User.set_database(database)
+
+
+def run_bot() -> None:
+    """
+    Call to run bot
+    """
+    bot.polling(none_stop=True)
+
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    """
+    Processing the command "/start"
+    """
+    bot.send_message(message.chat.id,
+                     text=phrases.welcome_message,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
+    check_registration(message.chat.id)
+
+
+@bot.message_handler(commands=['main_menu'])
+def main_menu(message):
+    """
+    Processing the command "/main_menu"
+    """
+    activate_main_menu(message.chat.id)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def query_handler(call):
+    """Inline-keyboards button's click handler"""
+    users_active_menu_id = database.get_users_menu_id(call.message.chat.id)
+    bot.answer_callback_query(callback_query_id=call.id, text='')
+    if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
+        if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
+            candidate_id = database.get_users_last_shown_profile_id(call.message.chat.id)
+            if candidate_id is None:
+                return
+            if User(call.message.chat.id).is_like_acceptable():
+                candidate_login = database.get_users_telegram_login_by_id(candidate_id)
+                bot.send_message(call.message.chat.id, text=phrases.telegram_login + candidate_login)
+                database.inc_number_of_likes(call.message.chat.id)
+            else:
+                bot.send_message(call.message.chat.id, text=phrases.likes_blocked)
+            database.set_users_last_shown_profile_id(call.message.chat.id, None)
+
+        elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
+            show_candidates_profile(call.message.chat.id)
+        elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
+            activate_main_menu(call.message.chat.id)
+
+
+def check_registration(user_id: int):
+    if database.is_registered(user_id):
+        activate_main_menu(user_id)
+    else:  # Start registration procedure
+        bot.send_message(user_id, text=phrases.user_not_registered_yet)
+        bot.send_message(user_id, text=phrases.enter_your_first_name,
+                         reply_markup=Keyboards.profile_do_not_specify)
+        database.set_users_menu_id(user_id, constants.MenuIds.REGISTRATION_MENU)
+        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.FIRST_NAME)
+
+
+def check_search_parameters(user_id: int):
+    if database.are_search_parameters_filled(user_id):
+        activate_search_menu(user_id)
+    else:  # Start filling search parameters procedure
+        bot.send_message(user_id, text=phrases.user_have_not_search_parameters_yet)
+        bot.send_message(user_id, text=phrases.enter_age_group_for_search,
+                         reply_markup=Keyboards.search_parameters_age_groups)
+        database.set_users_menu_id(user_id, constants.MenuIds.SEARCH_PARAMETERS_MENU)
+        database.set_users_search_parameter_item_id(user_id, constants.SearchParametersItemsIds.AGE_GROUP)
+
+
+def activate_main_menu(user_id: int):
+    database.set_users_menu_id(user_id, constants.MenuIds.MAIN_MENU)
+    bot.send_message(user_id, text=phrases.main_menu_title,
+                     reply_markup=Keyboards.main_menu)
+
+
+def activate_search_menu(user_id: int):
+    database.set_users_menu_id(user_id, constants.MenuIds.SEARCH_MENU)
+    bot.send_message(user_id, text=phrases.search_menu_title,
+                     reply_markup=Keyboards.search_menu)
+
+
+def show_users_profile(user_id: int):
+    """
+    Send a message to the user with his profile
+    """
+    database.set_users_menu_id(user_id, constants.MenuIds.CHECK_PROFILE_MENU)
+    bot.send_message(user_id, text=phrases.your_profile)
+    bot.send_message(user_id, text=User(user_id).get_profile(),
+                     parse_mode="Markdown",
+                     reply_markup=Keyboards.profile_ok_edit)
+
+
+def show_users_search_parameters(user_id: int):
+    """
+    Send a message to the user with his search_parameters
+    """
+    database.set_users_menu_id(user_id, constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU)
+    bot.send_message(user_id, text=phrases.your_search_parameters)
+    bot.send_message(user_id, text=User(user_id).get_search_parameters(),
+                     parse_mode="Markdown",
+                     reply_markup=Keyboards.search_parameters_ok_edit)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_menu(constants.MenuIds.MAIN_MENU))
+def processing_main_menu_items(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.main_menu_list[0]:
+        check_search_parameters(user_id)
+    elif users_message == phrases.main_menu_list[1]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
+    elif users_message == phrases.main_menu_list[2]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_menu(
+                         constants.MenuIds.CHECK_PROFILE_MENU))
+def processing_check_profile_items_menu(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.ok_edit[0]:
+        activate_main_menu(user_id)
+    elif users_message == phrases.ok_edit[1]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
+        activate_main_menu(user_id)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_menu(
+                         constants.MenuIds.CHECK_SEARCH_PARAMETERS_MENU))
+def processing_check_search_parameters_items_menu(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.ok_edit[0]:
+        activate_search_menu(user_id)
+    elif users_message == phrases.ok_edit[1]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
+        activate_search_menu(user_id)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
+                         constants.ProfileItemsIds.FIRST_NAME))
+def processing_registration_item_first_name(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.do_not_specify:
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.FIRST_NAME,
+                                        value=None)
+    else:
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.FIRST_NAME,
+                                        value=users_message)
+
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.LAST_NAME)
+    bot.send_message(user_id, text=phrases.enter_your_last_name)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
+                         constants.ProfileItemsIds.LAST_NAME))
+def processing_registration_item_last_name(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.do_not_specify:
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.LAST_NAME,
+                                        value=None)
+    else:
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.LAST_NAME,
+                                        value=users_message)
+
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.AGE)
+    bot.send_message(user_id, text=phrases.enter_your_age)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
+                         constants.ProfileItemsIds.AGE))
+def processing_registration_item_age(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.do_not_specify:
+        database.set_users_profile_item(user_id, item=constants.ProfileItemsIds.AGE, value=None)
+    elif users_message.isdigit():
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.AGE,
+                                        value=users_message)
+    else:
+        bot.send_message(user_id, text=phrases.enter_correct_age)
+
+    if users_message == phrases.do_not_specify or users_message.isdigit():
+        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.SPOKEN_LANGUAGES)
+        bot.send_message(user_id, text=phrases.enter_your_spoken_languages,
+                         reply_markup=Keyboards.profile_spoken_languages)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
+                         constants.ProfileItemsIds.SPOKEN_LANGUAGES))
+def processing_registration_item_spoken_language(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.do_not_specify:
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
+                                        value=None)
+    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
+        database.append_to_users_profile_item(user_id,
+                                              item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
+                                              value=users_message)
+    elif users_message != phrases.finish_typing:
+        bot.send_message(user_id, text=phrases.select_from_the_list)
+
+    if users_message in (phrases.do_not_specify, phrases.finish_typing):
+        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.PROGRAMMING_LANGUAGES)
+        bot.send_message(user_id, text=phrases.enter_your_programming_languages,
+                         reply_markup=Keyboards.profile_programming_languages)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
+                         constants.ProfileItemsIds.PROGRAMMING_LANGUAGES))
+def processing_registration_item_programming_language(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.do_not_specify:
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
+    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
+        database.append_to_users_profile_item(user_id,
+                                              item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
+                                              value=users_message)
+    elif users_message != phrases.finish_typing:
+        bot.send_message(user_id, text=phrases.select_from_the_list)
+
+    if users_message in (phrases.do_not_specify, phrases.finish_typing):
+        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.INTERESTS)
+        bot.send_message(user_id, text=phrases.enter_your_interests,
+                         reply_markup=Keyboards.profile_interests)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_registration_item(
+                         constants.ProfileItemsIds.INTERESTS))
+def processing_registration_item_interests(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.do_not_specify:
+        database.set_users_profile_item(user_id,
+                                        item=constants.ProfileItemsIds.INTERESTS, value=None)
+    elif phrases.Interests.is_member_of_enum(users_message):
+        database.append_to_users_profile_item(user_id,
+                                              item=constants.ProfileItemsIds.INTERESTS,
+                                              value=users_message)
+    elif users_message != phrases.finish_typing:
+        bot.send_message(user_id, text=phrases.select_from_the_list)
+
+    if users_message in (phrases.do_not_specify, phrases.finish_typing):
+        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
+        # database.register_user(user_id, user_name)
+        bot.send_message(user_id, text=phrases.finish_registration,
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        show_users_profile(user_id)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
+                         constants.SearchParametersItemsIds.AGE_GROUP))
+def processing_search_parameter_item_age_group(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.does_not_matter:
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.AGE_GROUP,
+                                                       value=None)
+    elif phrases.AgeGroups.is_member_of_enum(users_message):
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.AGE_GROUP,
+                                                       value=users_message)
+    elif users_message != phrases.finish_typing:
+        bot.send_message(user_id, text=phrases.select_from_the_list)
+
+    if users_message in (phrases.does_not_matter, phrases.finish_typing):
+        database.set_users_search_parameter_item_id(user_id,
+                                                    constants.SearchParametersItemsIds.SPOKEN_LANGUAGES)
+        bot.send_message(user_id, text=phrases.enter_spoken_languages,
+                         reply_markup=Keyboards.search_parameters_spoken_languages)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
+                         constants.SearchParametersItemsIds.SPOKEN_LANGUAGES))
+def processing_search_parameter_item_spoken_languages(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.does_not_matter:
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
+                                                       value=None)
+    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
+                                                       value=users_message)
+    elif users_message != phrases.finish_typing:
+        bot.send_message(user_id, text=phrases.select_from_the_list)
+
+    if users_message in (phrases.does_not_matter, phrases.finish_typing):
+        database.set_users_search_parameter_item_id(user_id,
+                                                    constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
+        bot.send_message(user_id, text=phrases.enter_programming_languages,
+                         reply_markup=Keyboards.search_parameters_programming_languages)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
+                         constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES))
+def processing_search_parameter_item_programming_languages(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.does_not_matter:
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
+                                                       value=None)
+    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
+                                                       value=users_message)
+    elif users_message != phrases.finish_typing:
+        bot.send_message(user_id, text=phrases.select_from_the_list)
+
+    if users_message in (phrases.does_not_matter, phrases.finish_typing):
+        database.set_users_search_parameter_item_id(user_id,
+                                                    constants.SearchParametersItemsIds.INTERESTS)
+        bot.send_message(user_id, text=phrases.enter_interests,
+                         reply_markup=Keyboards.search_parameters_interests)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_search_parameters_item(
+                         constants.SearchParametersItemsIds.INTERESTS))
+def processing_search_parameter_item_interests(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.does_not_matter:
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.INTERESTS,
+                                                       value=None)
+    elif phrases.Interests.is_member_of_enum(users_message):
+        database.append_to_users_search_parameter_item(user_id,
+                                                       item=constants.SearchParametersItemsIds.INTERESTS,
+                                                       value=users_message)
+    elif users_message != phrases.finish_typing:
+        bot.send_message(user_id, text=phrases.select_from_the_list)
+
+    if users_message in (phrases.does_not_matter, phrases.finish_typing):
+        database.set_users_search_parameter_item_id(user_id,
+                                                    constants.SearchParametersItemsIds.NULL)
+        database.set_search_parameters_filled(user_id)
+        bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        show_users_search_parameters(user_id)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_menu(
+                         constants.MenuIds.SEARCH_MENU))
+def processing_search_menu_items(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.search_menu_list[0]:
+        database.set_users_menu_id(user_id, constants.MenuIds.PROFILE_REACTIONS_MENU)
+        bot.send_message(user_id, text=phrases.candidates_profiles,
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        show_candidates_profile(user_id)
+    elif users_message == phrases.search_menu_list[1]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
+    elif users_message == phrases.search_menu_list[2]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
+
+
+def show_candidates_profile(user_id: int):
+    candidate_id = search.Search.get_candidate_id(user_id)
+    bot.send_message(user_id, text=User(candidate_id).get_profile(),
+                     parse_mode="Markdown",
+                     reply_markup=Keyboards.profile_reaction_menu)
+    database.set_users_last_shown_profile_id(user_id, candidate_id)
