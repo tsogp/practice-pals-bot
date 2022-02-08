@@ -1,10 +1,11 @@
 from IDatabase import IDatabase
 import constants
 import phrases_ru as phrases
+from typing import Optional, List
 
 
 class User:
-    __DATABASE = None  # Bot's database object
+    __DATABASE: Optional[IDatabase] = None  # Bot's database object
 
     @classmethod
     def set_database(cls, database: IDatabase) -> None:
@@ -53,30 +54,94 @@ class User:
         :return: list of profile items and it's values in string with markdown
         """
         profile = ""
-        profile_items_ids = constants.ProfileItemsIds.get_all_not_null_ids()
-
-        for profile_item_id in profile_items_ids:
-            title = f"*{phrases.profile_items[profile_item_id]}:* "
-            raw_value = User.__DATABASE.get_users_profile_item(self.__id, profile_item_id)
-            value = raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")
-            profile += title + value + "\n"
-
+        profile += self.__get_profile_first_name()
+        profile += self.__get_profile_last_name()
+        profile += self.__get_profile_age()
+        profile += self.__get_profile_spoken_languages()
+        profile += self.__get_profile_programming_languages()
+        profile += self.__get_profile_interests()
         return profile
+
+    def __get_str_from_list(self, raw_value: Optional[List[constants.PossibleAnswers]]):
+        if raw_value is None:
+            values = "_" + phrases.item_is_not_specified + "_"
+        else:
+            values = ""
+            for v in raw_value:
+                values += (v.value + " ")
+        return values
+
+    def __get_profile_first_name(self) -> str:
+        title = f"*{phrases.profile_items[constants.ProfileItemsIds.FIRST_NAME]}:* "
+        raw_value = User.__DATABASE.get_users_profile_first_name(self.__id)
+        value = raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")
+        return title + value + "\n"
+
+    def __get_profile_last_name(self) -> str:
+        title = f"*{phrases.profile_items[constants.ProfileItemsIds.LAST_NAME]}:* "
+        raw_value = User.__DATABASE.get_users_profile_last_name(self.__id)
+        value = raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")
+        return title + value + "\n"
+
+    def __get_profile_age(self) -> str:
+        title = f"*{phrases.profile_items[constants.ProfileItemsIds.AGE]}:* "
+        raw_value = User.__DATABASE.get_users_profile_age(self.__id)
+        value = str(raw_value) if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")
+        return title + value + "\n"
+
+    def __get_profile_spoken_languages(self) -> str:
+        title = f"*{phrases.profile_items[constants.ProfileItemsIds.SPOKEN_LANGUAGES]}:* "
+        raw_value = User.__DATABASE.get_users_profile_spoken_languages(self.__id)
+        values = self.__get_str_from_list(raw_value)
+        return title + values + "\n"
+
+    def __get_profile_programming_languages(self) -> str:
+        title = f"*{phrases.profile_items[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES]}:* "
+        raw_value = User.__DATABASE.get_users_profile_programming_languages(self.__id)
+        values = self.__get_str_from_list(raw_value)
+        return title + values + "\n"
+
+    def __get_profile_interests(self) -> str:
+        title = f"*{phrases.profile_items[constants.ProfileItemsIds.INTERESTS]}:* "
+        raw_value = User.__DATABASE.get_users_profile_interests(self.__id)
+        values = self.__get_str_from_list(raw_value)
+        return title + values + "\n"
 
     def get_search_parameters(self) -> str:
         """
-        :return: list of search parameters items and it's values in string with markdown
+        :return: list of profile items and it's values in string with markdown
         """
         search_parameters = ""
-        search_parameters_items_ids = constants.SearchParametersItemsIds.get_all_not_null_ids()
-
-        for search_parameters_item_id in search_parameters_items_ids:
-            title = f"*{phrases.search_parameters_items[search_parameters_item_id]}:* "
-            raw_value = User.__DATABASE.get_users_search_parameter_item(self.__id, search_parameters_item_id)
-            value = raw_value if raw_value is not None else ("_" + phrases.item_is_not_specified + "_")
-            search_parameters += title + value + "\n"
+        search_parameters += self.__get_search_parameters_age_groups()
+        search_parameters += self.__get_search_parameters_spoken_languages()
+        search_parameters += self.__get_search_parameters_programming_languages()
+        search_parameters += self.__get_search_parameters_interests()
 
         return search_parameters
+
+    def __get_search_parameters_age_groups(self) -> str:
+        title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.AGE_GROUP]}:* "
+        raw_value = User.__DATABASE.get_users_search_parameters_age_groups(self.__id)
+        values = self.__get_str_from_list(raw_value)
+        return title + values + "\n"
+
+    def __get_search_parameters_spoken_languages(self) -> str:
+        title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.SPOKEN_LANGUAGES]}:* "
+        raw_value = User.__DATABASE.get_users_search_parameters_spoken_languages(self.__id)
+        values = self.__get_str_from_list(raw_value)
+        return title + values + "\n"
+
+    def __get_search_parameters_programming_languages(self) -> str:
+        title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES]}:* "
+        raw_value = User.__DATABASE.get_users_search_parameters_programming_languages(self.__id)
+        values = self.__get_str_from_list(raw_value)
+        return title + values + "\n"
+
+    def __get_search_parameters_interests(self) -> str:
+        title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.INTERESTS]}:* "
+        raw_value = User.__DATABASE.get_users_search_parameters_interests(self.__id)
+        values = self.__get_str_from_list(raw_value)
+        return title + values + "\n"
 
     def create_candidates_list(self) -> None:
         pass

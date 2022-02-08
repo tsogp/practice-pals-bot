@@ -1,5 +1,5 @@
 import enum
-from typing import Optional
+from typing import Optional, List
 
 from IDatabase import IDatabase
 
@@ -52,6 +52,9 @@ class FakeDatabase(IDatabase):
 
     # REGISTRATION AND PROFILE
 
+    def initial_user_setup(self, user_id: int) -> None:
+        pass
+
     def is_registered(self, user_id: int) -> bool:
         return self.__is_registered
 
@@ -70,20 +73,51 @@ class FakeDatabase(IDatabase):
     def set_users_registration_item_id(self, user_id: int, new_registration_item_id: constants.ProfileItemsIds) -> None:
         self.__navigation[NavigationItems.REGISTRATION_ITEM_ID] = new_registration_item_id
 
-    def get_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds) -> Optional[str]:
-        if self.__profile[item] is None:
-            return None
-        if item in (constants.ProfileItemsIds.SPOKEN_LANGUAGES, constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
-                    constants.ProfileItemsIds.INTERESTS):
-            return ", ".join([str(elem) for elem in self.__profile[item]])
-        else:
-            return self.__profile[item]
+    def get_users_profile_first_name(self, user_id: int) -> str:
+        return self.__profile[constants.ProfileItemsIds.FIRST_NAME]
 
-    def set_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds, value: Optional[str]) -> None:
-        self.__profile[item] = value
+    def set_users_profile_first_name(self, user_id: int, value: str) -> None:
+        self.__profile[constants.ProfileItemsIds.FIRST_NAME] = value
 
-    def append_to_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds, value: str) -> None:
-        self.__profile[item].add(value)
+    def get_users_profile_last_name(self, user_id: int) -> str:
+        return self.__profile[constants.ProfileItemsIds.LAST_NAME]
+
+    def set_users_profile_last_name(self, user_id: int, value: str) -> None:
+        self.__profile[constants.ProfileItemsIds.LAST_NAME] = value
+
+    def get_users_profile_age(self, user_id: int) -> int:
+        return self.__profile[constants.ProfileItemsIds.AGE]
+
+    def set_users_profile_age(self, user_id: int, value: int) -> None:
+        self.__profile[constants.ProfileItemsIds.AGE] = value
+
+    def get_users_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        return self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES]
+
+    def append_to_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
+        self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES].add(value)
+
+    def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
+        self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES] = None
+
+    def get_users_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        return self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES]
+
+    def append_to_users_profile_programming_languages(self, user_id: int,
+                                                      value: constants.ProgrammingLanguages) -> None:
+        self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES].add(value)
+
+    def set_users_profile_programming_languages_null(self, user_id: int) -> None:
+        self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES] = None
+
+    def get_users_profile_interests(self, user_id: int) -> List[constants.Interests]:
+        return self.__profile[constants.ProfileItemsIds.INTERESTS]
+
+    def append_to_users_profile_interests(self, user_id: int, value: constants.Interests) -> None:
+        self.__profile[constants.ProfileItemsIds.INTERESTS].add(value)
+
+    def set_users_profile_interests_null(self, user_id: int) -> None:
+        self.__profile[constants.ProfileItemsIds.INTERESTS] = None
 
     # SEARCH PARAMETERS
 
@@ -96,18 +130,47 @@ class FakeDatabase(IDatabase):
     def get_users_search_parameter_item_id(self, user_id: int) -> constants.SearchParametersItemsIds:
         return self.__navigation[NavigationItems.SEARCH_PARAMETER_ITEM_ID]
 
-    def set_users_search_parameter_item_id(self, user_id: int,
-                                           new_search_parameter_item_id: constants.SearchParametersItemsIds) -> None:
+    def set_users_search_parameters_item_id(self, user_id: int,
+                                            new_search_parameter_item_id: constants.SearchParametersItemsIds) -> None:
         self.__navigation[NavigationItems.SEARCH_PARAMETER_ITEM_ID] = new_search_parameter_item_id
 
-    def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds) -> Optional[str]:
-        if self.__search_parameters[item] is None:
-            return None
-        return ", ".join([str(elem) for elem in self.__search_parameters[item]])
+    def get_users_search_parameters_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
+        return self.__search_parameters[constants.SearchParametersItemsIds.AGE_GROUP]
 
-    def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds,
-                                              value: Optional[str]) -> None:
-        self.__search_parameters[item].add(value)
+    def append_to_users_search_parameters_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
+        self.__search_parameters[constants.SearchParametersItemsIds.AGE_GROUP].add(value)
+
+    def set_users_profile_search_parameters_age_groups_null(self, user_id: int) -> None:
+        self.__search_parameters[constants.SearchParametersItemsIds.AGE_GROUP] = None
+
+    def get_users_search_parameters_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        return self.__search_parameters[constants.SearchParametersItemsIds.SPOKEN_LANGUAGES]
+
+    def append_to_users_search_parameters_spoken_languages(self, user_id: int,
+                                                           value: constants.SpokenLanguages) -> None:
+        self.__search_parameters[constants.SearchParametersItemsIds.SPOKEN_LANGUAGES].add(value)
+
+    def set_users_profile_search_parameters_spoken_languages_null(self, user_id: int) -> None:
+        self.__search_parameters[constants.SearchParametersItemsIds.SPOKEN_LANGUAGES] = None
+
+    def get_users_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        return self.__search_parameters[constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES]
+
+    def append_to_users_search_parameters_programming_languages(self, user_id: int,
+                                                                value: constants.ProgrammingLanguages) -> None:
+        return self.__search_parameters[constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES]
+
+    def set_users_profile_search_parameters_programming_languages_null(self, user_id: int) -> None:
+        self.__search_parameters[constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES] = None
+
+    def get_users_search_parameters_interests(self, user_id: int) -> List[constants.Interests]:
+        return self.__search_parameters[constants.SearchParametersItemsIds.INTERESTS]
+
+    def append_to_users_search_parameters_interests(self, user_id: int, value: constants.Interests) -> None:
+        return self.__search_parameters[constants.SearchParametersItemsIds.INTERESTS]
+
+    def set_users_profile_search_parameters_interests_null(self, user_id: int) -> None:
+        self.__search_parameters[constants.SearchParametersItemsIds.INTERESTS] = None
 
     # OTHER USER DATA
 
