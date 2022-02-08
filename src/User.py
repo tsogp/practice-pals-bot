@@ -43,7 +43,10 @@ class User:
         return check_menu_id and check_search_parameter_item_id
 
     def is_like_acceptable(self) -> bool:
-        return User.__DATABASE.get_number_of_likes(self.__id) < constants.MAXIMUM_NUMBER_OF_LIKES
+        if User.__DATABASE.have_subscription(self.__id):
+            return True
+        else:
+            return User.__DATABASE.get_number_of_likes(self.__id) < constants.MAXIMUM_NUMBER_OF_LIKES
 
     def get_profile(self) -> str:
         """

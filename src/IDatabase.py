@@ -192,3 +192,10 @@ class IDatabase(ABC):
         :param user_id: Telegram's id of user we work with
         """
         pass
+
+    @abstractmethod
+    def have_subscription(self, user_id: int) -> bool:
+        """
+        :return: does the user have a subscription
+        """
+        pass

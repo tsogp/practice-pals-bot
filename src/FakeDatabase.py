@@ -15,8 +15,9 @@ class FakeDatabase(IDatabase):
         self.__id: int = 1
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
-        self.__is_registered: bool = False
-        self.__are_search_parameters_filled = False
+        self.__is_registered: bool = True
+        self.__are_search_parameters_filled = True
+        self.__subscription = True
 
         self.__navigation: dict = {
             NavigationItems.MENU_ID: constants.MenuIds.NULL,
@@ -124,6 +125,9 @@ class FakeDatabase(IDatabase):
 
     def inc_number_of_likes(self, user_id: int) -> None:
         self.__number_of_likes += 1
+
+    def have_subscription(self, user_id: int) -> bool:
+        return self.__subscription
 
 
 class NavigationItems(enum.Enum):

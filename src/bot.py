@@ -48,21 +48,27 @@ def query_handler(call):
     bot.answer_callback_query(callback_query_id=call.id, text='')
     if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
         if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
-            candidate_id = database.get_users_last_shown_profile_id(call.message.chat.id)
-            if candidate_id is None:
-                return
-            if User(call.message.chat.id).is_like_acceptable():
-                candidate_login = database.get_users_telegram_login_by_id(candidate_id)
-                bot.send_message(call.message.chat.id, text=phrases.telegram_login + candidate_login)
-                database.inc_number_of_likes(call.message.chat.id)
-            else:
-                bot.send_message(call.message.chat.id, text=phrases.likes_blocked)
-            database.set_users_last_shown_profile_id(call.message.chat.id, None)
+            processing_like_button(call.message.chat.id)
 
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
             show_candidates_profile(call.message.chat.id)
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
             activate_main_menu(call.message.chat.id)
+
+
+def processing_like_button(user_id: int):
+    candidate_id = database.get_users_last_shown_profile_id(user_id)
+    if candidate_id is None:
+        return
+
+    if User(user_id).is_like_acceptable():
+        candidate_login = database.get_users_telegram_login_by_id(candidate_id)
+        bot.send_message(user_id, text=phrases.telegram_login + candidate_login)
+        database.inc_number_of_likes(user_id)
+    else:
+        bot.send_message(user_id, text=phrases.likes_blocked)
+
+    database.set_users_last_shown_profile_id(user_id, None)
 
 
 def check_registration(user_id: int):
