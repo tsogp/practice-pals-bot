@@ -6,6 +6,7 @@ IS_REGISTERED = 'is_registered'
 ARE_SEARCH_PARAMETERS_FILLED = 'are_search_parameters_filled'
 NUMBER_OF_LIKES = 'number_of_likes'
 LAST_PROFILE_ID = 'last_profile_id'
+IS_SUBSCRIBED = 'is_subscribed'
 
 MENU_ID = 'menu_id'
 REGISTRATION_ITEM_ID = 'registration_item_id'
