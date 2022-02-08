@@ -15,8 +15,8 @@ class FakeDatabase(IDatabase):
         self.__id: int = 1
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
-        self.__is_registered: bool = True
-        self.__are_search_parameters_filled = True
+        self.__is_registered: bool = False
+        self.__are_search_parameters_filled = False
         self.__subscription = True
 
         self.__navigation: dict = {
@@ -75,7 +75,7 @@ class FakeDatabase(IDatabase):
             return None
         if item in (constants.ProfileItemsIds.SPOKEN_LANGUAGES, constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
                     constants.ProfileItemsIds.INTERESTS):
-            return ", ".join(self.__profile[item])
+            return ", ".join([str(elem) for elem in self.__profile[item]])
         else:
             return self.__profile[item]
 
@@ -103,7 +103,7 @@ class FakeDatabase(IDatabase):
     def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds) -> Optional[str]:
         if self.__search_parameters[item] is None:
             return None
-        return ", ".join(self.__search_parameters[item])
+        return ", ".join([str(elem) for elem in self.__search_parameters[item]])
 
     def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds,
                                               value: Optional[str]) -> None:

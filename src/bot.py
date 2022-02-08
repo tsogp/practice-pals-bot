@@ -242,10 +242,10 @@ def processing_registration_item_spoken_language(message):
         database.set_users_profile_item(user_id,
                                         item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
                                         value=None)
-    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
+    elif users_message in phrases.SpokenLanguages.keys():
         database.append_to_users_profile_item(user_id,
                                               item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
-                                              value=users_message)
+                                              value=phrases.SpokenLanguages[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -265,10 +265,10 @@ def processing_registration_item_programming_language(message):
     if users_message == phrases.do_not_specify:
         database.set_users_profile_item(user_id,
                                         item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
-    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
+    elif users_message in phrases.ProgrammingLanguages.keys():
         database.append_to_users_profile_item(user_id,
                                               item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
-                                              value=users_message)
+                                              value=phrases.ProgrammingLanguages[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -288,10 +288,10 @@ def processing_registration_item_interests(message):
     if users_message == phrases.do_not_specify:
         database.set_users_profile_item(user_id,
                                         item=constants.ProfileItemsIds.INTERESTS, value=None)
-    elif phrases.Interests.is_member_of_enum(users_message):
+    elif users_message in phrases.Interests.keys():
         database.append_to_users_profile_item(user_id,
                                               item=constants.ProfileItemsIds.INTERESTS,
-                                              value=users_message)
+                                              value=phrases.Interests[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -314,10 +314,10 @@ def processing_search_parameter_item_age_group(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.AGE_GROUP,
                                                        value=None)
-    elif phrases.AgeGroups.is_member_of_enum(users_message):
+    elif users_message in phrases.AgeGroups.keys():
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.AGE_GROUP,
-                                                       value=users_message)
+                                                       value=phrases.AgeGroups[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -339,10 +339,10 @@ def processing_search_parameter_item_spoken_languages(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
                                                        value=None)
-    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
+    elif users_message in phrases.SpokenLanguages.keys():
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
-                                                       value=users_message)
+                                                       value=phrases.SpokenLanguages[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -364,10 +364,10 @@ def processing_search_parameter_item_programming_languages(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
                                                        value=None)
-    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
+    elif users_message in phrases.ProgrammingLanguages.keys():
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
-                                                       value=users_message)
+                                                       value=phrases.ProgrammingLanguages[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -389,10 +389,10 @@ def processing_search_parameter_item_interests(message):
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.INTERESTS,
                                                        value=None)
-    elif phrases.Interests.is_member_of_enum(users_message):
+    elif users_message in phrases.Interests.keys():
         database.append_to_users_search_parameter_item(user_id,
                                                        item=constants.SearchParametersItemsIds.INTERESTS,
-                                                       value=users_message)
+                                                       value=phrases.Interests[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
