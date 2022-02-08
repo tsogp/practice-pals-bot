@@ -286,7 +286,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def get_user_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+    def get_users_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
         """
         :param user_id: Telegram's id of user we work with
         :return: value of "Programming languages" field in user's search parameters
