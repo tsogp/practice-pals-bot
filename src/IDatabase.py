@@ -210,6 +210,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def get_users_search_parameters_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
         """
         :param user_id: Telegram's id of user we work with
@@ -217,6 +218,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def append_to_users_search_parameters_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
         """
         Append value to "Age groups" field in user's search parameters
@@ -225,6 +227,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def get_users_search_parameters_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
         """
         :param user_id: Telegram's id of user we work with
@@ -232,6 +235,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def append_to_users_search_parameters_spoken_languages(self, user_id: int,
                                                            value: constants.SpokenLanguages) -> None:
         """
@@ -241,6 +245,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def get_user_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
         """
         :param user_id: Telegram's id of user we work with
@@ -248,6 +253,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def append_to_users_search_parameters_programming_languages(self, user_id: int,
                                                                 value: constants.ProgrammingLanguages) -> None:
         """
@@ -257,6 +263,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def get_users_search_parameters_interests(self, user_id: int) -> List[constants.Interests]:
         """
         :param user_id: Telegram's id of user we work with
@@ -264,6 +271,7 @@ class IDatabase(ABC):
         """
         pass
 
+    @abstractmethod
     def append_to_users_search_parameters_interests(self, user_id: int, value: constants.Interests) -> None:
         """
         Append value to "Interests" field in user's search parameters
