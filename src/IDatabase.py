@@ -71,7 +71,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def get_users_profile_first_name(self, user_id: int) -> str:
+    def get_users_profile_first_name(self, user_id: int) -> Optional[str]:
         """
         :param user_id: Telegram's id of user we work with
         :return: value of "First name" field in user's profile
@@ -79,7 +79,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def set_users_profile_first_name(self, user_id: int, value: str) -> None:
+    def set_users_profile_first_name(self, user_id: int, value: Optional[str]) -> None:
         """
         Set value of "First name" field in user's profile
         :param user_id: Telegram's id of user we work with
@@ -88,7 +88,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def get_users_profile_last_name(self, user_id: int) -> str:
+    def get_users_profile_last_name(self, user_id: int) -> Optional[str]:
         """
         :param user_id: Telegram's id of user we work with
         :return: value of "Last name" field in user's profile
@@ -96,7 +96,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def set_users_profile_last_name(self, user_id: int, value: str) -> None:
+    def set_users_profile_last_name(self, user_id: int, value: Optional[str]) -> None:
         """
         Set value of "Last name" field in user's profile
         :param user_id: Telegram's id of user we work with
@@ -105,7 +105,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def get_users_profile_age(self, user_id: int) -> int:
+    def get_users_profile_age(self, user_id: int) -> Optional[int]:
         """
         :param user_id: Telegram's id of user we work with
         :return: value of "Age" field in user's profile
@@ -113,7 +113,7 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def set_users_profile_age(self, user_id: int, value: int) -> None:
+    def set_users_profile_age(self, user_id: int, value: Optional[int]) -> None:
         """
         Set value of "Age" field in user's profile
         :param user_id: Telegram's id of user we work with
@@ -139,6 +139,14 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
+        """
+        Set "Spoken languages" field in user's profile = Null
+        :param user_id: Telegram's id of user we work with
+        """
+        pass
+
+    @abstractmethod
     def get_users_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
         """
         :param user_id: Telegram's id of user we work with
@@ -157,6 +165,14 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def set_users_profile_programming_languages_null(self, user_id: int) -> None:
+        """
+        Set "Programming languages" field in user's profile = Null
+        :param user_id: Telegram's id of user we work with
+        """
+        pass
+
+    @abstractmethod
     def get_users_profile_interests(self, user_id: int) -> List[constants.Interests]:
         """
         :param user_id: Telegram's id of user we work with
@@ -170,6 +186,14 @@ class IDatabase(ABC):
         Append value to "Interests" field in user's profile
         :param user_id: Telegram's id of user we work with
         :param value: appended value
+        """
+        pass
+
+    @abstractmethod
+    def set_users_profile_interests_null(self, user_id: int) -> None:
+        """
+        Set "Interests" field in user's profile = Null
+        :param user_id: Telegram's id of user we work with
         """
         pass
 
@@ -228,6 +252,14 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def set_users_profile_search_parameters_age_groups_null(self, user_id: int) -> None:
+        """
+        Set "Age groups" field in user's search parameters = Null
+        :param user_id: Telegram's id of user we work with
+        """
+        pass
+
+    @abstractmethod
     def get_users_search_parameters_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
         """
         :param user_id: Telegram's id of user we work with
@@ -242,6 +274,14 @@ class IDatabase(ABC):
         Append value to "Spoken languages" field in user's search parameters
         :param user_id: Telegram's id of user we work with
         :param value: appended value
+        """
+        pass
+
+    @abstractmethod
+    def set_users_profile_search_parameters_spoken_languages_null(self, user_id: int) -> None:
+        """
+        Set "Spoken Languages" field in user's search parameters = Null
+        :param user_id: Telegram's id of user we work with
         """
         pass
 
@@ -264,6 +304,14 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def set_users_profile_search_parameters_programming_languages_null(self, user_id: int) -> None:
+        """
+        Set "Programming Languages" field in user's search parameters = Null
+        :param user_id: Telegram's id of user we work with
+        """
+        pass
+
+    @abstractmethod
     def get_users_search_parameters_interests(self, user_id: int) -> List[constants.Interests]:
         """
         :param user_id: Telegram's id of user we work with
@@ -277,6 +325,14 @@ class IDatabase(ABC):
         Append value to "Interests" field in user's search parameters
         :param user_id: Telegram's id of user we work with
         :param value: appended value
+        """
+        pass
+
+    @abstractmethod
+    def set_users_profile_search_parameters_interests_null(self, user_id: int) -> None:
+        """
+        Set "Interests" field in user's search parameters = Null
+        :param user_id: Telegram's id of user we work with
         """
         pass
 
