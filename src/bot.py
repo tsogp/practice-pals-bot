@@ -406,8 +406,7 @@ def processing_search_parameter_item_interests(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(message.chat.id).is_in_menu(
-                         constants.MenuIds.SEARCH_MENU))
+                     func=lambda message: User(message.chat.id).is_in_menu(constants.MenuIds.SEARCH_MENU))
 def processing_search_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
@@ -416,6 +415,7 @@ def processing_search_menu_items(message):
         database.set_users_menu_id(user_id, constants.MenuIds.PROFILE_REACTIONS_MENU)
         bot.send_message(user_id, text=phrases.candidates_profiles,
                          reply_markup=telebot.types.ReplyKeyboardRemove())
+        User(message.chat.id).create_candidates_list()
         show_candidates_profile(user_id)
     elif users_message == phrases.search_menu_list[1]:
         bot.send_message(user_id, text=phrases.not_ready_yet)

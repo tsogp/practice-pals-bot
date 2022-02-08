@@ -77,3 +77,6 @@ class User:
             search_parameters += title + value + "\n"
 
         return search_parameters
+
+    def create_candidates_list(self) -> None:
+        pass
