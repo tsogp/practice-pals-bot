@@ -55,3 +55,58 @@ class SearchParametersItemsIds(Ids):
 PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"
 
 MAXIMUM_NUMBER_OF_LIKES = 3
+
+@enum.unique
+class PossibleAnswers(enum.Enum):
+
+    @classmethod
+    def is_member_of_enum(cls, value: str) -> bool:
+        """
+        :return: does the enumeration contain a value
+        """
+        values = [member.value for name, member in cls.__members__.items()]
+        return value in values
+
+    @classmethod
+    def get_all_vales(cls) -> List[str]:
+        """
+        :return: list with all values of enum's constants
+        """
+        return [member.value for name, member in cls.__members__.items()]
+
+    def __str__(self) -> str:
+        return self.value
+
+
+@enum.unique
+class SpokenLanguages(PossibleAnswers):
+    RUSSIAN = "russian"
+    ENGLISH = "english"
+
+
+@enum.unique
+class ProgrammingLanguages(PossibleAnswers):
+    PYTHON = "python"
+    C = "c"
+    CPP = "cpp"
+    C_SHARP = "c_sharp"
+    JAVA = "java"
+    JAVA_SCRIPT = "java_script"
+
+
+@enum.unique
+class Interests(PossibleAnswers):
+    FRONT_END = "front_end"
+    BACK_END = "back_end"
+    MACHINE_LEARNING = "machine_learning"
+    BIG_DATA = "big_data"
+    DEV_FOR_ANDROID = "android_dev"
+    DEV_FOR_IOS = "ios_dev"
+
+
+@enum.unique
+class AgeGroups(PossibleAnswers):
+    YOUNGER_THAN_14 = "younger_than_14"
+    FROM_14_TO_18 = "from_14_to_18"
+    FROM_18_TO_25 = "from_18_to_25"
+    OLDER_THAN_25 = "older_than_25"

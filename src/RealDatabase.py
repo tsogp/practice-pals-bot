@@ -1,9 +1,9 @@
 from sqlalchemy import *
-from typing import Optional
+from typing import Optional, List
 
 import choice_fields as mp # multiple choice
 from database_constants import *
-from constants import MenuIds, SearchParametersItemsIds, ProfileItemsIds
+from constants import *
 from IDatabase import IDatabase
 
 class Database(IDatabase):
@@ -22,7 +22,8 @@ class Database(IDatabase):
             Column(ARE_SEARCH_PARAMETERS_FILLED, Boolean, nullable=False, default=False),
 
             Column(NUMBER_OF_LIKES, Integer, nullable=False, default=0),
-            Column(LAST_PROFILE_ID, Integer)
+            Column(LAST_PROFILE_ID, Integer),
+            Column(IS_SUBSCRIBED, Boolean, default=False, nullable=False)
         )
 
         self.Navigation = Table(
@@ -70,6 +71,20 @@ class Database(IDatabase):
 
         self.metadata.create_all(self.engine)
         self.connection = self.engine.connect()
+
+    def initial_user_setup(self, user_id: int):
+        pass 
+
+    def is_in_database(self, user_id: int) -> bool: 
+        statement = select(
+            self.Account.c[TELEGRAM_ID]
+        ).where(self.Account.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+
+        return bool(mapped_result)
+
 
     def is_registered(self, user_id: int):
         statement = select(
@@ -128,28 +143,87 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
 
-    def get_users_profile_item(self, user_id: int, item: str) -> Optional[str]:
-        statement = select(
-            self.Profile.c[item]
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+    # def get_users_profile_item(self, user_id: int, item: str) -> Optional[str]:
+    #     statement = select(
+    #         self.Profile.c[item]
+    #     ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+    #     result = self.connection.execute(statement)
+    #     mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+    #     return mapped_result.scalars().all()[0]
 
     
-    def set_users_profile_item(self, user_id: int, item: str, value: Optional[str]) -> None:
-        statement = update(
-            self.Profile.c[item]
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({item: value})
+    # def set_users_profile_item(self, user_id: int, item: str, value: Optional[str]) -> None:
+    #     statement = update(
+    #         self.Profile.c[item]
+    #     ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({item: value})
 
-        result = self.connection.execute(statement)
+    #     result = self.connection.execute(statement)
 
 
-    def append_to_users_profile_item(self, user_id: int, item: ProfileItemsIds, value: str) -> None:
+    # def append_to_users_profile_item(self, user_id: int, item: ProfileItemsIds, value: str) -> None:
+    #     pass
+
+    def get_user_profile_first_name(self, user_id: int) -> str:
         pass
 
+    def set_user_profile_first_name(self, user_id: int, value: str) -> None:
+        pass
+
+    def get_user_profile_last_name(self, user_id: int) -> str:
+        pass
+
+    def set_user_profile_last_name(self, user_id: int, value: str) -> None:
+        pass
+
+    def get_user_profile_age(self, user_id: int) -> int:
+        pass
+
+    def set_user_profile_age(self, user_id: int, value: int) -> None:
+        pass
+
+    def get_user_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        pass
+
+    def set_user_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
+        pass
+
+    def get_user_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        pass
+
+    def set_user_profile_programming_languages(self, user_id: int, value: constants.ProgrammingLanguages) -> None:
+        pass
+
+    def get_user_profile_interests(self, user_id: int) -> List[constants.Interests]:
+        pass
+
+    def set_user_profile_interests(self, user_id: int, value: constants.Interests) -> None:
+        pass
+
+    def get_user_search_parameter_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
+        pass
+
+    def set_user_search_parameter_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
+        pass
+
+    def get_user_search_parameter_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        pass
+
+    def set_user_search_parameter_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
+        pass
+
+    def get_user_search_parameter_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        pass
+
+    def set_user_search_parameter_programming_languages(self, user_id: int, value: constants.ProgrammingLanguages) -> None:
+        pass
+
+    def get_user_search_parameter_interests(self, user_id: int) -> List[constants.Interests]:
+        pass
+
+    def set_user_search_parameter_interests(self, user_id: int, value: constants.Interests) -> None:
+        pass
 
     def are_search_parameters_filled(self, user_id: int) -> bool:
         statement = select(
@@ -252,6 +326,15 @@ class Database(IDatabase):
         
         result = self.connection.execute(statement)
 
+    def have_subscription(self, user_id: int) -> bool:
+        statement = select(
+            self.Account.c[IS_SUBSCRIBED]
+        ).where(self.Account.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+
+        return mapped_result[0]
 
 DATABASE = Database()
 
