@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, List
 
 import constants
 
@@ -10,6 +10,13 @@ class IDatabase(ABC):
     """
 
     # REGISTRATION AND PROFILE
+
+    @abstractmethod
+    def initial_user_setup(self, user_id: int) -> None:
+        """
+        :param user_id: Telegram's id of user we work with
+        """
+        pass
 
     @abstractmethod
     def is_registered(self, user_id: int) -> bool:
@@ -64,32 +71,105 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def get_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds) -> Optional[str]:
+    def get_users_profile_first_name(self, user_id: int) -> str:
         """
-        Get value of item from user's profile
         :param user_id: Telegram's id of user we work with
-        :param item: id of profile's item
-        :return: value of profile's item
+        :return: value of "First name" field in user's profile
         """
         pass
 
     @abstractmethod
-    def set_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds, value: Optional[str]) -> None:
+    def set_users_profile_first_name(self, user_id: int, value: str) -> None:
         """
-        Set new value of item from user's profile
+        Set value of "First name" field in user's profile
         :param user_id: Telegram's id of user we work with
-        :param item: id of profile's item which needs to be changed
-        :param value: new value for item
+        :param value: new value of "First name" field in user's profile
         """
         pass
 
     @abstractmethod
-    def append_to_users_profile_item(self, user_id: int, item: constants.ProfileItemsIds, value: str) -> None:
+    def get_users_profile_last_name(self, user_id: int) -> str:
         """
-        Append some value into user's profile item
         :param user_id: Telegram's id of user we work with
-        :param item: id of profile's item which needs to be changed
-        :param value: value to be added
+        :return: value of "Last name" field in user's profile
+        """
+        pass
+
+    @abstractmethod
+    def set_users_profile_last_name(self, user_id: int, value: str) -> None:
+        """
+        Set value of "Last name" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: new value of "Last name" field in user's profile
+        """
+        pass
+
+    @abstractmethod
+    def get_users_profile_age(self, user_id: int) -> int:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: value of "Age" field in user's profile
+        """
+        pass
+
+    @abstractmethod
+    def set_users_profile_age(self, user_id: int, value: int) -> None:
+        """
+        Set value of "Age" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: new value of "Age" field in user's profile
+        """
+        pass
+
+    @abstractmethod
+    def get_users_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: value of "Spoken languages" field in user's profile
+        """
+        pass
+
+    @abstractmethod
+    def append_to_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
+        """
+        Append value to "Spoken languages" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: appended value
+        """
+        pass
+
+    @abstractmethod
+    def get_users_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: value of "Programming languages" field in user's profile
+        """
+        pass
+
+    @abstractmethod
+    def append_to_users_profile_programming_languages(self, user_id: int,
+                                                      value: constants.ProgrammingLanguages) -> None:
+        """
+        Append value to "Programming languages" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: appended value
+        """
+        pass
+
+    @abstractmethod
+    def get_users_profile_interests(self, user_id: int) -> List[constants.Interests]:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: value of "Interests" field in user's profile
+        """
+        pass
+
+    @abstractmethod
+    def append_to_users_profile_interests(self, user_id: int, value: constants.Interests) -> None:
+        """
+        Append value to "Interests" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: appended value
         """
         pass
 
@@ -121,8 +201,8 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def set_users_search_parameter_item_id(self, user_id: int,
-                                           new_search_parameter_item_id: constants.SearchParametersItemsIds) -> None:
+    def set_users_search_parameters_item_id(self, user_id: int,
+                                            new_search_parameter_item_id: constants.SearchParametersItemsIds) -> None:
         """
         :param user_id: Telegram's id of user we work with
         :param new_search_parameter_item_id: new value of "search_parameter_item_id" field
@@ -130,24 +210,65 @@ class IDatabase(ABC):
         """
         pass
 
-    @abstractmethod
-    def get_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds) -> Optional[str]:
+    def get_users_search_parameters_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
         """
-        Get value of item from user's search parameters
         :param user_id: Telegram's id of user we work with
-        :param item: id of search parameters item
-        :return: value of search parameters item
+        :return: value of "Age groups" field in user's search parameters
         """
         pass
 
-    @abstractmethod
-    def append_to_users_search_parameter_item(self, user_id: int, item: constants.SearchParametersItemsIds,
-                                              value: Optional[str]) -> None:
+    def append_to_users_search_parameters_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
         """
-        Append some value into user's search parameters item
+        Append value to "Age groups" field in user's search parameters
         :param user_id: Telegram's id of user we work with
-        :param item: id of search parameters item which needs to be changed
-        :param value: value to be added
+        :param value: appended value
+        """
+        pass
+
+    def get_users_search_parameters_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: value of "Spoken languages" field in user's search parameters
+        """
+        pass
+
+    def append_to_users_search_parameters_spoken_languages(self, user_id: int,
+                                                           value: constants.SpokenLanguages) -> None:
+        """
+        Append value to "Spoken languages" field in user's search parameters
+        :param user_id: Telegram's id of user we work with
+        :param value: appended value
+        """
+        pass
+
+    def get_user_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: value of "Programming languages" field in user's search parameters
+        """
+        pass
+
+    def append_to_users_search_parameters_programming_languages(self, user_id: int,
+                                                                value: constants.ProgrammingLanguages) -> None:
+        """
+        Append value to "Programming languages" field in user's search parameters
+        :param user_id: Telegram's id of user we work with
+        :param value: appended value
+        """
+        pass
+
+    def get_users_search_parameters_interests(self, user_id: int) -> List[constants.Interests]:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: value of "Interests" field in user's search parameters
+        """
+        pass
+
+    def append_to_users_search_parameters_interests(self, user_id: int, value: constants.Interests) -> None:
+        """
+        Append value to "Interests" field in user's search parameters
+        :param user_id: Telegram's id of user we work with
+        :param value: appended value
         """
         pass
 
