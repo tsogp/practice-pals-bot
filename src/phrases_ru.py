@@ -98,12 +98,7 @@ SpokenLanguages = {
 }
 
 ProgrammingLanguages = {
-    "Python": constants.ProgrammingLanguages.PYTHON,
-    "C": constants.ProgrammingLanguages.C,
-    "C++": constants.ProgrammingLanguages.CPP,
-    "C#": constants.ProgrammingLanguages.C_SHARP,
-    "Java": constants.ProgrammingLanguages.JAVA,
-    "Java Script": constants.ProgrammingLanguages.JAVA_SCRIPT
+
 }
 
 Interests = {
@@ -120,4 +115,28 @@ AgeGroups = {
     "от 14 до 18 лет": constants.AgeGroups.FROM_14_TO_18,
     "от 18 до 25 лет": constants.AgeGroups.FROM_18_TO_25,
     "старше 25 лет": constants.AgeGroups.OLDER_THAN_25,
+}
+
+values_of_enums_constants = {
+    constants.SpokenLanguages.RUSSIAN: "Русский",
+    constants.SpokenLanguages.ENGLISH: "Английский",
+
+    constants.ProgrammingLanguages.PYTHON: "Python",
+    constants.ProgrammingLanguages.C: "C",
+    constants.ProgrammingLanguages.CPP: "C++",
+    constants.ProgrammingLanguages.C_SHARP: "C#",
+    constants.ProgrammingLanguages.JAVA: "Java",
+    constants.ProgrammingLanguages.JAVA_SCRIPT: "Java Script",
+
+    constants.Interests.FRONT_END: "Front-end",
+    constants.Interests.BACK_END: "Back-end",
+    constants.Interests.MACHINE_LEARNING: "Machine learning",
+    constants.Interests.BIG_DATA: "Big data",
+    constants.Interests.DEV_FOR_ANDROID: "Разработка под Android",
+    constants.Interests.DEV_FOR_IOS: "Разработка под iOS",
+
+    constants.AgeGroups.YOUNGER_THAN_14: "до 14 лет",
+    constants.AgeGroups.FROM_14_TO_18: "от 14 до 18 лет",
+    constants.AgeGroups.FROM_18_TO_25: "от 18 до 25 лет",
+    constants.AgeGroups.OLDER_THAN_25: "старше 25 лет"
 }

@@ -68,7 +68,7 @@ class User:
         else:
             values = ""
             for v in raw_value:
-                values += (v.value + " ")
+                values += (phrases.values_of_enums_constants.get(v, "ERROR") + " ")
         return values
 
     def __get_profile_first_name(self) -> str:
