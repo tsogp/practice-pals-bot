@@ -15,8 +15,8 @@ class UserProfile:
                  spoken_languages: Optional[List[constants.SpokenLanguages]],
                  programming_languages: Optional[List[constants.ProgrammingLanguages]],
                  interests: Optional[List[constants.Interests]]):
-        self.id = self.__ID_COUNTER
-        self.__ID_COUNTER += 1
+        self.id = UserProfile.__ID_COUNTER
+        UserProfile.__ID_COUNTER += 1
         self.first_name = first_name
         self.last_name = last_name
         self.age = age
@@ -51,7 +51,7 @@ class FakeDatabase(IDatabase):
         self.__id: int = 1220018146
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
-        self.__is_registered: bool = False
+        self.__is_registered: bool = True
         self.__are_search_parameters_filled = False
         self.__subscription = True
 
