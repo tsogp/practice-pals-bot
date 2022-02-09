@@ -15,18 +15,14 @@ class UserProfile:
                  spoken_languages: Optional[List[constants.SpokenLanguages]],
                  programming_languages: Optional[List[constants.ProgrammingLanguages]],
                  interests: Optional[List[constants.Interests]]):
-        self.__id = self.__ID_COUNTER
+        self.id = self.__ID_COUNTER
         self.__ID_COUNTER += 1
-        self.__first_name = first_name
-        self.__last_name = last_name
-        self.__age = age
-        self.__spoken_languages = spoken_languages
-        self.__programming_languages = programming_languages
-        self.__interests = interests
-
-    @property
-    def id(self):
-        return self.__id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.age = age
+        self.spoken_languages = spoken_languages
+        self.programming_languages = programming_languages
+        self.interests = interests
 
 
 class FakeDatabase(IDatabase):
@@ -52,10 +48,10 @@ class FakeDatabase(IDatabase):
 
     def __init__(self):
         self.__add_users_to_users_list()
-        self.__id: int = 1
+        self.__id: int = 1220018146
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
-        self.__is_registered: bool = True
+        self.__is_registered: bool = False
         self.__are_search_parameters_filled = False
         self.__subscription = True
 
@@ -108,26 +104,40 @@ class FakeDatabase(IDatabase):
     def set_users_registration_item_id(self, user_id: int, new_registration_item_id: constants.ProfileItemsIds) -> None:
         self.__navigation[NavigationItems.REGISTRATION_ITEM_ID] = new_registration_item_id
 
+    # PROFILE
+
     def get_users_profile_first_name(self, user_id: int) -> str:
-        return self.__profile[constants.ProfileItemsIds.FIRST_NAME]
+        if user_id == self.__id:
+            return self.__profile[constants.ProfileItemsIds.FIRST_NAME]
+        else:
+            return self.USERS_LIST[user_id].first_name
 
     def set_users_profile_first_name(self, user_id: int, value: str) -> None:
         self.__profile[constants.ProfileItemsIds.FIRST_NAME] = value
 
     def get_users_profile_last_name(self, user_id: int) -> str:
-        return self.__profile[constants.ProfileItemsIds.LAST_NAME]
+        if user_id == self.__id:
+            return self.__profile[constants.ProfileItemsIds.LAST_NAME]
+        else:
+            return self.USERS_LIST[user_id].last_name
 
     def set_users_profile_last_name(self, user_id: int, value: str) -> None:
         self.__profile[constants.ProfileItemsIds.LAST_NAME] = value
 
     def get_users_profile_age(self, user_id: int) -> int:
-        return self.__profile[constants.ProfileItemsIds.AGE]
+        if user_id == self.__id:
+            return self.__profile[constants.ProfileItemsIds.AGE]
+        else:
+            return self.USERS_LIST[user_id].age
 
     def set_users_profile_age(self, user_id: int, value: int) -> None:
         self.__profile[constants.ProfileItemsIds.AGE] = value
 
     def get_users_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
-        return self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES]
+        if user_id == self.__id:
+            return self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES]
+        else:
+            return self.USERS_LIST[user_id].spoken_languages
 
     def append_to_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
         self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES].add(value)
@@ -136,7 +146,10 @@ class FakeDatabase(IDatabase):
         self.__profile[constants.ProfileItemsIds.SPOKEN_LANGUAGES] = None
 
     def get_users_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
-        return self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES]
+        if user_id == self.__id:
+            return self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES]
+        else:
+            return self.USERS_LIST[user_id].programming_languages
 
     def append_to_users_profile_programming_languages(self, user_id: int,
                                                       value: constants.ProgrammingLanguages) -> None:
@@ -146,7 +159,10 @@ class FakeDatabase(IDatabase):
         self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES] = None
 
     def get_users_profile_interests(self, user_id: int) -> List[constants.Interests]:
-        return self.__profile[constants.ProfileItemsIds.INTERESTS]
+        if user_id == self.__id:
+            return self.__profile[constants.ProfileItemsIds.INTERESTS]
+        else:
+            return self.USERS_LIST[user_id].interests
 
     def append_to_users_profile_interests(self, user_id: int, value: constants.Interests) -> None:
         self.__profile[constants.ProfileItemsIds.INTERESTS].add(value)
