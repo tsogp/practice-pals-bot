@@ -90,6 +90,8 @@ likes_blocked = "Вы исчерпали кол-во лайков, доступ�
 
 item_is_not_specified = "Не указано"
 
+no_profiles_more = "Вы просмотрели все профили, удовлетворяющие заданным Вами критериям"
+
 SpokenLanguages = {
     "Русский": constants.SpokenLanguages.RUSSIAN,
     "Английский": constants.SpokenLanguages.ENGLISH,

@@ -144,4 +144,16 @@ class User:
         return title + values + "\n"
 
     def create_candidates_list(self) -> None:
-        pass
+        spoken_languages = self.__DATABASE.get_users_search_parameters_spoken_languages(self.__id)
+        programming_languages = self.__DATABASE.get_users_search_parameters_programming_languages(self.__id)
+        interests = self.__DATABASE.get_users_search_parameters_interests(self.__id)
+        candidates_ids = self.__DATABASE.get_users_by_parameters(spoken_languages, programming_languages, interests)
+
+        for candidate_id in candidates_ids:
+            self.__DATABASE.add_candidate(self.__id, candidate_id)
+
+    def get_candidate_id(self) -> Optional[int]:
+        candidates = self.__DATABASE.get_not_viewed_candidates(self.__id)
+        if not candidates:
+            return None
+        return candidates[0]

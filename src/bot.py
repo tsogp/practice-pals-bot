@@ -392,8 +392,16 @@ def processing_search_menu_items(message):
 
 
 def show_candidates_profile(user_id: int):
-    candidate_id = search.Search.get_candidate_id(user_id)
-    bot.send_message(user_id, text=User(candidate_id).get_profile(),
-                     parse_mode="Markdown",
-                     reply_markup=Keyboards.profile_reaction_menu)
-    database.set_users_last_shown_profile_id(user_id, candidate_id)
+    # candidate_id = search.Search.get_candidate_id(user_id)
+    candidate_id = User(user_id).get_candidate_id()
+    if candidate_id is None:
+        bot.send_message(user_id, text=phrases.no_profiles_more,
+                         parse_mode="Markdown",
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        activate_main_menu(user_id)
+    else:
+        bot.send_message(user_id, text=User(candidate_id).get_profile(),
+                         parse_mode="Markdown",
+                         reply_markup=Keyboards.profile_reaction_menu)
+        database.set_users_last_shown_profile_id(user_id, candidate_id)
+        database.mark_profile_as_viewed(user_id, candidate_id)

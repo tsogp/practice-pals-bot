@@ -384,3 +384,37 @@ class IDatabase(ABC):
         :return: does the user have a subscription
         """
         pass
+
+    @abstractmethod
+    def get_users_by_parameters(self, spoken_languages: List[constants.SpokenLanguages],
+                                programming_languages: List[constants.ProgrammingLanguages],
+                                interests: List[constants.Interests]) -> List[int]:
+        """
+        :return: list of users, which have at least one item from parameters
+        """
+        pass
+
+    @abstractmethod
+    def add_candidate(self, user_id: int, candidate_id: int) -> None:
+        """
+        Add candidate to potential profiles
+        :param user_id: Telegram's id of user we work with
+        :param candidate_id: id of the candidate being added
+        """
+        pass
+
+    @abstractmethod
+    def get_not_viewed_candidates(self, user_id: int) -> Optional[List[int]]:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: list of not viewed by user (with user_id) profiles
+        """
+        pass
+
+    @abstractmethod
+    def mark_profile_as_viewed(self, user_id: int, candidate_id: int) -> None:
+        """
+        :param user_id: Telegram's id of user we work with
+        :param candidate_id: id of the candidate being marked
+        """
+        pass

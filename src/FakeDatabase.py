@@ -15,8 +15,8 @@ class FakeDatabase(IDatabase):
         self.__id: int = 1
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
-        self.__is_registered: bool = False
-        self.__are_search_parameters_filled = False
+        self.__is_registered: bool = True
+        self.__are_search_parameters_filled = True
         self.__subscription = True
 
         self.__navigation: dict = {
@@ -40,13 +40,14 @@ class FakeDatabase(IDatabase):
             constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: set(),
             constants.SearchParametersItemsIds.INTERESTS: set()
         }
-
+        self.__potential_relationships = []
+        """
         self.__potential_relationship: dict = {
             PotentialRelationshipItems.SENDER_ACCOUNT_ID: None,
             PotentialRelationshipItems.REQUESTED_ACCOUNT_ID: None,
             PotentialRelationshipItems.IS_VIEWED: None,
         }
-
+        """
         self.__number_of_likes: int = 0
         self.__last_profile_id: Optional[int] = None
 
@@ -191,6 +192,22 @@ class FakeDatabase(IDatabase):
 
     def have_subscription(self, user_id: int) -> bool:
         return self.__subscription
+
+    def get_users_by_parameters(self, spoken_languages: List[constants.SpokenLanguages],
+                                programming_languages: List[constants.ProgrammingLanguages],
+                                interests: List[constants.Interests]) -> List[int]:
+        return [1]
+
+    def add_candidate(self, user_id: int, candidate_id: int) -> None:
+        self.__potential_relationships.append([user_id, candidate_id, False])
+
+    def get_not_viewed_candidates(self, user_id: int) -> Optional[List[int]]:
+        return [pr[1] for pr in self.__potential_relationships if not pr[2]]
+
+    def mark_profile_as_viewed(self, user_id: int, candidate_id: int) -> None:
+        for i in range(len(self.__potential_relationships)):
+            if self.__potential_relationships[i][1] == candidate_id:
+                self.__potential_relationships[i][2] = True
 
 
 class NavigationItems(enum.Enum):
