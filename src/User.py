@@ -143,14 +143,49 @@ class User:
         values = self.__get_str_from_list(raw_value)
         return title + values + "\n"
 
+    def __get_users_by_parameters(self, spoken_languages, programming_languages, interests):
+        all_users_ids = set(self.__DATABASE.get_all_users())
+        users_ids = all_users_ids - {self.__id}
+
+        result_users_list = []
+
+        for u_id in users_ids:
+            u_spoken_languages = self.__DATABASE.get_users_profile_spoken_languages(u_id)
+            u_programming_languages = self.__DATABASE.get_users_profile_programming_languages(u_id)
+            u_interests = self.__DATABASE.get_users_profile_interests(u_id)
+
+            a = False
+            if spoken_languages is None:
+                a = True
+            elif u_spoken_languages is not None:
+                a = bool(len(set(spoken_languages) & set(u_spoken_languages)))
+
+            b = False
+            if programming_languages is None:
+                b = True
+            elif u_programming_languages is not None:
+                b = bool(len(set(programming_languages) & set(u_programming_languages)))
+
+            c = False
+            if interests is None:
+                c = True
+            elif u_interests is not None:
+                c = bool(len(set(interests) & set(u_interests)))
+
+            if a and b and c:
+                result_users_list.append(u_id)
+
+        return result_users_list
+
     def create_candidates_list(self) -> None:
         spoken_languages = self.__DATABASE.get_users_search_parameters_spoken_languages(self.__id)
         programming_languages = self.__DATABASE.get_users_search_parameters_programming_languages(self.__id)
         interests = self.__DATABASE.get_users_search_parameters_interests(self.__id)
-        candidates_ids = self.__DATABASE.get_users_by_parameters(spoken_languages, programming_languages, interests)
+        candidates_ids = self.__get_users_by_parameters(spoken_languages, programming_languages, interests)
 
         for candidate_id in candidates_ids:
             self.__DATABASE.add_candidate(self.__id, candidate_id)
+            print(candidates_ids)
 
     def get_candidate_id(self) -> Optional[int]:
         candidates = self.__DATABASE.get_not_viewed_candidates(self.__id)

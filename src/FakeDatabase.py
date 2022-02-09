@@ -6,17 +6,57 @@ from IDatabase import IDatabase
 import constants
 
 
+class UserProfile:
+    __ID_COUNTER = 0
+
+    def __init__(self, first_name: str,
+                 last_name: str,
+                 age: int,
+                 spoken_languages: Optional[List[constants.SpokenLanguages]],
+                 programming_languages: Optional[List[constants.ProgrammingLanguages]],
+                 interests: Optional[List[constants.Interests]]):
+        self.__id = self.__ID_COUNTER
+        self.__ID_COUNTER += 1
+        self.__first_name = first_name
+        self.__last_name = last_name
+        self.__age = age
+        self.__spoken_languages = spoken_languages
+        self.__programming_languages = programming_languages
+        self.__interests = interests
+
+    @property
+    def id(self):
+        return self.__id
+
+
 class FakeDatabase(IDatabase):
     """
     Fake database for development (do not use in production)"
     """
+    USERS_LIST: List[UserProfile] = []
+
+    def __add_users_to_users_list(cls):
+        cls.USERS_LIST.append(UserProfile("Иван",
+                                          "Петров",
+                                          12,
+                                          [constants.SpokenLanguages.RUSSIAN],
+                                          [constants.ProgrammingLanguages.PYTHON],
+                                          [constants.Interests.DEV_FOR_IOS]))
+
+        cls.USERS_LIST.append(UserProfile("Павел",
+                                          "Иванов",
+                                          18,
+                                          [constants.SpokenLanguages.ENGLISH],
+                                          [constants.ProgrammingLanguages.PYTHON],
+                                          [constants.Interests.BACK_END]))
 
     def __init__(self):
+        self.__add_users_to_users_list()
         self.__id: int = 1
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
         self.__is_registered: bool = True
-        self.__are_search_parameters_filled = True
+        self.__are_search_parameters_filled = False
         self.__subscription = True
 
         self.__navigation: dict = {
@@ -41,13 +81,7 @@ class FakeDatabase(IDatabase):
             constants.SearchParametersItemsIds.INTERESTS: set()
         }
         self.__potential_relationships = []
-        """
-        self.__potential_relationship: dict = {
-            PotentialRelationshipItems.SENDER_ACCOUNT_ID: None,
-            PotentialRelationshipItems.REQUESTED_ACCOUNT_ID: None,
-            PotentialRelationshipItems.IS_VIEWED: None,
-        }
-        """
+
         self.__number_of_likes: int = 0
         self.__last_profile_id: Optional[int] = None
 
@@ -193,11 +227,6 @@ class FakeDatabase(IDatabase):
     def have_subscription(self, user_id: int) -> bool:
         return self.__subscription
 
-    def get_users_by_parameters(self, spoken_languages: List[constants.SpokenLanguages],
-                                programming_languages: List[constants.ProgrammingLanguages],
-                                interests: List[constants.Interests]) -> List[int]:
-        return [1]
-
     def add_candidate(self, user_id: int, candidate_id: int) -> None:
         self.__potential_relationships.append([user_id, candidate_id, False])
 
@@ -208,6 +237,9 @@ class FakeDatabase(IDatabase):
         for i in range(len(self.__potential_relationships)):
             if self.__potential_relationships[i][1] == candidate_id:
                 self.__potential_relationships[i][2] = True
+
+    def get_all_users(self) -> List[int]:
+        return [user.id for user in self.USERS_LIST]
 
 
 class NavigationItems(enum.Enum):

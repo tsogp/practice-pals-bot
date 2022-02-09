@@ -386,15 +386,6 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def get_users_by_parameters(self, spoken_languages: List[constants.SpokenLanguages],
-                                programming_languages: List[constants.ProgrammingLanguages],
-                                interests: List[constants.Interests]) -> List[int]:
-        """
-        :return: list of users, which have at least one item from parameters
-        """
-        pass
-
-    @abstractmethod
     def add_candidate(self, user_id: int, candidate_id: int) -> None:
         """
         Add candidate to potential profiles
@@ -416,5 +407,12 @@ class IDatabase(ABC):
         """
         :param user_id: Telegram's id of user we work with
         :param candidate_id: id of the candidate being marked
+        """
+        pass
+
+    @abstractmethod
+    def get_all_users(self) -> List[int]:
+        """
+        :return: list with all user's ids
         """
         pass
