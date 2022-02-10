@@ -84,61 +84,64 @@ go_to_main_menu = "\U0001F3E0 Вернуться в главное меню"
 
 candidates_profiles = "Профили согласно вашим критериям поиска: "
 
-telegram_login = "Telegram login: "
+telegram_login = "Telegram login: @"
 
 likes_blocked = "Вы исчерпали кол-во лайков, доступное бесплатно"
 
 item_is_not_specified = "Не указано"
 
+no_profiles_more = "Вы просмотрели все профили, удовлетворяющие заданным Вами критериям"
 
-@enum.unique
-class PossibleAnswers(enum.Enum):
+SpokenLanguages = {
+    "Русский": constants.SpokenLanguages.RUSSIAN,
+    "Английский": constants.SpokenLanguages.ENGLISH,
+}
 
-    @classmethod
-    def is_member_of_enum(cls, value: str) -> bool:
-        """
-        :return: does the enumeration contain a value
-        """
-        values = [member.value for name, member in cls.__members__.items()]
-        return value in values
+ProgrammingLanguages = {
+    "Python": constants.ProgrammingLanguages.PYTHON,
+    "C": constants.ProgrammingLanguages.C,
+    "C++": constants.ProgrammingLanguages.CPP,
+    "C#": constants.ProgrammingLanguages.C_SHARP,
+    "Java": constants.ProgrammingLanguages.JAVA,
+    "Java Script": constants.ProgrammingLanguages.JAVA_SCRIPT
+}
 
-    @classmethod
-    def get_all_vales(cls) -> List[str]:
-        """
-        :return: list with all values of enum's constants
-        """
-        return [member.value for name, member in cls.__members__.items()]
+Interests = {
+    "Front-end": constants.Interests.FRONT_END,
+    "Back-end": constants.Interests.BACK_END,
+    "Machine learning": constants.Interests.MACHINE_LEARNING,
+    "Big data": constants.Interests.BIG_DATA,
+    "Разработка под Android": constants.Interests.DEV_FOR_ANDROID,
+    "Разработка под iOS": constants.Interests.DEV_FOR_IOS
+}
 
+AgeGroups = {
+    "до 14 лет": constants.AgeGroups.YOUNGER_THAN_14,
+    "от 14 до 18 лет": constants.AgeGroups.FROM_14_TO_18,
+    "от 18 до 25 лет": constants.AgeGroups.FROM_18_TO_25,
+    "старше 25 лет": constants.AgeGroups.OLDER_THAN_25,
+}
 
-@enum.unique
-class SpokenLanguages(PossibleAnswers):
-    RUSSIAN = "Русский"
-    ENGLISH = "Английский"
+values_of_enums_constants = {
+    constants.SpokenLanguages.RUSSIAN: "Русский",
+    constants.SpokenLanguages.ENGLISH: "Английский",
 
+    constants.ProgrammingLanguages.PYTHON: "Python",
+    constants.ProgrammingLanguages.C: "C",
+    constants.ProgrammingLanguages.CPP: "C++",
+    constants.ProgrammingLanguages.C_SHARP: "C#",
+    constants.ProgrammingLanguages.JAVA: "Java",
+    constants.ProgrammingLanguages.JAVA_SCRIPT: "Java Script",
 
-@enum.unique
-class ProgrammingLanguages(PossibleAnswers):
-    PYTHON = "Python"
-    C = "C"
-    CPP = "C++"
-    C_SHARP = "C#"
-    JAVA = "Java"
-    JAVA_SCRIPT = "Java Script"
+    constants.Interests.FRONT_END: "Front-end",
+    constants.Interests.BACK_END: "Back-end",
+    constants.Interests.MACHINE_LEARNING: "Machine learning",
+    constants.Interests.BIG_DATA: "Big data",
+    constants.Interests.DEV_FOR_ANDROID: "Разработка под Android",
+    constants.Interests.DEV_FOR_IOS: "Разработка под iOS",
 
-
-@enum.unique
-class Interests(PossibleAnswers):
-    FRONT_END = "Front-end"
-    BACK_END = "Back-end"
-    MACHINE_LEARNING = "Machine learning"
-    BIG_DATA = "Big data"
-    DEV_FOR_ANDROID = "Разработка под Android"
-    DEV_FOR_IOS = "Разработка под iOS"
-
-
-@enum.unique
-class AgeGroups(PossibleAnswers):
-    YOUNGER_THAN_14 = "до 14 лет"
-    FROM_14_TO_18 = "от 14 до 18 лет"
-    FROM_18_TO_25 = "от 18 до 25 лет"
-    OLDER_THAN_25 = "старше 25 лет"
+    constants.AgeGroups.YOUNGER_THAN_14: "до 14 лет",
+    constants.AgeGroups.FROM_14_TO_18: "от 14 до 18 лет",
+    constants.AgeGroups.FROM_18_TO_25: "от 18 до 25 лет",
+    constants.AgeGroups.OLDER_THAN_25: "старше 25 лет"
+}

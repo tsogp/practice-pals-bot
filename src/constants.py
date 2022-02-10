@@ -56,28 +56,12 @@ PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"
 
 MAXIMUM_NUMBER_OF_LIKES = 3
 
+
 @enum.unique
 class PossibleAnswers(enum.Enum):
+    pass
 
-    @classmethod
-    def is_member_of_enum(cls, value: str) -> bool:
-        """
-        :return: does the enumeration contain a value
-        """
-        values = [member.value for name, member in cls.__members__.items()]
-        return value in values
-
-    @classmethod
-    def get_all_vales(cls) -> List[str]:
-        """
-        :return: list with all values of enum's constants
-        """
-        return [member.value for name, member in cls.__members__.items()]
-
-    def __str__(self) -> str:
-        return self.value
-
-
+  
 @enum.unique
 class SpokenLanguages(PossibleAnswers):
     RUSSIAN = "russian"

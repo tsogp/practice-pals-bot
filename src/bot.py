@@ -2,7 +2,6 @@ import telebot
 
 import phrases_ru as phrases
 import constants
-import search
 from keyboards import Keyboards
 import bottoken
 
@@ -49,7 +48,6 @@ def query_handler(call):
     if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
         if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
             processing_like_button(call.message.chat.id)
-
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
             show_candidates_profile(call.message.chat.id)
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
@@ -90,7 +88,7 @@ def check_search_parameters(user_id: int):
         bot.send_message(user_id, text=phrases.enter_age_group_for_search,
                          reply_markup=Keyboards.search_parameters_age_groups)
         database.set_users_menu_id(user_id, constants.MenuIds.SEARCH_PARAMETERS_MENU)
-        database.set_users_search_parameter_item_id(user_id, constants.SearchParametersItemsIds.AGE_GROUP)
+        database.set_users_search_parameters_item_id(user_id, constants.SearchParametersItemsIds.AGE_GROUP)
 
 
 def activate_main_menu(user_id: int):
@@ -177,13 +175,9 @@ def processing_registration_item_first_name(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.FIRST_NAME,
-                                        value=None)
+        database.set_users_profile_first_name(user_id, value=None)
     else:
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.FIRST_NAME,
-                                        value=users_message)
+        database.set_users_profile_first_name(user_id, value=users_message)
 
     database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.LAST_NAME)
     bot.send_message(user_id, text=phrases.enter_your_last_name)
@@ -197,13 +191,9 @@ def processing_registration_item_last_name(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.LAST_NAME,
-                                        value=None)
+        database.set_users_profile_last_name(user_id, value=None)
     else:
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.LAST_NAME,
-                                        value=users_message)
+        database.set_users_profile_last_name(user_id, value=users_message)
 
     database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.AGE)
     bot.send_message(user_id, text=phrases.enter_your_age)
@@ -217,11 +207,9 @@ def processing_registration_item_age(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_profile_item(user_id, item=constants.ProfileItemsIds.AGE, value=None)
+        database.set_users_profile_age(user_id, value=None)
     elif users_message.isdigit():
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.AGE,
-                                        value=users_message)
+        database.set_users_profile_age(user_id, value=users_message)
     else:
         bot.send_message(user_id, text=phrases.enter_correct_age)
 
@@ -239,13 +227,9 @@ def processing_registration_item_spoken_language(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
-                                        value=None)
-    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
-        database.append_to_users_profile_item(user_id,
-                                              item=constants.ProfileItemsIds.SPOKEN_LANGUAGES,
-                                              value=users_message)
+        database.set_users_profile_spoken_languages_null(user_id)
+    elif users_message in phrases.SpokenLanguages.keys():
+        database.append_to_users_profile_spoken_languages(user_id, value=phrases.SpokenLanguages[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -263,12 +247,10 @@ def processing_registration_item_programming_language(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES, value=None)
-    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
-        database.append_to_users_profile_item(user_id,
-                                              item=constants.ProfileItemsIds.PROGRAMMING_LANGUAGES,
-                                              value=users_message)
+        database.set_users_profile_programming_languages_null(user_id)
+    elif users_message in phrases.ProgrammingLanguages.keys():
+        database.append_to_users_profile_programming_languages(user_id,
+                                                               value=phrases.ProgrammingLanguages[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -286,12 +268,9 @@ def processing_registration_item_interests(message):
     user_id = message.chat.id
 
     if users_message == phrases.do_not_specify:
-        database.set_users_profile_item(user_id,
-                                        item=constants.ProfileItemsIds.INTERESTS, value=None)
-    elif phrases.Interests.is_member_of_enum(users_message):
-        database.append_to_users_profile_item(user_id,
-                                              item=constants.ProfileItemsIds.INTERESTS,
-                                              value=users_message)
+        database.set_users_profile_interests_null(user_id)
+    elif users_message in phrases.Interests.keys():
+        database.append_to_users_profile_interests(user_id, value=phrases.Interests[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -311,19 +290,15 @@ def processing_search_parameter_item_age_group(message):
     user_id = message.chat.id
 
     if users_message == phrases.does_not_matter:
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.AGE_GROUP,
-                                                       value=None)
-    elif phrases.AgeGroups.is_member_of_enum(users_message):
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.AGE_GROUP,
-                                                       value=users_message)
+        database.set_users_profile_search_parameters_age_groups_null(user_id)
+    elif users_message in phrases.AgeGroups.keys():
+        database.append_to_users_search_parameters_age_groups(user_id, value=phrases.AgeGroups[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        database.set_users_search_parameter_item_id(user_id,
-                                                    constants.SearchParametersItemsIds.SPOKEN_LANGUAGES)
+        database.set_users_search_parameters_item_id(user_id,
+                                                     constants.SearchParametersItemsIds.SPOKEN_LANGUAGES)
         bot.send_message(user_id, text=phrases.enter_spoken_languages,
                          reply_markup=Keyboards.search_parameters_spoken_languages)
 
@@ -336,19 +311,16 @@ def processing_search_parameter_item_spoken_languages(message):
     user_id = message.chat.id
 
     if users_message == phrases.does_not_matter:
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
-                                                       value=None)
-    elif phrases.SpokenLanguages.is_member_of_enum(users_message):
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.SPOKEN_LANGUAGES,
-                                                       value=users_message)
+        database.set_users_profile_search_parameters_spoken_languages_null(user_id)
+    elif users_message in phrases.SpokenLanguages.keys():
+        database.append_to_users_search_parameters_spoken_languages(user_id,
+                                                                    value=phrases.SpokenLanguages[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        database.set_users_search_parameter_item_id(user_id,
-                                                    constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
+        database.set_users_search_parameters_item_id(user_id,
+                                                     constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
         bot.send_message(user_id, text=phrases.enter_programming_languages,
                          reply_markup=Keyboards.search_parameters_programming_languages)
 
@@ -361,19 +333,17 @@ def processing_search_parameter_item_programming_languages(message):
     user_id = message.chat.id
 
     if users_message == phrases.does_not_matter:
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
-                                                       value=None)
-    elif phrases.ProgrammingLanguages.is_member_of_enum(users_message):
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES,
-                                                       value=users_message)
+        database.set_users_profile_search_parameters_programming_languages_null(user_id)
+    elif users_message in phrases.ProgrammingLanguages.keys():
+        database.append_to_users_search_parameters_programming_languages(user_id,
+                                                                         value=phrases.ProgrammingLanguages[
+                                                                             users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        database.set_users_search_parameter_item_id(user_id,
-                                                    constants.SearchParametersItemsIds.INTERESTS)
+        database.set_users_search_parameters_item_id(user_id,
+                                                     constants.SearchParametersItemsIds.INTERESTS)
         bot.send_message(user_id, text=phrases.enter_interests,
                          reply_markup=Keyboards.search_parameters_interests)
 
@@ -386,19 +356,15 @@ def processing_search_parameter_item_interests(message):
     user_id = message.chat.id
 
     if users_message == phrases.does_not_matter:
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.INTERESTS,
-                                                       value=None)
-    elif phrases.Interests.is_member_of_enum(users_message):
-        database.append_to_users_search_parameter_item(user_id,
-                                                       item=constants.SearchParametersItemsIds.INTERESTS,
-                                                       value=users_message)
+        database.set_users_profile_search_parameters_interests_null(user_id)
+    elif users_message in phrases.Interests.keys():
+        database.append_to_users_search_parameters_interests(user_id, value=phrases.Interests[users_message])
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        database.set_users_search_parameter_item_id(user_id,
-                                                    constants.SearchParametersItemsIds.NULL)
+        database.set_users_search_parameters_item_id(user_id,
+                                                     constants.SearchParametersItemsIds.NULL)
         database.set_search_parameters_filled(user_id)
         bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
                          reply_markup=telebot.types.ReplyKeyboardRemove())
@@ -406,8 +372,7 @@ def processing_search_parameter_item_interests(message):
 
 
 @bot.message_handler(content_types=["text"],
-                     func=lambda message: User(message.chat.id).is_in_menu(
-                         constants.MenuIds.SEARCH_MENU))
+                     func=lambda message: User(message.chat.id).is_in_menu(constants.MenuIds.SEARCH_MENU))
 def processing_search_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
@@ -416,6 +381,7 @@ def processing_search_menu_items(message):
         database.set_users_menu_id(user_id, constants.MenuIds.PROFILE_REACTIONS_MENU)
         bot.send_message(user_id, text=phrases.candidates_profiles,
                          reply_markup=telebot.types.ReplyKeyboardRemove())
+        User(message.chat.id).create_candidates_list()
         show_candidates_profile(user_id)
     elif users_message == phrases.search_menu_list[1]:
         bot.send_message(user_id, text=phrases.not_ready_yet)
@@ -424,8 +390,15 @@ def processing_search_menu_items(message):
 
 
 def show_candidates_profile(user_id: int):
-    candidate_id = search.Search.get_candidate_id(user_id)
-    bot.send_message(user_id, text=User(candidate_id).get_profile(),
-                     parse_mode="Markdown",
-                     reply_markup=Keyboards.profile_reaction_menu)
-    database.set_users_last_shown_profile_id(user_id, candidate_id)
+    candidate_id = User(user_id).get_candidate_id()
+    if candidate_id is None:
+        bot.send_message(user_id, text=phrases.no_profiles_more,
+                         parse_mode="Markdown",
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        activate_main_menu(user_id)
+    else:
+        bot.send_message(user_id, text=User(candidate_id).get_profile(),
+                         parse_mode="Markdown",
+                         reply_markup=Keyboards.profile_reaction_menu)
+        database.set_users_last_shown_profile_id(user_id, candidate_id)
+        database.mark_profile_as_viewed(user_id, candidate_id)
