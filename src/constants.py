@@ -61,7 +61,7 @@ MAXIMUM_NUMBER_OF_LIKES = 3
 class PossibleAnswers(enum.Enum):
     pass
 
-
+  
 @enum.unique
 class SpokenLanguages(PossibleAnswers):
     RUSSIAN = "russian"
