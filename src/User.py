@@ -49,6 +49,8 @@ class User:
         else:
             return User.__DATABASE.get_number_of_likes(self.__id) < constants.MAXIMUM_NUMBER_OF_LIKES
 
+    # GET PROFILE
+
     def get_profile(self) -> str:
         """
         :return: list of profile items and it's values in string with markdown
@@ -62,7 +64,8 @@ class User:
         profile += self.__get_profile_interests()
         return profile
 
-    def __get_str_from_list(self, raw_value: Optional[List[constants.PossibleAnswers]]):
+    @staticmethod
+    def __get_str_from_list(raw_value: Optional[List[constants.PossibleAnswers]]):
         if raw_value is None:
             values = "_" + phrases.item_is_not_specified + "_"
         else:
@@ -92,21 +95,24 @@ class User:
     def __get_profile_spoken_languages(self) -> str:
         title = f"*{phrases.profile_items[constants.ProfileItemsIds.SPOKEN_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_profile_spoken_languages(self.__id)
-        values = self.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value)
         return title + values + "\n"
 
     def __get_profile_programming_languages(self) -> str:
         title = f"*{phrases.profile_items[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_profile_programming_languages(self.__id)
-        values = self.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value)
         return title + values + "\n"
 
     def __get_profile_interests(self) -> str:
         title = f"*{phrases.profile_items[constants.ProfileItemsIds.INTERESTS]}:* "
         raw_value = User.__DATABASE.get_users_profile_interests(self.__id)
-        values = self.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value)
         return title + values + "\n"
 
+    # GET PROFILE
+
+    # GET SEARCH PARAMETERS
     def get_search_parameters(self) -> str:
         """
         :return: list of profile items and it's values in string with markdown
@@ -122,74 +128,107 @@ class User:
     def __get_search_parameters_age_groups(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.AGE_GROUP]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_age_groups(self.__id)
-        values = self.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value)
         return title + values + "\n"
 
     def __get_search_parameters_spoken_languages(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.SPOKEN_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_spoken_languages(self.__id)
-        values = self.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value)
         return title + values + "\n"
 
     def __get_search_parameters_programming_languages(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_programming_languages(self.__id)
-        values = self.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value)
         return title + values + "\n"
 
     def __get_search_parameters_interests(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.INTERESTS]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_interests(self.__id)
-        values = self.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value)
         return title + values + "\n"
 
-    def __get_users_by_parameters(self, spoken_languages, programming_languages, interests):
-        all_users_ids = set(self.__DATABASE.get_all_users())
+    # GET SEARCH PARAMETERS
+
+    # GET USERS_BY_PARAMETERS
+
+    def __get_users_by_parameters(self,
+                                  age_intervals: Optional[List[List[int]]],
+                                  spoken_languages: Optional[List[constants.SpokenLanguages]],
+                                  programming_languages: Optional[List[constants.ProgrammingLanguages]],
+                                  interests: Optional[List[constants.Interests]]):
+        all_users_ids = set(User.__DATABASE.get_all_users())
         users_ids = all_users_ids - {self.__id}
 
         result_users_list = []
 
         for u_id in users_ids:
-            u_spoken_languages = self.__DATABASE.get_users_profile_spoken_languages(u_id)
-            u_programming_languages = self.__DATABASE.get_users_profile_programming_languages(u_id)
-            u_interests = self.__DATABASE.get_users_profile_interests(u_id)
+            u_age = User.__DATABASE.get_users_profile_age(u_id)
+            u_spoken_languages = User.__DATABASE.get_users_profile_spoken_languages(u_id)
+            u_programming_languages = User.__DATABASE.get_users_profile_programming_languages(u_id)
+            u_interests = User.__DATABASE.get_users_profile_interests(u_id)
 
-            a = False
-            if spoken_languages is None:
-                a = True
-            elif u_spoken_languages is not None:
-                a = bool(len(set(spoken_languages) & set(u_spoken_languages)))
+            check_age = User.__is_age_in_intervals(u_age, age_intervals)
+            check_spoken_languages = User.__check_multiply_choice(spoken_languages, u_spoken_languages)
+            check_programming_languages = User.__check_multiply_choice(programming_languages, u_programming_languages)
+            check_interests = User.__check_multiply_choice(interests, u_interests)
 
-            b = False
-            if programming_languages is None:
-                b = True
-            elif u_programming_languages is not None:
-                b = bool(len(set(programming_languages) & set(u_programming_languages)))
-
-            c = False
-            if interests is None:
-                c = True
-            elif u_interests is not None:
-                c = bool(len(set(interests) & set(u_interests)))
-
-            if a and b and c:
+            if check_age and check_spoken_languages and check_programming_languages and check_interests:
                 result_users_list.append(u_id)
 
         return result_users_list
 
-    def create_candidates_list(self) -> None:
-        spoken_languages = self.__DATABASE.get_users_search_parameters_spoken_languages(self.__id)
-        programming_languages = self.__DATABASE.get_users_search_parameters_programming_languages(self.__id)
-        interests = self.__DATABASE.get_users_search_parameters_interests(self.__id)
+    @staticmethod
+    def __is_age_in_intervals(age: int, age_intervals: Optional[List[int]]):
+        for a_i in age_intervals:
+            if a_i[0] <= age <= a_i[1]:
+                return True
+        return False
 
-        candidates_ids = self.__get_users_by_parameters(spoken_languages, programming_languages, interests)
+    @staticmethod
+    def __check_multiply_choice(criteria: Optional[List[constants.PossibleAnswers]],
+                                candidate: Optional[List[constants.PossibleAnswers]]) -> bool:
+        if criteria is None:
+            return True
+        elif candidate is not None:
+            return bool(len(set(criteria) & set(candidate)))
+        return False
+
+    def create_candidates_list(self) -> None:
+        spoken_languages = User.__DATABASE.get_users_search_parameters_spoken_languages(self.__id)
+        programming_languages = User.__DATABASE.get_users_search_parameters_programming_languages(self.__id)
+        interests = User.__DATABASE.get_users_search_parameters_interests(self.__id)
+        age_groups = User.__DATABASE.get_users_search_parameters_age_groups(self.__id)
+        age_intervals = User.__get_age_intervals_by_age_groups(age_groups)
+
+        candidates_ids = self.__get_users_by_parameters(age_intervals, spoken_languages, programming_languages,
+                                                        interests)
 
         for candidate_id in candidates_ids:
-            if not self.__DATABASE.is_profile_viewed(self.__id, candidate_id):
-                self.__DATABASE.add_candidate(self.__id, candidate_id)
+            if not User.__DATABASE.is_profile_viewed(self.__id, candidate_id):
+                User.__DATABASE.add_candidate(self.__id, candidate_id)
+
+    @staticmethod
+    def __get_age_intervals_by_age_groups(age_groups: Optional[List[constants.AgeGroups]]):
+        if age_groups is None:
+            return None
+        result = []
+        for a_g in age_groups:
+            if a_g == constants.AgeGroups.YOUNGER_THAN_14:
+                result.append((0, 14))
+            elif a_g == constants.AgeGroups.FROM_14_TO_18:
+                result.append((14, 18))
+            elif a_g == constants.AgeGroups.FROM_18_TO_25:
+                result.append((18, 25))
+            elif a_g == constants.AgeGroups.OLDER_THAN_25:
+                result.append((25, 100))
+            else:
+                print("ERROR")
+        return result
 
     def get_candidate_id(self) -> Optional[int]:
-        candidates = self.__DATABASE.get_not_viewed_candidates(self.__id)
+        candidates = User.__DATABASE.get_not_viewed_candidates(self.__id)
         if not candidates:
             return None
         return candidates[0]
