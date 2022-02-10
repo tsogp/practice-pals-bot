@@ -98,7 +98,12 @@ SpokenLanguages = {
 }
 
 ProgrammingLanguages = {
-
+    "Python": constants.ProgrammingLanguages.PYTHON,
+    "C": constants.ProgrammingLanguages.C,
+    "C++": constants.ProgrammingLanguages.CPP,
+    "C#": constants.ProgrammingLanguages.C_SHARP,
+    "Java": constants.ProgrammingLanguages.JAVA,
+    "Java Script": constants.ProgrammingLanguages.JAVA_SCRIPT
 }
 
 Interests = {

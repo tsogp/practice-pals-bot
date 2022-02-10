@@ -2,7 +2,6 @@ import telebot
 
 import phrases_ru as phrases
 import constants
-import search
 from keyboards import Keyboards
 import bottoken
 
