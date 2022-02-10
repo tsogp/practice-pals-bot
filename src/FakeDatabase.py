@@ -279,6 +279,12 @@ class FakeDatabase(IDatabase):
     def get_all_users(self) -> List[int]:
         return [user.id for user in self.USERS_LIST]
 
+    def is_profile_viewed(self, user_id: int, candidate_id: int) -> bool:
+        for i in range(len(self.__potential_relationships)):
+            if self.__potential_relationships[i][1] == candidate_id:
+                return self.__potential_relationships[i][2]
+        return False
+
 
 class NavigationItems(enum.Enum):
     """

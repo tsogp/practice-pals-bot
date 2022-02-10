@@ -416,3 +416,10 @@ class IDatabase(ABC):
         :return: list with all user's ids
         """
         pass
+
+    @abstractmethod
+    def is_profile_viewed(self, user_id: int, candidate_id: int) -> bool:
+        """
+        :return: is user with user_id saw profile of user with candidate_id
+        """
+        pass

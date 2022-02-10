@@ -185,7 +185,8 @@ class User:
         candidates_ids = self.__get_users_by_parameters(spoken_languages, programming_languages, interests)
 
         for candidate_id in candidates_ids:
-            self.__DATABASE.add_candidate(self.__id, candidate_id)
+            if not self.__DATABASE.is_profile_viewed(self.__id, candidate_id):
+                self.__DATABASE.add_candidate(self.__id, candidate_id)
 
     def get_candidate_id(self) -> Optional[int]:
         candidates = self.__DATABASE.get_not_viewed_candidates(self.__id)
