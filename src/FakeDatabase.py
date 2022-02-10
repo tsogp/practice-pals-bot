@@ -8,7 +8,7 @@ import constants
 # SETTINGS FOR DEVELOPMENT AND MANUAL TESTING
 
 
-TELEGRAM_ID: int = 1220018146
+TELEGRAM_ID: int = -1  # Set your Telegram ID for manual testsing
 IS_REGISTERED: bool = False
 ARE_SEARCH_PARAMETERS_FILLED: bool = False
 HAVE_SUBSCRIPTION: bool = False
@@ -87,7 +87,7 @@ class FakeDatabase(IDatabase):
 
     def __init__(self):
         FakeDatabase.__add_users_to_users_list()
-        self.__id: int = TELEGRAM_ID  # Set yours telegram id for tests
+        self.__id: int = TELEGRAM_ID
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
         self.__is_registered: bool = IS_REGISTERED
