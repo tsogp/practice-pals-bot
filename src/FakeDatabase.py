@@ -5,6 +5,17 @@ from IDatabase import IDatabase
 
 import constants
 
+# SETTINGS FOR DEVELOPMENT AND MANUAL TESTING
+
+
+TELEGRAM_ID: int = 1220018146
+IS_REGISTERED: bool = False
+ARE_SEARCH_PARAMETERS_FILLED: bool = False
+HAVE_SUBSCRIPTION: bool = False
+
+
+# SETTINGS FOR DEVELOPMENT AND MANUAL TESTING
+
 
 class UserProfile:
     """
@@ -40,7 +51,7 @@ class FakeDatabase(IDatabase):
     @classmethod
     def __add_users_to_users_list(cls) -> None:
 
-        cls.USERS_LIST.append(UserProfile("username_1_ivan",
+        cls.USERS_LIST.append(UserProfile("user_ivan",
                                           "Иван",
                                           "Петров",
                                           12,
@@ -48,7 +59,7 @@ class FakeDatabase(IDatabase):
                                           [constants.ProgrammingLanguages.PYTHON],
                                           [constants.Interests.DEV_FOR_IOS]))
 
-        cls.USERS_LIST.append(UserProfile("user_2_pavel",
+        cls.USERS_LIST.append(UserProfile("user_pavel",
                                           "Павел",
                                           "Иванов",
                                           18,
@@ -56,14 +67,32 @@ class FakeDatabase(IDatabase):
                                           [constants.ProgrammingLanguages.PYTHON],
                                           [constants.Interests.BACK_END]))
 
+        cls.USERS_LIST.append(UserProfile("user_misha",
+                                          "Михаил",
+                                          "Михайлов",
+                                          15,
+                                          [constants.SpokenLanguages.ENGLISH],
+                                          [constants.ProgrammingLanguages.PYTHON],
+                                          [constants.Interests.FRONT_END]))
+
+        cls.USERS_LIST.append(UserProfile("user_evgen",
+                                          "Евгений",
+                                          "Баженов",
+                                          30,
+                                          [constants.SpokenLanguages.RUSSIAN],
+                                          [constants.ProgrammingLanguages.PYTHON, constants.ProgrammingLanguages.C,
+                                           constants.ProgrammingLanguages.CPP],
+                                          [constants.Interests.BACK_END, constants.Interests.BIG_DATA,
+                                           constants.Interests.MACHINE_LEARNING]))
+
     def __init__(self):
         FakeDatabase.__add_users_to_users_list()
-        self.__id: int = 1220018146  # Set yours telegram id for tests
+        self.__id: int = TELEGRAM_ID  # Set yours telegram id for tests
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
-        self.__is_registered: bool = True
-        self.__are_search_parameters_filled = False
-        self.__subscription = True
+        self.__is_registered: bool = IS_REGISTERED
+        self.__are_search_parameters_filled = ARE_SEARCH_PARAMETERS_FILLED
+        self.__subscription = HAVE_SUBSCRIPTION
 
         self.__navigation: dict = {
             NavigationItems.MENU_ID: constants.MenuIds.NULL,
