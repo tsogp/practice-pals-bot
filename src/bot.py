@@ -48,7 +48,6 @@ def query_handler(call):
     if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
         if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
             processing_like_button(call.message.chat.id)
-
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
             show_candidates_profile(call.message.chat.id)
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":

@@ -9,7 +9,9 @@ import constants
 class UserProfile:
     __ID_COUNTER = 0
 
-    def __init__(self, first_name: str,
+    def __init__(self,
+                 telegram_login: str,
+                 first_name: str,
                  last_name: str,
                  age: int,
                  spoken_languages: Optional[List[constants.SpokenLanguages]],
@@ -23,6 +25,7 @@ class UserProfile:
         self.spoken_languages = spoken_languages
         self.programming_languages = programming_languages
         self.interests = interests
+        self.telegram_login = telegram_login
 
 
 class FakeDatabase(IDatabase):
@@ -32,14 +35,16 @@ class FakeDatabase(IDatabase):
     USERS_LIST: List[UserProfile] = []
 
     def __add_users_to_users_list(cls):
-        cls.USERS_LIST.append(UserProfile("Иван",
+        cls.USERS_LIST.append(UserProfile("username_1_ivan",
+                                          "Иван",
                                           "Петров",
                                           12,
                                           [constants.SpokenLanguages.RUSSIAN],
                                           [constants.ProgrammingLanguages.PYTHON],
                                           [constants.Interests.DEV_FOR_IOS]))
 
-        cls.USERS_LIST.append(UserProfile("Павел",
+        cls.USERS_LIST.append(UserProfile("user_2_pavel",
+                                          "Павел",
                                           "Иванов",
                                           18,
                                           [constants.SpokenLanguages.ENGLISH],
@@ -254,7 +259,10 @@ class FakeDatabase(IDatabase):
         self.__last_profile_id = candidate_id
 
     def get_users_telegram_login_by_id(self, user_id: int) -> str:
-        return self.__telegram_login
+        if user_id == self.__id:
+            return self.__telegram_login
+        else:
+            return self.USERS_LIST[user_id].telegram_login
 
     def get_number_of_likes(self, user_id: int) -> int:
         return self.__number_of_likes
