@@ -392,7 +392,6 @@ def processing_search_menu_items(message):
 
 
 def show_candidates_profile(user_id: int):
-    # candidate_id = search.Search.get_candidate_id(user_id)
     candidate_id = User(user_id).get_candidate_id()
     if candidate_id is None:
         bot.send_message(user_id, text=phrases.no_profiles_more,
