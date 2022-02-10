@@ -44,6 +44,9 @@ class User:
         return check_menu_id and check_search_parameter_item_id
 
     def is_like_acceptable(self) -> bool:
+        """
+        Check if the user can put a like
+        """
         if User.__DATABASE.have_subscription(self.__id):
             return True
         else:
@@ -151,19 +154,22 @@ class User:
 
     # GET SEARCH PARAMETERS
 
-    # GET USERS_BY_PARAMETERS
+    # GET USERS BY PARAMETERS
 
     def __get_users_by_parameters(self,
                                   age_intervals: Optional[List[List[int]]],
                                   spoken_languages: Optional[List[constants.SpokenLanguages]],
                                   programming_languages: Optional[List[constants.ProgrammingLanguages]],
                                   interests: Optional[List[constants.Interests]]):
+        """
+        :return: list with ids of profiles, which meet the specified criteria
+        """
         all_users_ids = set(User.__DATABASE.get_all_users())
-        users_ids = all_users_ids - {self.__id}
+        users_ids = all_users_ids - {self.__id}  # All users ids except user's profile
 
         result_users_list = []
 
-        for u_id in users_ids:
+        for u_id in users_ids:  # Check all profiles
             u_age = User.__DATABASE.get_users_profile_age(u_id)
             u_spoken_languages = User.__DATABASE.get_users_profile_spoken_languages(u_id)
             u_programming_languages = User.__DATABASE.get_users_profile_programming_languages(u_id)
@@ -175,20 +181,27 @@ class User:
             check_interests = User.__check_multiply_choice(interests, u_interests)
 
             if check_age and check_spoken_languages and check_programming_languages and check_interests:
-                result_users_list.append(u_id)
-
+                result_users_list.append(u_id)  # Add, if profile meet the specified criteria
         return result_users_list
 
     @staticmethod
-    def __is_age_in_intervals(age: int, age_intervals: Optional[List[int]]):
-        for a_i in age_intervals:
-            if a_i[0] <= age <= a_i[1]:
+    def __is_age_in_intervals(age: int, age_intervals: Optional[List[List[int]]]):
+        """
+        :return: is the age included in at least one of the specified intervals
+        """
+        if age_intervals is None:
+            return True
+        for interval in age_intervals:
+            if interval[0] <= age <= interval[1]:
                 return True
         return False
 
     @staticmethod
     def __check_multiply_choice(criteria: Optional[List[constants.PossibleAnswers]],
                                 candidate: Optional[List[constants.PossibleAnswers]]) -> bool:
+        """
+        :return: is at least one of the candidate's parameters included in the list of criteria
+        """
         if criteria is None:
             return True
         elif candidate is not None:
@@ -211,6 +224,9 @@ class User:
 
     @staticmethod
     def __get_age_intervals_by_age_groups(age_groups: Optional[List[constants.AgeGroups]]):
+        """
+        :return: list of intervals in format: [from: int , to: int] from list of age_groups
+        """
         if age_groups is None:
             return None
         result = []
@@ -228,6 +244,9 @@ class User:
         return result
 
     def get_candidate_id(self) -> Optional[int]:
+        """
+        :return: id of next candidate profile
+        """
         candidates = User.__DATABASE.get_not_viewed_candidates(self.__id)
         if not candidates:
             return None

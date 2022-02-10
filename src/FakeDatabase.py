@@ -7,7 +7,10 @@ import constants
 
 
 class UserProfile:
-    __ID_COUNTER = 0
+    """
+    Profile of user for fake DB
+    """
+    __ID_COUNTER = 0  # For generating unique id
 
     def __init__(self,
                  telegram_login: str,
@@ -34,7 +37,9 @@ class FakeDatabase(IDatabase):
     """
     USERS_LIST: List[UserProfile] = []
 
-    def __add_users_to_users_list(cls):
+    @classmethod
+    def __add_users_to_users_list(cls) -> None:
+
         cls.USERS_LIST.append(UserProfile("username_1_ivan",
                                           "Иван",
                                           "Петров",
@@ -52,8 +57,8 @@ class FakeDatabase(IDatabase):
                                           [constants.Interests.BACK_END]))
 
     def __init__(self):
-        self.__add_users_to_users_list()
-        self.__id: int = 1220018146
+        FakeDatabase.__add_users_to_users_list()
+        self.__id: int = 1220018146  # Set yours telegram id for tests
         self.__telegram_login: str = "None"
         self.__telegram_id: int = 0
         self.__is_registered: bool = True
@@ -161,7 +166,6 @@ class FakeDatabase(IDatabase):
 
     def append_to_users_profile_programming_languages(self, user_id: int,
                                                       value: constants.ProgrammingLanguages) -> None:
-
         if self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES] is None:
             self.__profile[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES] = {value}
         else:
