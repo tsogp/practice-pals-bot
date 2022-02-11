@@ -92,36 +92,6 @@ item_is_not_specified = "Не указано"
 
 no_profiles_more = "Вы просмотрели все профили, удовлетворяющие заданным Вами критериям"
 
-SpokenLanguages = {
-    "Русский": constants.SpokenLanguages.RUSSIAN,
-    "Английский": constants.SpokenLanguages.ENGLISH,
-}
-
-ProgrammingLanguages = {
-    "Python": constants.ProgrammingLanguages.PYTHON,
-    "C": constants.ProgrammingLanguages.C,
-    "C++": constants.ProgrammingLanguages.CPP,
-    "C#": constants.ProgrammingLanguages.C_SHARP,
-    "Java": constants.ProgrammingLanguages.JAVA,
-    "Java Script": constants.ProgrammingLanguages.JAVA_SCRIPT
-}
-
-Interests = {
-    "Front-end": constants.Interests.FRONT_END,
-    "Back-end": constants.Interests.BACK_END,
-    "Machine learning": constants.Interests.MACHINE_LEARNING,
-    "Big data": constants.Interests.BIG_DATA,
-    "Разработка под Android": constants.Interests.DEV_FOR_ANDROID,
-    "Разработка под iOS": constants.Interests.DEV_FOR_IOS
-}
-
-AgeGroups = {
-    "до 14 лет": constants.AgeGroups.YOUNGER_THAN_14,
-    "от 14 до 18 лет": constants.AgeGroups.FROM_14_TO_18,
-    "от 18 до 25 лет": constants.AgeGroups.FROM_18_TO_25,
-    "старше 25 лет": constants.AgeGroups.OLDER_THAN_25,
-}
-
 values_of_enums_constants = {
     constants.SpokenLanguages.RUSSIAN: "Русский",
     constants.SpokenLanguages.ENGLISH: "Английский",
@@ -132,13 +102,25 @@ values_of_enums_constants = {
     constants.ProgrammingLanguages.C_SHARP: "C#",
     constants.ProgrammingLanguages.JAVA: "Java",
     constants.ProgrammingLanguages.JAVA_SCRIPT: "Java Script",
+    constants.ProgrammingLanguages.SQL: "SQL",
+    constants.ProgrammingLanguages.PHP: "PHP",
+    constants.ProgrammingLanguages.SWIFT: "Swift",
+    constants.ProgrammingLanguages.KOTLIN: "Kotlin",
+    constants.ProgrammingLanguages.RUBY: "Ruby",
+    constants.ProgrammingLanguages.ASSEMBLER: "Assembler",
+    constants.ProgrammingLanguages.HTML_CSS: "HTML+CSS",
+    constants.ProgrammingLanguages.NODE_JS: "Node.js",
 
+    constants.Interests.DB_DESIGN: "Проектирование баз данных",
     constants.Interests.FRONT_END: "Front-end",
     constants.Interests.BACK_END: "Back-end",
     constants.Interests.MACHINE_LEARNING: "Machine learning",
     constants.Interests.BIG_DATA: "Big data",
     constants.Interests.DEV_FOR_ANDROID: "Разработка под Android",
     constants.Interests.DEV_FOR_IOS: "Разработка под iOS",
+    constants.Interests.DESIGN: "Дизайн",
+    constants.Interests.PROJECT_MANAGEMENT: "Управление проектами",
+    constants.Interests.TESTING: "Тестирование",
 
     constants.AgeGroups.YOUNGER_THAN_14: "до 14 лет",
     constants.AgeGroups.FROM_14_TO_18: "от 14 до 18 лет",

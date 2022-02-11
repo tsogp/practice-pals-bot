@@ -225,11 +225,13 @@ def processing_registration_item_age(message):
 def processing_registration_item_spoken_language(message):
     users_message = message.text
     user_id = message.chat.id
-
     if users_message == phrases.do_not_specify:
         database.set_users_profile_spoken_languages_null(user_id)
-    elif users_message in phrases.SpokenLanguages.keys():
-        database.append_to_users_profile_spoken_languages(user_id, value=phrases.SpokenLanguages[users_message])
+    elif users_message in constants.SpokenLanguages.get_all_str_vales(phrases.values_of_enums_constants):
+        database.append_to_users_profile_spoken_languages(user_id,
+                                                          value=constants.SpokenLanguages.get_object_by_str_value(
+                                                              users_message,
+                                                              phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -248,9 +250,11 @@ def processing_registration_item_programming_language(message):
 
     if users_message == phrases.do_not_specify:
         database.set_users_profile_programming_languages_null(user_id)
-    elif users_message in phrases.ProgrammingLanguages.keys():
+    elif users_message in constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants):
         database.append_to_users_profile_programming_languages(user_id,
-                                                               value=phrases.ProgrammingLanguages[users_message])
+                                                               value=constants.ProgrammingLanguages.get_object_by_str_value(
+                                                                   users_message,
+                                                                   phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -269,8 +273,10 @@ def processing_registration_item_interests(message):
 
     if users_message == phrases.do_not_specify:
         database.set_users_profile_interests_null(user_id)
-    elif users_message in phrases.Interests.keys():
-        database.append_to_users_profile_interests(user_id, value=phrases.Interests[users_message])
+    elif users_message in constants.Interests.get_all_str_vales(phrases.values_of_enums_constants):
+        database.append_to_users_profile_interests(user_id, value=constants.Interests.get_object_by_str_value(
+            users_message,
+            phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -291,8 +297,11 @@ def processing_search_parameter_item_age_group(message):
 
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_age_groups_null(user_id)
-    elif users_message in phrases.AgeGroups.keys():
-        database.append_to_users_search_parameters_age_groups(user_id, value=phrases.AgeGroups[users_message])
+    elif users_message in constants.AgeGroups.get_all_str_vales(phrases.values_of_enums_constants):
+        database.append_to_users_search_parameters_age_groups(user_id,
+                                                              value=constants.AgeGroups.get_object_by_str_value(
+                                                                  users_message,
+                                                                  phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -312,9 +321,11 @@ def processing_search_parameter_item_spoken_languages(message):
 
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_spoken_languages_null(user_id)
-    elif users_message in phrases.SpokenLanguages.keys():
+    elif users_message in constants.SpokenLanguages.get_all_str_vales(phrases.values_of_enums_constants):
         database.append_to_users_search_parameters_spoken_languages(user_id,
-                                                                    value=phrases.SpokenLanguages[users_message])
+                                                                    value=constants.SpokenLanguages.get_object_by_str_value(
+                                                                        users_message,
+                                                                        phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -334,10 +345,11 @@ def processing_search_parameter_item_programming_languages(message):
 
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_programming_languages_null(user_id)
-    elif users_message in phrases.ProgrammingLanguages.keys():
+    elif users_message in constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants):
         database.append_to_users_search_parameters_programming_languages(user_id,
-                                                                         value=phrases.ProgrammingLanguages[
-                                                                             users_message])
+                                                                         value=constants.ProgrammingLanguages.get_object_by_str_value(
+                                                                             users_message,
+                                                                             phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -357,8 +369,10 @@ def processing_search_parameter_item_interests(message):
 
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_interests_null(user_id)
-    elif users_message in phrases.Interests.keys():
-        database.append_to_users_search_parameters_interests(user_id, value=phrases.Interests[users_message])
+    elif users_message in constants.Interests.get_all_str_vales(phrases.values_of_enums_constants):
+        database.append_to_users_search_parameters_interests(user_id, value=constants.Interests.get_object_by_str_value(
+            users_message,
+            phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 

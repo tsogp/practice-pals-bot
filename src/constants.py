@@ -59,9 +59,25 @@ MAXIMUM_NUMBER_OF_LIKES = 3
 
 @enum.unique
 class PossibleAnswers(enum.Enum):
-    pass
 
-  
+    def get_str_value(self, dictionary: dict) -> str:
+        return dictionary.get(self, "ERROR")
+
+    @staticmethod
+    def get_object_by_str_value(str_value: str, dictionary: dict):
+        for key, value in dictionary.items():
+            if value == str_value:
+                return key
+        return None  # Error
+
+    @classmethod
+    def get_all_str_vales(cls, dictionary: dict) -> List[str]:
+        """
+        :return: list with all str values of enum's constants
+        """
+        return [dictionary.get(member, "ERROR") for member in cls.__members__.values()]
+
+
 @enum.unique
 class SpokenLanguages(PossibleAnswers):
     RUSSIAN = "russian"
@@ -76,16 +92,28 @@ class ProgrammingLanguages(PossibleAnswers):
     C_SHARP = "c_sharp"
     JAVA = "java"
     JAVA_SCRIPT = "java_script"
+    SQL = "sql"
+    PHP = "php"
+    SWIFT = "swift"
+    KOTLIN = "kotlin"
+    RUBY = "ruby"
+    ASSEMBLER = "assembler"
+    HTML_CSS = "html_css"
+    NODE_JS = "node_js"
 
 
 @enum.unique
 class Interests(PossibleAnswers):
+    DB_DESIGN = "db_design"
     FRONT_END = "front_end"
     BACK_END = "back_end"
     MACHINE_LEARNING = "machine_learning"
     BIG_DATA = "big_data"
     DEV_FOR_ANDROID = "android_dev"
     DEV_FOR_IOS = "ios_dev"
+    DESIGN = "design"
+    PROJECT_MANAGEMENT = "progect_management"
+    TESTING = "testing"
 
 
 @enum.unique
