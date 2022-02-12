@@ -4,16 +4,16 @@ import enum
 
 import constants
 
-welcome_message = "Привет! Я Practice Pals Bot Помогу Вам найти друзей по интересам в IT-сфере"
+welcome_message = "\U0001F44B Привет! Я Practice Pals Bot Помогу Вам найти друзей по интересам в IT-сфере"
 
-main_menu_title = "Вы находитесь в главном меню бота"
+main_menu_title = "\U0001F3E0 Вы находитесь в главном меню"
 
 main_menu_list = ["\U0001F91D Найти единомышленников",
-                  "Подписка",
+                  "\U00002B50 Подписка",
                   "\U0001F5C2 Найти проект",
                   "\U0001F46C Найти людей в свой проект"]
 
-not_ready_yet = "Выбранный пункт меню пока не доступен :("
+not_ready_yet = "\U00002639 Выбранный пункт меню пока не доступен"
 
 user_not_registered_yet = "Похоже, Вы пользуйтесь этим ботом первый раз. Пожалуйста, запоните данные о себе, чтобы продолжить"
 
@@ -73,17 +73,17 @@ search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Воз
                            constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
                            constants.SearchParametersItemsIds.INTERESTS: "Интересы"}
 
-search_menu_title = "Вы находитесь в меню поиска единомышленников"
+search_menu_title = "\U0001F50E Вы находитесь в меню поиска единомышленников"
 
 search_menu_list = ["\U0001F50E Искать единомышленников",
-                    "\U0001F4C4 Редактировать параметры поиска",
+                    "\U00002699 Редактировать параметры поиска",
                     "\U0001F600 Редактировать профиль"]
 
 get_contact = "\U0001F44D Начать общение"
 skip_profile = "\U0001F50E Искать ещё"
 go_to_main_menu = "\U0001F3E0 Вернуться в главное меню"
 
-candidates_profiles = "Профили согласно вашим критериям поиска: "
+candidates_profiles = "\U0001F4DC Профили согласно Вашим критериям поиска: "
 
 telegram_login = "Telegram login: @"
 
@@ -131,8 +131,8 @@ values_of_enums_constants = {
 
 about_subscription = """Преимущества подписки:\n- Cнятие ограничения на количество лайков\n- Продвиженеи Вашего аккаунта на сервисе\n\nЦена: 99 руб/мес"""
 
-buy = "Купить!"
+buy = "\U0001F449 Купить!"
 
-go_to_subscription_menu = "Купить подписку"
+go_to_subscription_menu = "\U00002B50 Купить подписку"
 
-after_purchase = "Спасибо за покупку!"
+after_purchase = "\U0001F44D Спасибо за покупку!"
