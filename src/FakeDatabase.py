@@ -9,8 +9,8 @@ import constants
 
 
 TELEGRAM_ID: int = bottoken.ID  # Set your Telegram ID for manual testsing
-IS_REGISTERED: bool = False
-ARE_SEARCH_PARAMETERS_FILLED: bool = False
+IS_REGISTERED: bool = True
+ARE_SEARCH_PARAMETERS_FILLED: bool = True
 HAVE_SUBSCRIPTION: bool = False
 
 

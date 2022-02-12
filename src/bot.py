@@ -138,6 +138,8 @@ def processing_main_menu_items(message):
         bot.send_message(user_id, text=phrases.not_ready_yet)
     elif users_message == phrases.main_menu_list[2]:
         bot.send_message(user_id, text=phrases.not_ready_yet)
+    elif users_message == phrases.main_menu_list[3]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
 
 
 @bot.message_handler(content_types=["text"],
