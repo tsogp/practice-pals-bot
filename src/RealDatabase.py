@@ -3,7 +3,7 @@ from typing import Optional, List
 
 import choice_fields as mp # multiple choice
 from database_constants import *
-from constants import *
+import constants
 from IDatabase import IDatabase
 
 class Database(IDatabase):
@@ -15,15 +15,15 @@ class Database(IDatabase):
             'Account',
             self.metadata,
             Column(ID, Integer, primary_key=True),
-            Column(TELEGRAM_LOGIN, String(255), unique=True, nullable=False),
-            Column(TELEGRAM_ID, Integer, nullable=False, unique=True),
+            Column(TELEGRAM_LOGIN, String(255), unique=True),
+            Column(TELEGRAM_ID, Integer, unique=True),
 
-            Column(IS_REGISTERED, Boolean, nullable=False, default=False),
-            Column(ARE_SEARCH_PARAMETERS_FILLED, Boolean, nullable=False, default=False),
+            Column(IS_REGISTERED, Boolean, default=False),
+            Column(ARE_SEARCH_PARAMETERS_FILLED, Boolean, default=False),
 
-            Column(NUMBER_OF_LIKES, Integer, nullable=False, default=0),
-            Column(LAST_PROFILE_ID, Integer),
-            Column(IS_SUBSCRIBED, Boolean, default=False, nullable=False)
+            Column(NUMBER_OF_LIKES, Integer, default=0),
+            Column(LAST_PROFILE_ID, Integer, default=None),
+            Column(IS_SUBSCRIBED, Boolean, default=False)
         )
 
         self.Navigation = Table(
@@ -31,9 +31,9 @@ class Database(IDatabase):
             self.metadata,
             Column(ID, Integer, primary_key=True),
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True), 
-            Column(MENU_ID, Enum(MenuIds), nullable=False),
-            Column(REGISTRATION_ITEM_ID, Enum(ProfileItemsIds), nullable=False),
-            Column(SEARCH_PARAMETER_ITEM_ID, Enum(SearchParametersItemsIds), nullable=False)
+            Column(MENU_ID, Enum(constants.MenuIds), default=None),
+            Column(REGISTRATION_ITEM_ID, Enum(constants.ProfileItemsIds), default=None),
+            Column(SEARCH_PARAMETER_ITEM_ID, Enum(constants.SearchParametersItemsIds), default=None)
         )
 
         self.PotentialProfiles = Table(
@@ -41,9 +41,9 @@ class Database(IDatabase):
             self.metadata,
             Column(ID, Integer, primary_key=True),
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id')), 
-            Column(SENDER_ACCOUNT_ID, Integer, nullable=False),
-            Column(REQUESTED_ACCOUNT_ID, Integer, nullable=False), 
-            Column(IS_VIEWED, Boolean, nullable=False, default=False)
+            Column(SENDER_ACCOUNT_ID, Integer, default=None),
+            Column(REQUESTED_ACCOUNT_ID, Integer, default=None), 
+            Column(IS_VIEWED, Boolean, default=False)
         )
 
         self.SearchParameters = Table(
@@ -51,9 +51,10 @@ class Database(IDatabase):
             self.metadata,
             Column(ID, Integer, primary_key=True),
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True), 
-            Column(AGE, Enum(mp.PreferedAge)),
-            Column(SPOKEN_LANGUAGES, Enum(mp.SpokenLanguages)),
-            Column(PROGRAMMING_LANGUAGES, Enum(mp.ProgrammingLanguages)),
+            Column(AGE, Enum(constants.AgeGroups), default=None),
+            Column(SPOKEN_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
+            Column(PROGRAMMING_LANGUAGES, Enum(constants.ProgrammingLanguages), default=None),
+            Column(INTERESTS, Enum())
         )
 
         self.Profile = Table(
@@ -61,19 +62,41 @@ class Database(IDatabase):
             self.metadata,
             Column(ID, Integer, primary_key=True),
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True), 
-            Column(FIRST_NAME, String(255), nullable=False),
-            Column(LAST_NAME, String(255)),
-            Column(AGE, Integer),
-            Column(PHOTO_URL, String(255)),
-            Column(SPOKEN_LANGUAGES, Enum(mp.SpokenLanguages)),
-            Column(PROGRAMMING_LANGUAGES, Enum(mp.ProgrammingLanguages)),
+            Column(FIRST_NAME, String(255), default=None),
+            Column(LAST_NAME, String(255), default=None),
+            Column(AGE, Integer, default=None),
+            Column(PHOTO_URL, String(255), default=None),
+            Column(SPOKEN_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
+            Column(PROGRAMMING_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
         )
 
         self.metadata.create_all(self.engine)
         self.connection = self.engine.connect()
 
     def initial_user_setup(self, user_id: int):
-        pass 
+        statement = insert(
+            self.Account,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
+
+        statement = insert(
+            self.Navigation,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
+
+        statement = insert(
+            self.SearchParameters,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
+
+        statement = insert(
+            self.Profile,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
 
     def is_in_database(self, user_id: int) -> bool: 
         statement = select(
@@ -105,7 +128,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         
 
-    def get_users_menu_id(self, user_id: int) -> MenuIds:
+    def get_users_menu_id(self, user_id: int) -> constants.MenuIds:
         statement = select(
             self.Navigation.c[MENU_ID]
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
@@ -116,7 +139,7 @@ class Database(IDatabase):
         return mapped_result.scalars().all()[0]
 
 
-    def set_users_menu_id(self, user_id: int, new_menu_id: MenuIds) -> None:
+    def set_users_menu_id(self, user_id: int, new_menu_id: constants.MenuIds) -> None:
         statement = update(
             self.Navigation
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id).values({MENU_ID: new_nenu_id})
@@ -124,7 +147,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
 
-    def get_users_registration_item_id(self, user_id: int) -> ProfileItemsIds:
+    def get_users_registration_item_id(self, user_id: int) -> constants.ProfileItemsIds:
         statement = select(
             self.Navigation.c[REGISTRATION_ITEM_ID]
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
@@ -135,7 +158,7 @@ class Database(IDatabase):
         return mapped_result.scalars().all()[0]
 
 
-    def set_users_registration_item_id(self, user_id: int, new_registration_item_id: ProfileItemsIds) -> None:
+    def set_users_registration_item_id(self, user_id: int, new_registration_item_id: constants.ProfileItemsIds) -> None:
         statement = update(
             self.Navigation
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id).values({REGISTRATION_ITEM_ID: new_registration_item_id})
@@ -143,87 +166,134 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
 
-    # def get_users_profile_item(self, user_id: int, item: str) -> Optional[str]:
-    #     statement = select(
-    #         self.Profile.c[item]
-    #     ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+    def get_users_profile_first_name(self, user_id: int) -> str:
+        statement = select(
+            self.Profile.c[FIRST_NAME]
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-    #     result = self.connection.execute(statement)
-    #     mapped_result = result.scalars().all()
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
         
-    #     return mapped_result.scalars().all()[0]
+        return mapped_result.scalars().all()[0]
 
-    
-    # def set_users_profile_item(self, user_id: int, item: str, value: Optional[str]) -> None:
-    #     statement = update(
-    #         self.Profile.c[item]
-    #     ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({item: value})
+    def set_users_profile_first_name(self, user_id: int, value: str) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({FIRST_NAME: value})
 
-    #     result = self.connection.execute(statement)
+        result = self.connection.execute(statement)
+
+    def get_users_profile_last_name(self, user_id: int) -> str:
+        statement = select(
+            self.Profile.c[LAST_NAME]
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()[0]
+
+    def set_users_profile_last_name(self, user_id: int, value: str) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({LAST_NAME: value})
+
+        result = self.connection.execute(statement)
+
+    def get_users_profile_age(self, user_id: int) -> int:
+        statement = select(
+            self.Profile.c[AGE]
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()[0]
+
+    def set_users_profile_age(self, user_id: int, value: int) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({AGE: value})
+
+        result = self.connection.execute(statement)
+
+    def get_users_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        statement = select(
+            self.Profile.c[SPOKEN_LANGUAGES]
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()[0]
+
+    def append_to_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: value})
+
+        result = self.connection.execute(statement)
 
 
-    # def append_to_users_profile_item(self, user_id: int, item: ProfileItemsIds, value: str) -> None:
-    #     pass
+    def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: None})
 
-    def get_user_profile_first_name(self, user_id: int) -> str:
-        pass
+        result = self.connection.execute(statement)
 
-    def set_user_profile_first_name(self, user_id: int, value: str) -> None:
-        pass
 
-    def get_user_profile_last_name(self, user_id: int) -> str:
-        pass
+    def get_users_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        statement = select(
+            self.Profile.c[PROGRAMMING_LANGUAGES]
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-    def set_user_profile_last_name(self, user_id: int, value: str) -> None:
-        pass
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()[0]
 
-    def get_user_profile_age(self, user_id: int) -> int:
-        pass
 
-    def set_user_profile_age(self, user_id: int, value: int) -> None:
-        pass
+    def append_to_users_profile_programming_languages(self, user_id: int, value: constants.ProgrammingLanguages) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: value})
 
-    def get_user_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
-        pass
+        result = self.connection.execute(statement)
 
-    def set_user_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
-        pass
 
-    def get_user_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
-        pass
+    def set_users_profile_programming_languages_null(self, user_id: int) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: None})
 
-    def set_user_profile_programming_languages(self, user_id: int, value: constants.ProgrammingLanguages) -> None:
-        pass
+        result = self.connection.execute(statement)
 
-    def get_user_profile_interests(self, user_id: int) -> List[constants.Interests]:
-        pass
 
-    def set_user_profile_interests(self, user_id: int, value: constants.Interests) -> None:
-        pass
+    def get_users_profile_interests(self, user_id: int) -> List[constants.Interests]:
+        statement = select(
+            self.Profile.c[INTERESTS]
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-    def get_user_search_parameter_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
-        pass
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()[0]
 
-    def set_user_search_parameter_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
-        pass
+    def append_to_users_profile_interests(self, user_id: int, value: constants.Interests) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({INTERESTS: value})
 
-    def get_user_search_parameter_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
-        pass
+        result = self.connection.execute(statement)
 
-    def set_user_search_parameter_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
-        pass
+    def set_users_profile_interests_null(self, user_id: int) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({INTERESTS: None})
 
-    def get_user_search_parameter_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
-        pass
+        result = self.connection.execute(statement)
 
-    def set_user_search_parameter_programming_languages(self, user_id: int, value: constants.ProgrammingLanguages) -> None:
-        pass
-
-    def get_user_search_parameter_interests(self, user_id: int) -> List[constants.Interests]:
-        pass
-
-    def set_user_search_parameter_interests(self, user_id: int, value: constants.Interests) -> None:
-        pass
 
     def are_search_parameters_filled(self, user_id: int) -> bool:
         statement = select(
@@ -244,7 +314,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
 
-    def get_users_search_parameter_item_id(self, user_id: int) -> SearchParametersItemsIds:
+    def get_users_search_parameter_item_id(self, user_id: int) -> constants.SearchParametersItemsIds:
         statement = select(
             self.Account.c[ARE_SEARCH_PARAMETERS_FILLED]
         ).where(self.Account.c[TELEGRAM_ID] == user_id)
@@ -255,27 +325,123 @@ class Database(IDatabase):
         return mapped_result.scalars().all()[0]
 
 
-    def set_users_search_parameter_item_id(self, user_id: int, new_search_parameter_item_id: SearchParametersItemsIds) -> None:
+    def set_users_search_parameters_item_id(self, user_id: int, new_search_parameter_item_id: constants.SearchParametersItemsIds) -> None:
         statement = update(
             self.Navigation
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id).values({SEARCH_PARAMETER_ITEM_ID: new_search_parameter_item_id})
         
         result = self.connection.execute(statement)
 
-
-    def get_users_search_parameter_item(self, user_id: int, item: str) -> Optional[str]:
+        
+    def get_users_search_parameters_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
         statement = select(
-            self.Navigation.c[item]
-        ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
+            self.SearchParameters.c[AGE]
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
         return mapped_result.scalars().all()[0]
+        
+    
+    def append_to_users_search_parameters_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({AGE: value})
+        
+        result = self.connection.execute(statement)
 
+    
+    def set_users_profile_search_parameters_age_groups_null(self, user_id: int) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({AGE: None})
+        
+        result = self.connection.execute(statement)
 
-    def append_to_users_search_parameter_item(self, user_id: int, item: SearchParametersItemsIds, value: Optional[str]) -> None:
-        pass
+    
+    def get_users_search_parameters_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+        statement = select(
+            self.SearchParameters.c[SPOKEN_LANGUAGES]
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()
+
+    
+    def append_to_users_search_parameters_spoken_languages(self, user_id: int,
+                                                           value: constants.SpokenLanguages) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: value})
+        
+        result = self.connection.execute(statement)
+
+    
+    def set_users_profile_search_parameters_spoken_languages_null(self, user_id: int) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: None})
+        
+        result = self.connection.execute(statement)
+
+    
+    def get_users_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+        statement = select(
+            self.SearchParameters.c[PROGRAMMING_LANGUAGES]
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()
+
+    
+    def append_to_users_search_parameters_programming_languages(self, user_id: int,
+                                                                value: constants.ProgrammingLanguages) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: value})
+        
+        result = self.connection.execute(statement)
+
+    
+    def set_users_profile_search_parameters_programming_languages_null(self, user_id: int) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: None})
+        
+        result = self.connection.execute(statement)
+
+    
+    def get_users_search_parameters_interests(self, user_id: int) -> List[constants.Interests]:
+        statement = select(
+            self.SearchParameters.c[INTERESTS]
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+        
+        return mapped_result.scalars().all()
+
+    
+    def append_to_users_search_parameters_interests(self, user_id: int, value: constants.Interests) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({INTERESTS: value})
+        
+        result = self.connection.execute(statement)
+
+    
+    def set_users_profile_search_parameters_interests_null(self, user_id: int) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({INTERESTS: None})
+        
+        result = self.connection.execute(statement)
+
 
     def get_users_last_shown_profile_id(self, user_id: int) -> Optional[int]:
         statement = select(
@@ -326,6 +492,7 @@ class Database(IDatabase):
         
         result = self.connection.execute(statement)
 
+
     def have_subscription(self, user_id: int) -> bool:
         statement = select(
             self.Account.c[IS_SUBSCRIBED]
@@ -335,6 +502,56 @@ class Database(IDatabase):
         mapped_result = result.scalars().all()
 
         return mapped_result[0]
+    
+
+    def add_candidate(self, user_id: int, candidate_id: int) -> None:
+        statement = update(
+            self.PotentialProfiles
+        ).where(self.PotentialProfiles.c[TELEGRAM_ID] == user_id).values({REQUESTED_ACCOUNT_ID: candidate_id})
+        
+        result = self.connection.execute(statement)
+
+
+    def get_not_viewed_candidates(self, user_id: int) -> Optional[List[int]]:
+        statement = select(
+            self.PotentialProfiles.c[ID]
+        ).where(and_(self.PotentialProfiles.c[SENDER_ACCOUNT_ID] == user_id, self.PotentialProfiles.c[IS_VIEWED] == False))
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+
+        return mapped_result
+
+    
+    def mark_profile_as_viewed(self, user_id: int, candidate_id: int) -> None:
+        statement = update(
+            self.PotentialProfiles
+        ).where(and_(self.PotentialProfiles.c[SENDER_ACCOUNT_ID] == user_id, self.PotentialProfiles.c[REQUESTED_ACCOUNT_ID] == candidate_id)
+        ).values({IS_VIEWED: True})
+
+        result = self.connection.execute(statement)
+    
+
+    def is_profile_viewed(self, user_id: int, candidate_id: int) -> bool:
+        statement = select(
+            self.PotentialProfiles.c[IS_VIEWED]
+        ).where(and_(self.PotentialProfiles.c[SENDER_ACCOUNT_ID] == user_id, self.PotentialProfiles.c[REQUESTED_ACCOUNT_ID] == candidate_id))
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+
+        return mapped_result[0]
+    
+
+    def get_all_users(self) -> List[int]:
+        statement = select(
+            self.Account.c[TELEGRAM_ID]
+        )
+
+        result = self.connection.execute(statement)
+        mapped_result = result.scalars().all()
+
+        return mapped_result
 
 DATABASE = Database()
-
+DATABASE.initial_user_setup(1)
