@@ -51,8 +51,8 @@ class Keyboards:
         return keyboard
 
     @staticmethod
-    def __create_profile_reactions_inline_keyboard(items_list: list, prefix: str):
-        keyboard = telebot.types.InlineKeyboardMarkup(row_width=2)  # Create inline-keyboard
+    def __create_inline_keyboard_from_list(items_list: list, prefix: str):
+        keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)  # Create inline-keyboard
         for i in range(len(items_list)):
             keyboard.add(telebot.types.InlineKeyboardButton(
                 text=items_list[i],
@@ -87,7 +87,10 @@ class Keyboards:
     search_parameters_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
     search_menu = __create_menu_from_list(items_list=phrases.search_menu_list)
 
-    profile_reaction_menu = __create_profile_reactions_inline_keyboard(
+    profile_reaction_menu = __create_inline_keyboard_from_list(
         [phrases.get_contact, phrases.skip_profile, phrases.go_to_main_menu], constants.PROFILE_REACTIONS_MENU_PREFIX)
 
     subscription_menu = __create_menu_from_list(items_list=[phrases.buy])
+
+    go_to_subscription_menu_btn = __create_inline_keyboard_from_list(
+        [phrases.go_to_subscription_menu], constants.GO_TO_SUBSCRIPTION_MENU_PREFIX)

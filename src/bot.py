@@ -53,6 +53,8 @@ def query_handler(call):
             show_candidates_profile(call.message.chat.id)
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
             activate_main_menu(call.message.chat.id)
+        elif call.data == constants.GO_TO_SUBSCRIPTION_MENU_PREFIX + "0":
+            activate_subscription_menu(call.message.chat.id)
 
 
 def processing_like_button(user_id: int):
@@ -65,7 +67,7 @@ def processing_like_button(user_id: int):
         bot.send_message(user_id, text=phrases.telegram_login + candidate_login)
         database.inc_number_of_likes(user_id)
     else:
-        bot.send_message(user_id, text=phrases.likes_blocked)
+        bot.send_message(user_id, text=phrases.likes_blocked, reply_markup=Keyboards.go_to_subscription_menu_btn)
 
     database.set_users_last_shown_profile_id(user_id, None)
 
