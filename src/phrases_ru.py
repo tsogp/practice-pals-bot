@@ -9,6 +9,7 @@ welcome_message = "Привет! Я Practice Pals Bot Помогу Вам най
 main_menu_title = "Вы находитесь в главном меню бота"
 
 main_menu_list = ["\U0001F91D Найти единомышленников",
+                  "Подписка",
                   "\U0001F5C2 Найти проект",
                   "\U0001F46C Найти людей в свой проект"]
 
@@ -127,3 +128,11 @@ values_of_enums_constants = {
     constants.AgeGroups.FROM_18_TO_25: "от 18 до 25 лет",
     constants.AgeGroups.OLDER_THAN_25: "старше 25 лет"
 }
+
+about_subscription = """Преимущества подписки:\n- Cнятие ограничения на количество лайков\n- Продвиженеи Вашего аккаунта на сервисе\n\nЦена: 99 руб/мес"""
+
+buy = "Купить!"
+
+go_to_subscription_menu = "Купить подписку"
+
+after_purchase = "Спасибо за покупку!"

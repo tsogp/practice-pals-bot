@@ -24,6 +24,7 @@ class MenuIds(Ids):
     CHECK_SEARCH_PARAMETERS_MENU = enum.auto()
     SEARCH_MENU = enum.auto()
     PROFILE_REACTIONS_MENU = enum.auto()
+    SUBSCRIPTION_MENU = enum.auto()
 
 
 @enum.unique
@@ -53,7 +54,7 @@ class SearchParametersItemsIds(Ids):
 
 
 PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"
-
+GO_TO_SUBSCRIPTION_MENU_PREFIX = "GO_TO_SUBSCRIPTION_MENU_"
 MAXIMUM_NUMBER_OF_LIKES = 3
 
 

@@ -53,6 +53,8 @@ def query_handler(call):
             show_candidates_profile(call.message.chat.id)
         elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
             activate_main_menu(call.message.chat.id)
+        elif call.data == constants.GO_TO_SUBSCRIPTION_MENU_PREFIX + "0":
+            activate_subscription_menu(call.message.chat.id)
 
 
 def processing_like_button(user_id: int):
@@ -65,7 +67,7 @@ def processing_like_button(user_id: int):
         bot.send_message(user_id, text=phrases.telegram_login + candidate_login)
         database.inc_number_of_likes(user_id)
     else:
-        bot.send_message(user_id, text=phrases.likes_blocked)
+        bot.send_message(user_id, text=phrases.likes_blocked, reply_markup=Keyboards.go_to_subscription_menu_btn)
 
     database.set_users_last_shown_profile_id(user_id, None)
 
@@ -104,6 +106,12 @@ def activate_search_menu(user_id: int):
                      reply_markup=Keyboards.search_menu)
 
 
+def activate_subscription_menu(user_id: int):
+    database.set_users_menu_id(user_id, constants.MenuIds.SUBSCRIPTION_MENU)
+    bot.send_message(user_id, text=phrases.about_subscription,
+                     reply_markup=Keyboards.subscription_menu)
+
+
 def show_users_profile(user_id: int):
     """
     Send a message to the user with his profile
@@ -135,8 +143,10 @@ def processing_main_menu_items(message):
     if users_message == phrases.main_menu_list[0]:
         check_search_parameters(user_id)
     elif users_message == phrases.main_menu_list[1]:
-        bot.send_message(user_id, text=phrases.not_ready_yet)
+        activate_subscription_menu(user_id)
     elif users_message == phrases.main_menu_list[2]:
+        bot.send_message(user_id, text=phrases.not_ready_yet)
+    elif users_message == phrases.main_menu_list[3]:
         bot.send_message(user_id, text=phrases.not_ready_yet)
 
 
@@ -402,6 +412,18 @@ def processing_search_menu_items(message):
         bot.send_message(user_id, text=phrases.not_ready_yet)
     elif users_message == phrases.search_menu_list[2]:
         bot.send_message(user_id, text=phrases.not_ready_yet)
+
+
+@bot.message_handler(content_types=["text"],
+                     func=lambda message: User(message.chat.id).is_in_menu(constants.MenuIds.SUBSCRIPTION_MENU))
+def processing_subscription_menu_items(message):
+    users_message = message.text
+    user_id = message.chat.id
+
+    if users_message == phrases.buy:
+        bot.send_message(user_id, text=phrases.after_purchase)
+        database.activate_subscription(user_id)
+        activate_main_menu(user_id)
 
 
 def show_candidates_profile(user_id: int):

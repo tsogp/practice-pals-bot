@@ -386,6 +386,20 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def activate_subscription(self, user_id: int) -> None:
+        """
+        Mark that the user have subscription
+        """
+        pass
+
+    @abstractmethod
+    def deactivate_subscription(self, user_id: int) -> None:
+        """
+        Mark that the user does not have a subscription
+        """
+        pass
+
+    @abstractmethod
     def add_candidate(self, user_id: int, candidate_id: int) -> None:
         """
         Add candidate to potential profiles
