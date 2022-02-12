@@ -24,6 +24,7 @@ class MenuIds(Ids):
     CHECK_SEARCH_PARAMETERS_MENU = enum.auto()
     SEARCH_MENU = enum.auto()
     PROFILE_REACTIONS_MENU = enum.auto()
+    SUBSCRIPTION_MENU = enum.auto()
 
 
 @enum.unique

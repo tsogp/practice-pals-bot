@@ -128,3 +128,9 @@ values_of_enums_constants = {
     constants.AgeGroups.FROM_18_TO_25: "от 18 до 25 лет",
     constants.AgeGroups.OLDER_THAN_25: "старше 25 лет"
 }
+
+about_subscription = """Преимущества подписки:\n- Cнятие ограничения на количество лайков\n- Продвиженеи Вашего аккаунта на сервисе\n\nЦена: 99 руб/мес"""
+
+buy = "Купить!"
+
+after_purchase = "Спасибо за покупку!"

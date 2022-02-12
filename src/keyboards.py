@@ -89,3 +89,5 @@ class Keyboards:
 
     profile_reaction_menu = __create_profile_reactions_inline_keyboard(
         [phrases.get_contact, phrases.skip_profile, phrases.go_to_main_menu], constants.PROFILE_REACTIONS_MENU_PREFIX)
+
+    subscription_menu = __create_menu_from_list(items_list=[phrases.buy])
