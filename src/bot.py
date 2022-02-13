@@ -68,7 +68,12 @@ def processing_like_button(user_id: int):
 
     if User(user_id).is_like_acceptable():
         candidate_login = database.get_users_telegram_login_by_id(candidate_id)
-        bot.send_message(user_id, text=phrases.telegram_login + candidate_login)
+        if candidate_login is None:
+            msg_with_login = phrases.item_is_not_specified
+        else:
+            msg_with_login = phrases.telegram_login + candidate_login
+        bot.send_message(user_id, text=msg_with_login)
+
         database.inc_number_of_likes(user_id)
     else:
         bot.send_message(user_id, text=phrases.likes_blocked, reply_markup=Keyboards.go_to_subscription_menu_btn)
@@ -297,7 +302,7 @@ def processing_registration_item_interests(message):
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
         database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
-        # database.register_user(user_id, user_name)
+        database.register_user(user_id)
         bot.send_message(user_id, text=phrases.finish_registration,
                          reply_markup=telebot.types.ReplyKeyboardRemove())
         show_users_profile(user_id)
