@@ -587,9 +587,12 @@ class Database(IDatabase):
         return mapped_result[0]
 
     def add_candidate(self, user_id: int, candidate_id: int) -> None:
-        statement = update(
+        statement = insert(
             self.PotentialProfiles
-        ).where(self.PotentialProfiles.c[TELEGRAM_ID] == user_id).values({REQUESTED_ACCOUNT_ID: candidate_id})
+        ).values({
+            SENDER_ACCOUNT_ID: user_id,
+            REQUESTED_ACCOUNT_ID: candidate_id
+        })
 
         result = self.connection.execute(statement)
 
