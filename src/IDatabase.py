@@ -27,6 +27,14 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def set_users_telegram_login(self, user_id: int, login: str) -> None:
+        """
+        :param user_id: Telegram's id of user we work with
+        :param login: user's telegram login
+        """
+        pass
+
+    @abstractmethod
     def is_registered(self, user_id: int) -> bool:
         """
         Check, is user registered

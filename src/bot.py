@@ -31,6 +31,7 @@ def start(message):
     """
     if not database.is_in_database(message.chat.id):
         database.initial_user_setup(message.chat.id)
+        database.set_users_telegram_login(message.chat.id, message.from_user.username)
     bot.send_message(message.chat.id,
                      text=phrases.welcome_message,
                      reply_markup=telebot.types.ReplyKeyboardRemove())

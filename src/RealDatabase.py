@@ -167,6 +167,13 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+    def set_users_telegram_login(self, user_id: int, login: str) -> None:
+        statement = update(
+            self.Account
+        ).where(self.Account.c[TELEGRAM_ID] == user_id).values({TELEGRAM_LOGIN: login})
+
+        result = self.connection.execute(statement)
+
     def is_in_database(self, user_id: int) -> bool:
         statement = select(
             self.Account.c[TELEGRAM_ID]
