@@ -597,7 +597,7 @@ class Database(IDatabase):
 
     def get_not_viewed_candidates(self, user_id: int) -> Optional[List[int]]:
         statement = select(
-            self.PotentialProfiles.c[TELEGRAM_ID]
+            self.PotentialProfiles.c[REQUESTED_ACCOUNT_ID]
         ).where(
             and_(self.PotentialProfiles.c[TELEGRAM_ID] == user_id, self.PotentialProfiles.c[IS_VIEWED] == False))
 
