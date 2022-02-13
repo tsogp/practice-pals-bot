@@ -113,7 +113,7 @@ class Interests(PossibleAnswers):
     DEV_FOR_ANDROID = "android_dev"
     DEV_FOR_IOS = "ios_dev"
     DESIGN = "design"
-    PROJECT_MANAGEMENT = "progect_management"
+    PROJECT_MANAGEMENT = "project_management"
     TESTING = "testing"
 
 
