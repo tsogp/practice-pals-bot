@@ -157,6 +157,30 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+        statement = insert(
+            self.SpokenLanguages,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
+
+        statement = insert(
+            self.ProgrammingLanguages,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
+
+        statement = insert(
+            self.Interests,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
+
+        statement = insert(
+            self.AgeGroups,
+        ).values({TELEGRAM_ID: user_id})
+
+        result = self.connection.execute(statement)
+
 
     def is_in_database(self, user_id: int) -> bool: 
         statement = select(
@@ -512,6 +536,38 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
 
+    def append_to_users_spoken_languages_unique_parameter(self, user_id: int, language: str, value: bool) -> None:
+        statement = update(
+            self.SpokenLanguages
+        ).where(self.SpokenLanguages.c[TELEGRAM_ID] == user_id).values({language: value})
+        
+        result = self.connection.execute(statement)
+
+
+    def append_to_users_programming_languages_unique_parameter(self, user_id: int, language: str, value: bool) -> None:
+        statement = update(
+            self.ProgrammingLanguages
+        ).where(self.ProgrammingLanguages.c[TELEGRAM_ID] == user_id).values({language: value})
+        
+        result = self.connection.execute(statement)
+    
+
+    def append_to_users_interests_unique_parameter(self, user_id: int, interest: str, value: bool) -> None:
+        statement = update(
+            self.SpokenLanguages
+        ).where(self.SpokenLanguages.c[TELEGRAM_ID] == user_id).values({interest: value})
+        
+        result = self.connection.execute(statement)
+    
+
+    def append_to_users_age_groups_unique_parameter(self, user_id: int, age_group: str, value: bool) -> None:
+        statement = update(
+            self.SpokenLanguages
+        ).where(self.SpokenLanguages.c[TELEGRAM_ID] == user_id).values({age_group: value})
+        
+        result = self.connection.execute(statement)
+
+
     def get_users_last_shown_profile_id(self, user_id: int) -> Optional[int]:
         statement = select(
             self.Account.c[LAST_PROFILE_ID]
@@ -623,6 +679,3 @@ class Database(IDatabase):
         return mapped_result
 
 DATABASE = Database()
-# DATABASE.initial_user_setup(1)
-DATABASE.append_to_users_profile_spoken_languages(1, constants.SpokenLanguages.ENGLISH)
-DATABASE.append_to_users_profile_spoken_languages(1, constants.SpokenLanguages.RUSSIAN)
