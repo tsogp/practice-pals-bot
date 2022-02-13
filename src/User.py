@@ -17,21 +17,21 @@ class User:
 
     def __init__(self, user_id: int):
         self.__id = user_id
-        self.__menu_id = User.__DATABASE.get_users_menu_id(self.__id)
-        self.__registration_item_id = User.__DATABASE.get_users_registration_item_id(self.__id)
-        self.__search_parameter_item_id = User.__DATABASE.get_users_search_parameter_item_id(self.__id)
 
     def is_in_menu(self, menu_id: constants.MenuIds) -> bool:
         """
         Check, is user in menu with menu_id
         """
+        self.__menu_id = User.__DATABASE.get_users_menu_id(self.__id)
         return self.__menu_id == menu_id
 
     def is_in_registration_item(self, profile_item_id: constants.ProfileItemsIds) -> bool:
         """
         Check, is user filling registration_item with profile_item_id
         """
+        self.__menu_id = User.__DATABASE.get_users_menu_id(self.__id)
         check_menu_id = self.__menu_id == constants.MenuIds.REGISTRATION_MENU
+        self.__registration_item_id = User.__DATABASE.get_users_registration_item_id(self.__id)
         check_registration_item_id = self.__registration_item_id == profile_item_id
         return check_menu_id and check_registration_item_id
 
@@ -40,6 +40,7 @@ class User:
         Check, is user filling search parameter with search_parameters_item_id
         """
         check_menu_id = self.__menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU
+        self.__search_parameter_item_id = User.__DATABASE.get_users_search_parameter_item_id(self.__id)
         check_search_parameter_item_id = self.__search_parameter_item_id == search_parameters_item_id
         return check_menu_id and check_search_parameter_item_id
 
