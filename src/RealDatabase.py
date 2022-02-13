@@ -47,7 +47,6 @@ class Database(IDatabase):
             self.metadata,
             Column(ID, Integer, primary_key=True),
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id')),
-            Column(SENDER_ACCOUNT_ID, Integer, default=None),
             Column(REQUESTED_ACCOUNT_ID, Integer, default=None),
             Column(IS_VIEWED, Boolean, default=False)
         )
@@ -590,7 +589,7 @@ class Database(IDatabase):
         statement = insert(
             self.PotentialProfiles
         ).values({
-            SENDER_ACCOUNT_ID: user_id,
+            TELEGRAM_ID: user_id,
             REQUESTED_ACCOUNT_ID: candidate_id
         })
 
@@ -600,7 +599,7 @@ class Database(IDatabase):
         statement = select(
             self.PotentialProfiles.c[TELEGRAM_ID]
         ).where(
-            and_(self.PotentialProfiles.c[SENDER_ACCOUNT_ID] == user_id, self.PotentialProfiles.c[IS_VIEWED] == False))
+            and_(self.PotentialProfiles.c[TELEGRAM_ID] == user_id, self.PotentialProfiles.c[IS_VIEWED] == False))
 
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
@@ -610,7 +609,7 @@ class Database(IDatabase):
     def mark_profile_as_viewed(self, user_id: int, candidate_id: int) -> None:
         statement = update(
             self.PotentialProfiles
-        ).where(and_(self.PotentialProfiles.c[SENDER_ACCOUNT_ID] == user_id,
+        ).where(and_(self.PotentialProfiles.c[TELEGRAM_ID] == user_id,
                      self.PotentialProfiles.c[REQUESTED_ACCOUNT_ID] == candidate_id)
                 ).values({IS_VIEWED: True})
 
@@ -619,7 +618,7 @@ class Database(IDatabase):
     def is_profile_viewed(self, user_id: int, candidate_id: int) -> bool:
         statement = select(
             self.PotentialProfiles.c[IS_VIEWED]
-        ).where(and_(self.PotentialProfiles.c[SENDER_ACCOUNT_ID] == user_id,
+        ).where(and_(self.PotentialProfiles.c[TELEGRAM_ID] == user_id,
                      self.PotentialProfiles.c[REQUESTED_ACCOUNT_ID] == candidate_id))
 
         result = self.connection.execute(statement)
