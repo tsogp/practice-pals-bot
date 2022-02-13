@@ -635,9 +635,17 @@ class Database(IDatabase):
         return mapped_result
 
     def activate_subscription(self, user_id: int) -> None:
-        pass
+        statement = update(
+            self.Account
+        ).where(self.Account.c[TELEGRAM_ID] == user_id).values({IS_SUBSCRIBED: True})
+
+        result = self.connection.execute(statement)
 
     def deactivate_subscription(self, user_id: int) -> None:
-        pass
+        statement = update(
+            self.Account
+        ).where(self.Account.c[TELEGRAM_ID] == user_id).values({IS_SUBSCRIBED: False})
+
+        result = self.connection.execute(statement)
 
 # DATABASE = Database()
