@@ -79,8 +79,10 @@ class User:
             values = "_" + (phrases.item_is_not_specified if mode == 0 else phrases.does_not_matter_without_emoji) + "_"
         else:
             values = ""
-            for v in raw_value:
-                values += (phrases.values_of_enums_constants.get(v, "ERROR") + " ")
+            for i in range(len(raw_value) - 1):
+                values += (phrases.values_of_enums_constants.get(raw_value[i], "ERROR") + ", ")
+            values += (phrases.values_of_enums_constants.get(raw_value[-1], "ERROR"))
+
         return values
 
     def __get_profile_first_name(self) -> str:
