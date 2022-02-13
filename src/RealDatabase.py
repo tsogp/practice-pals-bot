@@ -292,7 +292,7 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
-    def get_users_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+    def get_users_profile_spoken_languages(self, user_id: int) -> Optional[List[constants.SpokenLanguages]]:
         mapped_result = []
 
         for column in SPOKEN_LANGUAGES_LIST:
@@ -303,7 +303,8 @@ class Database(IDatabase):
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
                 mapped_result.append(constants.SpokenLanguages(column))
-
+        if not mapped_result:
+            return None
         return mapped_result
 
     def append_to_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
@@ -321,7 +322,7 @@ class Database(IDatabase):
 
             result = self.connection.execute(statement)
 
-    def get_users_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+    def get_users_profile_programming_languages(self, user_id: int) -> Optional[List[constants.ProgrammingLanguages]]:
         mapped_result = []
 
         for column in PROGRAMMING_LANGUAGES_LIST:
@@ -332,7 +333,8 @@ class Database(IDatabase):
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
                 mapped_result.append(constants.ProgrammingLanguages(column))
-
+        if not mapped_result:
+            return None
         return mapped_result
 
     def append_to_users_profile_programming_languages(self, user_id: int,
@@ -347,11 +349,11 @@ class Database(IDatabase):
         for column in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
                 self.Profile
-            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: False})
 
             result = self.connection.execute(statement)
 
-    def get_users_profile_interests(self, user_id: int) -> List[constants.Interests]:
+    def get_users_profile_interests(self, user_id: int) -> Optional[List[constants.Interests]]:
         mapped_result = []
 
         for column in INTERESTS_LIST:
@@ -362,7 +364,8 @@ class Database(IDatabase):
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
                 mapped_result.append(constants.Interests(column))
-
+        if not mapped_result:
+            return None
         return mapped_result
 
     def append_to_users_profile_interests(self, user_id: int, value: constants.Interests) -> None:
@@ -376,7 +379,7 @@ class Database(IDatabase):
         for column in INTERESTS_LIST:
             statement = update(
                 self.Profile
-            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: False})
 
             result = self.connection.execute(statement)
 
@@ -407,7 +410,6 @@ class Database(IDatabase):
 
         if not mapped_result:
             return None
-
         return mapped_result[0]
 
     def set_users_search_parameters_item_id(self, user_id: int,
@@ -446,7 +448,7 @@ class Database(IDatabase):
         for column in AGE_GROUP_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
 
             result = self.connection.execute(statement)
 
@@ -478,7 +480,7 @@ class Database(IDatabase):
         for column in SPOKEN_LANGUAGES_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
 
             result = self.connection.execute(statement)
 
@@ -511,7 +513,7 @@ class Database(IDatabase):
         for column in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
 
             result = self.connection.execute(statement)
 
@@ -542,7 +544,7 @@ class Database(IDatabase):
         for column in INTERESTS_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
 
             result = self.connection.execute(statement)
 

@@ -74,9 +74,9 @@ class User:
         return profile
 
     @staticmethod
-    def __get_str_from_list(raw_value: Optional[List[constants.PossibleAnswers]]):
+    def __get_str_from_list(raw_value: Optional[List[constants.PossibleAnswers]], mode: int):
         if raw_value is None:
-            values = "_" + phrases.item_is_not_specified + "_"
+            values = "_" + (phrases.item_is_not_specified if mode == 0 else phrases.does_not_matter_without_emoji) + "_"
         else:
             values = ""
             for v in raw_value:
@@ -104,19 +104,19 @@ class User:
     def __get_profile_spoken_languages(self) -> str:
         title = f"*{phrases.profile_items[constants.ProfileItemsIds.SPOKEN_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_profile_spoken_languages(self.__id)
-        values = User.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value, mode=0)
         return title + values + "\n"
 
     def __get_profile_programming_languages(self) -> str:
         title = f"*{phrases.profile_items[constants.ProfileItemsIds.PROGRAMMING_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_profile_programming_languages(self.__id)
-        values = User.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value, mode=0)
         return title + values + "\n"
 
     def __get_profile_interests(self) -> str:
         title = f"*{phrases.profile_items[constants.ProfileItemsIds.INTERESTS]}:* "
         raw_value = User.__DATABASE.get_users_profile_interests(self.__id)
-        values = User.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value, mode=0)
         return title + values + "\n"
 
     # GET PROFILE
@@ -137,25 +137,25 @@ class User:
     def __get_search_parameters_age_groups(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.AGE_GROUP]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_age_groups(self.__id)
-        values = User.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value, mode=1)
         return title + values + "\n"
 
     def __get_search_parameters_spoken_languages(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.SPOKEN_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_spoken_languages(self.__id)
-        values = User.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value, mode=1)
         return title + values + "\n"
 
     def __get_search_parameters_programming_languages(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_programming_languages(self.__id)
-        values = User.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value, mode=1)
         return title + values + "\n"
 
     def __get_search_parameters_interests(self) -> str:
         title = f"*{phrases.search_parameters_items[constants.SearchParametersItemsIds.INTERESTS]}:* "
         raw_value = User.__DATABASE.get_users_search_parameters_interests(self.__id)
-        values = User.__get_str_from_list(raw_value)
+        values = User.__get_str_from_list(raw_value, mode=1)
         return title + values + "\n"
 
     # GET SEARCH PARAMETERS
