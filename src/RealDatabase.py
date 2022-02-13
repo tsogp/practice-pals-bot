@@ -11,7 +11,7 @@ class Database(IDatabase):
     def __init__(self):
         self.engine = create_engine(
             'sqlite:///testdb.db',
-            echo=True,
+            echo=False,
             connect_args={'check_same_thread': False}
         )
 
@@ -37,9 +37,10 @@ class Database(IDatabase):
             self.metadata,
             Column(ID, Integer, primary_key=True),
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
-            Column(MENU_ID, Enum(constants.MenuIds), default=None),
-            Column(REGISTRATION_ITEM_ID, Enum(constants.ProfileItemsIds), default=None),
-            Column(SEARCH_PARAMETER_ITEM_ID, Enum(constants.SearchParametersItemsIds), default=None)
+            Column(MENU_ID, Enum(constants.MenuIds), default=constants.MenuIds.NULL),
+            Column(REGISTRATION_ITEM_ID, Enum(constants.ProfileItemsIds), default=constants.ProfileItemsIds.NULL),
+            Column(SEARCH_PARAMETER_ITEM_ID, Enum(constants.SearchParametersItemsIds),
+                   default=constants.SearchParametersItemsIds.NULL)
         )
 
         self.PotentialProfiles = Table(
@@ -59,42 +60,42 @@ class Database(IDatabase):
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
 
             # Spoken Languages
-            Column(RUSSIAN, Boolean, default=None),
-            Column(ENGLISH, Boolean, default=None),
+            Column(RUSSIAN, Boolean, default=False),
+            Column(ENGLISH, Boolean, default=False),
 
             # Programming Languages
-            Column(PYTHON, Boolean, default=None),
-            Column(C, Boolean, default=None),
-            Column(CPP, Boolean, default=None),
-            Column(C_SHARP, Boolean, default=None),
-            Column(JAVA, Boolean, default=None),
-            Column(JAVA_SCRIPT, Boolean, default=None),
-            Column(SQL, Boolean, default=None),
-            Column(PHP, Boolean, default=None),
-            Column(SWIFT, Boolean, default=None),
-            Column(KOTLIN, Boolean, default=None),
-            Column(RUBY, Boolean, default=None),
-            Column(ASSEMBLER, Boolean, default=None),
-            Column(HTML_CSS, Boolean, default=None),
-            Column(NODE_JS, Boolean, default=None),
+            Column(PYTHON, Boolean, default=False),
+            Column(C, Boolean, default=False),
+            Column(CPP, Boolean, default=False),
+            Column(C_SHARP, Boolean, default=False),
+            Column(JAVA, Boolean, default=False),
+            Column(JAVA_SCRIPT, Boolean, default=False),
+            Column(SQL, Boolean, default=False),
+            Column(PHP, Boolean, default=False),
+            Column(SWIFT, Boolean, default=False),
+            Column(KOTLIN, Boolean, default=False),
+            Column(RUBY, Boolean, default=False),
+            Column(ASSEMBLER, Boolean, default=False),
+            Column(HTML_CSS, Boolean, default=False),
+            Column(NODE_JS, Boolean, default=False),
 
             # Interests
-            Column(DB_DESIGN, Boolean, default=None),
-            Column(FRONT_END, Boolean, default=None),
-            Column(BACK_END, Boolean, default=None),
-            Column(MACHINE_LEARNING, Boolean, default=None),
-            Column(BIG_DATA, Boolean, default=None),
-            Column(DEV_FOR_ANDROID, Boolean, default=None),
-            Column(DEV_FOR_IOS, Boolean, default=None),
-            Column(DESIGN, Boolean, default=None),
-            Column(PROJECT_MANAGEMENT, Boolean, default=None),
-            Column(TESTING, Boolean, default=None),
+            Column(DB_DESIGN, Boolean, default=False),
+            Column(FRONT_END, Boolean, default=False),
+            Column(BACK_END, Boolean, default=False),
+            Column(MACHINE_LEARNING, Boolean, default=False),
+            Column(BIG_DATA, Boolean, default=False),
+            Column(DEV_FOR_ANDROID, Boolean, default=False),
+            Column(DEV_FOR_IOS, Boolean, default=False),
+            Column(DESIGN, Boolean, default=False),
+            Column(PROJECT_MANAGEMENT, Boolean, default=False),
+            Column(TESTING, Boolean, default=False),
 
             # Age groups
-            Column(YOUNGER_THAN_14, Boolean, default=None),
-            Column(FROM_14_TO_18, Boolean, default=None),
-            Column(FROM_18_TO_25, Boolean, default=None),
-            Column(OLDER_THAN_25, Boolean, default=None)
+            Column(YOUNGER_THAN_14, Boolean, default=False),
+            Column(FROM_14_TO_18, Boolean, default=False),
+            Column(FROM_18_TO_25, Boolean, default=False),
+            Column(OLDER_THAN_25, Boolean, default=False)
         )
 
         self.Profile = Table(
@@ -108,36 +109,36 @@ class Database(IDatabase):
             Column(PHOTO_URL, String(255), default=None),
 
             # Spoken Languages
-            Column(RUSSIAN, Boolean, default=None),
-            Column(ENGLISH, Boolean, default=None),
+            Column(RUSSIAN, Boolean, default=False),
+            Column(ENGLISH, Boolean, default=False),
 
             # Programming Languages
-            Column(PYTHON, Boolean, default=None),
-            Column(C, Boolean, default=None),
-            Column(CPP, Boolean, default=None),
-            Column(C_SHARP, Boolean, default=None),
-            Column(JAVA, Boolean, default=None),
-            Column(JAVA_SCRIPT, Boolean, default=None),
-            Column(SQL, Boolean, default=None),
-            Column(PHP, Boolean, default=None),
-            Column(SWIFT, Boolean, default=None),
-            Column(KOTLIN, Boolean, default=None),
-            Column(RUBY, Boolean, default=None),
-            Column(ASSEMBLER, Boolean, default=None),
-            Column(HTML_CSS, Boolean, default=None),
-            Column(NODE_JS, Boolean, default=None),
+            Column(PYTHON, Boolean, default=False),
+            Column(C, Boolean, default=False),
+            Column(CPP, Boolean, default=False),
+            Column(C_SHARP, Boolean, default=False),
+            Column(JAVA, Boolean, default=False),
+            Column(JAVA_SCRIPT, Boolean, default=False),
+            Column(SQL, Boolean, default=False),
+            Column(PHP, Boolean, default=False),
+            Column(SWIFT, Boolean, default=False),
+            Column(KOTLIN, Boolean, default=False),
+            Column(RUBY, Boolean, default=False),
+            Column(ASSEMBLER, Boolean, default=False),
+            Column(HTML_CSS, Boolean, default=False),
+            Column(NODE_JS, Boolean, default=False),
 
             # Interests
-            Column(DB_DESIGN, Boolean, default=None),
-            Column(FRONT_END, Boolean, default=None),
-            Column(BACK_END, Boolean, default=None),
-            Column(MACHINE_LEARNING, Boolean, default=None),
-            Column(BIG_DATA, Boolean, default=None),
-            Column(DEV_FOR_ANDROID, Boolean, default=None),
-            Column(DEV_FOR_IOS, Boolean, default=None),
-            Column(DESIGN, Boolean, default=None),
-            Column(PROJECT_MANAGEMENT, Boolean, default=None),
-            Column(TESTING, Boolean, default=None)
+            Column(DB_DESIGN, Boolean, default=False),
+            Column(FRONT_END, Boolean, default=False),
+            Column(BACK_END, Boolean, default=False),
+            Column(MACHINE_LEARNING, Boolean, default=False),
+            Column(BIG_DATA, Boolean, default=False),
+            Column(DEV_FOR_ANDROID, Boolean, default=False),
+            Column(DEV_FOR_IOS, Boolean, default=False),
+            Column(DESIGN, Boolean, default=False),
+            Column(PROJECT_MANAGEMENT, Boolean, default=False),
+            Column(TESTING, Boolean, default=False)
         )
 
         self.metadata.create_all(self.engine)
@@ -246,7 +247,6 @@ class Database(IDatabase):
         return mapped_result[0]
 
     def set_users_profile_first_name(self, user_id: int, value: str) -> None:
-        print(1234)
         statement = update(
             self.Profile
         ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({FIRST_NAME: value})
@@ -311,8 +311,8 @@ class Database(IDatabase):
     def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
         for column in SPOKEN_LANGUAGES_LIST:
             statement = update(
-                self.Profile.c[column]
-            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
+                self.Profile
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: False})
 
             result = self.connection.execute(statement)
 
@@ -341,7 +341,7 @@ class Database(IDatabase):
     def set_users_profile_programming_languages_null(self, user_id: int) -> None:
         for column in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
-                self.Profile.c[column]
+                self.Profile
             ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
 
             result = self.connection.execute(statement)
@@ -370,7 +370,7 @@ class Database(IDatabase):
     def set_users_profile_interests_null(self, user_id: int) -> None:
         for column in INTERESTS_LIST:
             statement = update(
-                self.Profile.c[column]
+                self.Profile
             ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
 
             result = self.connection.execute(statement)
@@ -438,7 +438,7 @@ class Database(IDatabase):
     def set_users_profile_search_parameters_age_groups_null(self, user_id: int) -> None:
         for column in AGE_GROUP_LIST:
             statement = update(
-                self.SearchParameters.c[column]
+                self.SearchParameters
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
 
             result = self.connection.execute(statement)
@@ -468,7 +468,7 @@ class Database(IDatabase):
     def set_users_profile_search_parameters_spoken_languages_null(self, user_id: int) -> None:
         for column in SPOKEN_LANGUAGES_LIST:
             statement = update(
-                self.SearchParameters.c[column]
+                self.SearchParameters
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
 
             result = self.connection.execute(statement)
@@ -484,7 +484,6 @@ class Database(IDatabase):
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
                 mapped_result.append(constants.ProgrammingLanguages(column))
-
         return mapped_result
 
     def append_to_users_search_parameters_programming_languages(self, user_id: int,
@@ -498,7 +497,7 @@ class Database(IDatabase):
     def set_users_profile_search_parameters_programming_languages_null(self, user_id: int) -> None:
         for column in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
-                self.SearchParameters.c[column]
+                self.SearchParameters
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
 
             result = self.connection.execute(statement)
@@ -508,8 +507,8 @@ class Database(IDatabase):
 
         for column in INTERESTS_LIST:
             statement = select(
-                self.Profile.c[column]
-            ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
@@ -527,7 +526,7 @@ class Database(IDatabase):
     def set_users_profile_search_parameters_interests_null(self, user_id: int) -> None:
         for column in INTERESTS_LIST:
             statement = update(
-                self.SearchParameters.c[column]
+                self.SearchParameters
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
 
             result = self.connection.execute(statement)
