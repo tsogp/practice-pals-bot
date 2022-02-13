@@ -625,6 +625,9 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
 
+        if not mapped_result:
+            return False
+
         return mapped_result[0]
 
     def get_all_users(self) -> List[int]:
