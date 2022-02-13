@@ -195,13 +195,16 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
-    def get_users_menu_id(self, user_id: int) -> constants.MenuIds:
+    def get_users_menu_id(self, user_id: int) -> Optional[constants.MenuIds]:
         statement = select(
             self.Navigation.c[MENU_ID]
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
 
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
+
+        if not mapper_result:
+            return None
 
         return mapped_result[0]
 
@@ -212,13 +215,16 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
-    def get_users_registration_item_id(self, user_id: int) -> constants.ProfileItemsIds:
+    def get_users_registration_item_id(self, user_id: int) -> Optional[constants.ProfileItemsIds]:
         statement = select(
             self.Navigation.c[REGISTRATION_ITEM_ID]
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
 
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
+
+        if not mapper_result:
+            return None
 
         return mapped_result[0]
 
@@ -385,13 +391,16 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
-    def get_users_search_parameter_item_id(self, user_id: int) -> constants.SearchParametersItemsIds:
+    def get_users_search_parameter_item_id(self, user_id: int) -> Optional[constants.SearchParametersItemsIds]:
         statement = select(
             self.Navigation.c[ARE_SEARCH_PARAMETERS_FILLED]
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
 
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
+
+        if not mapper_result:
+            return None
 
         return mapped_result[0]
 
