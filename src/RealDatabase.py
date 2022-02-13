@@ -71,6 +71,64 @@ class Database(IDatabase):
             Column(INTERESTS, Enum(constants.Interests))
         )
 
+        self.SpokenLanguages = Table(
+            'SpokenLanguages',
+            self.matadata,
+            Column(ID, Integer, primary_key=True),
+            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
+            Column(RUSSIAN, Boolean, default=False),
+            Column(ENGLISH, Boolean, default=False)
+        )
+
+        self.ProgrammingLanguages = Table(
+            'ProgrammingLanguages',
+            self.matadata,
+            Column(ID, Integer, primary_key=True),
+            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
+            Column(PYTHON, Boolean, default=False),
+            Column(C, Boolean, default=False),
+            Column(CPP, Boolean, default=False),
+            Column(C_SHARP, Boolean, default=False),
+            Column(JAVA, Boolean, default=False),
+            Column(JAVA_SCRIPT, Boolean, default=False),
+            Column(SQL, Boolean, default=False),
+            Column(PHP, Boolean, default=False),
+            Column(SWIFT, Boolean, default=False),
+            Column(KOTLIN, Boolean, default=False),
+            Column(RUBY, Boolean, default=False),
+            Column(ASSEMBLER, Boolean, default=False),
+            Column(HTML_CSS, Boolean, default=False),
+            Column(NODE_JS, Boolean, default=False)
+        )
+
+        self.Interests = Table(
+            'Interests',
+            self.matadata,
+            Column(ID, Integer, primary_key=True),
+            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
+            Column(DB_DESIGN, Boolean, default=False),
+            Column(FRONT_END, Boolean, default=False),
+            Column(BACK_END, Boolean, default=False),
+            Column(MACHINE_LEARNING, Boolean, default=False),
+            Column(BIG_DATA, Boolean, default=False),
+            Column(DEV_FOR_ANDROID, Boolean, default=False),
+            Column(DEV_FOR_IOS, Boolean, default=False),
+            Column(DESIGN, Boolean, default=False),
+            Column(PROJECT_MANAGEMENT, Boolean, default=False),
+            Column(TESTING, Boolean, default=False)
+        )
+
+        self.AgeGroups = Table(
+            'AgeGroups',
+            self.matadata,
+            Column(ID, Integer, primary_key=True),
+            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
+            Column(YOUNGER_THAN_14, Boolean, default=False),
+            Column(FROM_14_TO_18, Boolean, default=False),
+            Column(FROM_18_TO_25, Boolean, default=False),
+            Column(OLDER_THAN_25, Boolean, default=False)
+        )
+
         self.metadata.create_all(self.engine)
         self.connection = self.engine.connect()
 
@@ -565,4 +623,6 @@ class Database(IDatabase):
         return mapped_result
 
 DATABASE = Database()
-DATABASE.initial_user_setup(1)
+# DATABASE.initial_user_setup(1)
+DATABASE.append_to_users_profile_spoken_languages(1, constants.SpokenLanguages.ENGLISH)
+DATABASE.append_to_users_profile_spoken_languages(1, constants.SpokenLanguages.RUSSIAN)

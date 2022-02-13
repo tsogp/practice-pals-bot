@@ -23,3 +23,37 @@ SPOKEN_LANGUAGES = 'spoken_languages'
 PROGRAMMING_LANGUAGES = 'programming_languages'
 PHOTO_URL = 'photo_url'
 INTERESTS = 'interests'
+
+RUSSIAN = "russian"
+ENGLISH = "english"
+
+PYTHON = "python"
+C = "c"
+CPP = "cpp"
+C_SHARP = "c_sharp"
+JAVA = "java"
+JAVA_SCRIPT = "java_script"
+SQL = "sql"
+PHP = "php"
+SWIFT = "swift"
+KOTLIN = "kotlin"
+RUBY = "ruby"
+ASSEMBLER = "assembler"
+HTML_CSS = "html_css"
+NODE_JS = "node_js"
+
+DB_DESIGN = "db_design"
+FRONT_END = "front_end"
+BACK_END = "back_end"
+MACHINE_LEARNING = "machine_learning"
+BIG_DATA = "big_data"
+DEV_FOR_ANDROID = "android_dev"
+DEV_FOR_IOS = "ios_dev"
+DESIGN = "design"
+PROJECT_MANAGEMENT = "progect_management"
+TESTING = "testing"
+
+YOUNGER_THAN_14 = "younger_than_14"
+FROM_14_TO_18 = "from_14_to_18"
+FROM_18_TO_25 = "from_18_to_25"
+OLDER_THAN_25 = "older_than_25"
