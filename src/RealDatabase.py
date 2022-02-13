@@ -394,7 +394,7 @@ class Database(IDatabase):
 
     def get_users_search_parameter_item_id(self, user_id: int) -> Optional[constants.SearchParametersItemsIds]:
         statement = select(
-            self.Navigation.c[ARE_SEARCH_PARAMETERS_FILLED]
+            self.Navigation.c[SEARCH_PARAMETER_ITEM_ID]
         ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
 
         result = self.connection.execute(statement)
