@@ -69,10 +69,10 @@ def processing_like_button(user_id: int):
     if User(user_id).is_like_acceptable():
         candidate_login = database.get_users_telegram_login_by_id(candidate_id)
         if candidate_login is None:
-            msg_with_login = phrases.item_is_not_specified
+            msg_with_login = phrases.telegram_login + "_" + phrases.item_is_not_specified + "_"
         else:
-            msg_with_login = phrases.telegram_login + candidate_login
-        bot.send_message(user_id, text=msg_with_login)
+            msg_with_login = phrases.telegram_login + "@" + candidate_login
+        bot.send_message(user_id, text=msg_with_login, parse_mode="Markdown")
 
         database.inc_number_of_likes(user_id)
     else:
