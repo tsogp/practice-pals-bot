@@ -54,7 +54,7 @@ class Database(IDatabase):
             Column(AGE, Enum(constants.AgeGroups), default=None),
             Column(SPOKEN_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
             Column(PROGRAMMING_LANGUAGES, Enum(constants.ProgrammingLanguages), default=None),
-            Column(INTERESTS, Enum())
+            Column(INTERESTS, Enum(constants.Interests))
         )
 
         self.Profile = Table(
@@ -68,12 +68,13 @@ class Database(IDatabase):
             Column(PHOTO_URL, String(255), default=None),
             Column(SPOKEN_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
             Column(PROGRAMMING_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
+            Column(INTERESTS, Enum(constants.Interests))
         )
 
         self.metadata.create_all(self.engine)
         self.connection = self.engine.connect()
 
-    def initial_user_setup(self, user_id: int):
+    def initial_user_setup(self, user_id: int) -> None:
         statement = insert(
             self.Account,
         ).values({TELEGRAM_ID: user_id})
@@ -98,6 +99,7 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+
     def is_in_database(self, user_id: int) -> bool: 
         statement = select(
             self.Account.c[TELEGRAM_ID]
@@ -109,7 +111,7 @@ class Database(IDatabase):
         return bool(mapped_result)
 
 
-    def is_registered(self, user_id: int):
+    def is_registered(self, user_id: int) -> bool:
         statement = select(
             self.Account.c[IS_REGISTERED]
         ).where(self.Account.c[TELEGRAM_ID] == user_id)
@@ -136,7 +138,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
 
 
     def set_users_menu_id(self, user_id: int, new_menu_id: constants.MenuIds) -> None:
@@ -155,7 +157,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
 
 
     def set_users_registration_item_id(self, user_id: int, new_registration_item_id: constants.ProfileItemsIds) -> None:
@@ -174,7 +176,8 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
+
 
     def set_users_profile_first_name(self, user_id: int, value: str) -> None:
         statement = update(
@@ -182,6 +185,7 @@ class Database(IDatabase):
         ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({FIRST_NAME: value})
 
         result = self.connection.execute(statement)
+
 
     def get_users_profile_last_name(self, user_id: int) -> str:
         statement = select(
@@ -191,7 +195,8 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
+
 
     def set_users_profile_last_name(self, user_id: int, value: str) -> None:
         statement = update(
@@ -199,6 +204,7 @@ class Database(IDatabase):
         ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({LAST_NAME: value})
 
         result = self.connection.execute(statement)
+
 
     def get_users_profile_age(self, user_id: int) -> int:
         statement = select(
@@ -208,7 +214,8 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
+
 
     def set_users_profile_age(self, user_id: int, value: int) -> None:
         statement = update(
@@ -216,6 +223,7 @@ class Database(IDatabase):
         ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({AGE: value})
 
         result = self.connection.execute(statement)
+
 
     def get_users_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
         statement = select(
@@ -225,7 +233,8 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result
+        
 
     def append_to_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
         statement = update(
@@ -251,7 +260,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result
 
 
     def append_to_users_profile_programming_languages(self, user_id: int, value: constants.ProgrammingLanguages) -> None:
@@ -278,7 +287,8 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result
+
 
     def append_to_users_profile_interests(self, user_id: int, value: constants.Interests) -> None:
         statement = update(
@@ -286,6 +296,7 @@ class Database(IDatabase):
         ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({INTERESTS: value})
 
         result = self.connection.execute(statement)
+
 
     def set_users_profile_interests_null(self, user_id: int) -> None:
         statement = update(
@@ -341,7 +352,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result
         
     
     def append_to_users_search_parameters_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
@@ -368,7 +379,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()
+        return mapped_result
 
     
     def append_to_users_search_parameters_spoken_languages(self, user_id: int,
@@ -396,7 +407,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()
+        return mapped_result
 
     
     def append_to_users_search_parameters_programming_languages(self, user_id: int,
@@ -424,7 +435,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()
+        return mapped_result
 
     
     def append_to_users_search_parameters_interests(self, user_id: int, value: constants.Interests) -> None:
@@ -451,7 +462,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
 
 
     def set_users_last_shown_profile_id(self, user_id: int, candidate_id: int) -> None:
