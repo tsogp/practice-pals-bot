@@ -203,7 +203,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
 
-        if not mapper_result:
+        if not mapped_result:
             return None
 
         return mapped_result[0]
@@ -223,7 +223,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
 
-        if not mapper_result:
+        if not mapped_result:
             return None
 
         return mapped_result[0]
@@ -246,6 +246,7 @@ class Database(IDatabase):
         return mapped_result[0]
 
     def set_users_profile_first_name(self, user_id: int, value: str) -> None:
+        print(1234)
         statement = update(
             self.Profile
         ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({FIRST_NAME: value})
@@ -399,7 +400,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
 
-        if not mapper_result:
+        if not mapped_result:
             return None
 
         return mapped_result[0]
@@ -641,5 +642,4 @@ class Database(IDatabase):
     def deactivate_subscription(self, user_id: int) -> None:
         pass
 
-
-DATABASE = Database()
+# DATABASE = Database()
