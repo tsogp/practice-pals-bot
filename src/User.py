@@ -223,9 +223,8 @@ class User:
 
         candidates_ids = self.__get_users_by_parameters(age_intervals, spoken_languages, programming_languages,
                                                         interests)
-
         for candidate_id in candidates_ids:
-            if not User.__DATABASE.is_profile_viewed(self.__id, candidate_id):
+            if not User.__DATABASE.is_profile_in_candidates_list(self.__id, candidate_id):
                 User.__DATABASE.add_candidate(self.__id, candidate_id)
 
     @staticmethod

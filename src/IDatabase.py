@@ -440,8 +440,8 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def is_profile_viewed(self, user_id: int, candidate_id: int) -> bool:
+    def is_profile_in_candidates_list(self, user_id: int, candidate_id: int) -> bool:
         """
-        :return: is user with user_id saw profile of user with candidate_id
+        :return: is pair user_id - candidate_id is in potentials_profiles
         """
         pass

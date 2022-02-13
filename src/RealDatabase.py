@@ -615,7 +615,7 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
-    def is_profile_viewed(self, user_id: int, candidate_id: int) -> bool:
+    def is_profile_in_candidates_list(self, user_id: int, candidate_id: int) -> bool:
         statement = select(
             self.PotentialProfiles.c[IS_VIEWED]
         ).where(and_(self.PotentialProfiles.c[TELEGRAM_ID] == user_id,
@@ -624,10 +624,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
 
-        if not mapped_result:
-            return False
-
-        return mapped_result[0]
+        return bool(mapped_result)
 
     def get_all_users(self) -> List[int]:
         statement = select(
