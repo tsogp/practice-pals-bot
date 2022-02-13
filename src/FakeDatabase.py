@@ -9,8 +9,8 @@ import constants
 
 
 TELEGRAM_ID: int = bottoken.ID  # Set your Telegram ID for manual testsing
-IS_REGISTERED: bool = False
-ARE_SEARCH_PARAMETERS_FILLED: bool = False
+IS_REGISTERED: bool = True
+ARE_SEARCH_PARAMETERS_FILLED: bool = True
 HAVE_SUBSCRIPTION: bool = False
 
 
@@ -84,6 +84,16 @@ class FakeDatabase(IDatabase):
                                            constants.ProgrammingLanguages.CPP],
                                           [constants.Interests.BACK_END, constants.Interests.BIG_DATA,
                                            constants.Interests.MACHINE_LEARNING]))
+
+        cls.USERS_LIST.append(UserProfile("user_fedor",
+                                          "Фёдор",
+                                          "Котов",
+                                          19,
+                                          [constants.SpokenLanguages.ENGLISH],
+                                          [constants.ProgrammingLanguages.PYTHON,
+                                           constants.ProgrammingLanguages.C_SHARP,
+                                           constants.ProgrammingLanguages.CPP],
+                                          [constants.Interests.BACK_END]))
 
     def __init__(self):
         FakeDatabase.__add_users_to_users_list()
@@ -305,6 +315,12 @@ class FakeDatabase(IDatabase):
 
     def have_subscription(self, user_id: int) -> bool:
         return self.__subscription
+
+    def activate_subscription(self, user_id: int) -> None:
+        self.__subscription = True
+
+    def deactivate_subscription(self, user_id: int) -> None:
+        self.__subscription = False
 
     def add_candidate(self, user_id: int, candidate_id: int) -> None:
         self.__potential_relationships.append([user_id, candidate_id, False])
