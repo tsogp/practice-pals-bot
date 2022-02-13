@@ -412,7 +412,7 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
-    def get_users_search_parameters_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
+    def get_users_search_parameters_age_groups(self, user_id: int) -> Optional[List[constants.AgeGroups]]:
         mapped_result = []
 
         for column in AGE_GROUP_LIST:
@@ -424,6 +424,8 @@ class Database(IDatabase):
             if result.scalars().all()[0]:
                 mapped_result.append(constants.AgeGroups(column))
 
+        if not mapped_result:
+            return None
         return mapped_result
 
     def append_to_users_search_parameters_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
@@ -441,7 +443,7 @@ class Database(IDatabase):
 
             result = self.connection.execute(statement)
 
-    def get_users_search_parameters_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
+    def get_users_search_parameters_spoken_languages(self, user_id: int) -> Optional[List[constants.SpokenLanguages]]:
         mapped_result = []
 
         for column in SPOKEN_LANGUAGES_LIST:
@@ -453,6 +455,8 @@ class Database(IDatabase):
             if result.scalars().all()[0]:
                 mapped_result.append(constants.SpokenLanguages(column))
 
+        if not mapped_result:
+            return None
         return mapped_result
 
     def append_to_users_search_parameters_spoken_languages(self, user_id: int,
@@ -471,7 +475,8 @@ class Database(IDatabase):
 
             result = self.connection.execute(statement)
 
-    def get_users_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
+    def get_users_search_parameters_programming_languages(self, user_id: int) -> Optional[
+        List[constants.ProgrammingLanguages]]:
         mapped_result = []
 
         for column in PROGRAMMING_LANGUAGES_LIST:
@@ -482,6 +487,9 @@ class Database(IDatabase):
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
                 mapped_result.append(constants.ProgrammingLanguages(column))
+
+        if not mapped_result:
+            return None
         return mapped_result
 
     def append_to_users_search_parameters_programming_languages(self, user_id: int,
@@ -500,7 +508,7 @@ class Database(IDatabase):
 
             result = self.connection.execute(statement)
 
-    def get_users_search_parameters_interests(self, user_id: int) -> List[constants.Interests]:
+    def get_users_search_parameters_interests(self, user_id: int) -> Optional[List[constants.Interests]]:
         mapped_result = []
 
         for column in INTERESTS_LIST:
@@ -512,6 +520,8 @@ class Database(IDatabase):
             if result.scalars().all()[0]:
                 mapped_result.append(constants.Interests(column))
 
+        if not mapped_result:
+            return None
         return mapped_result
 
     def append_to_users_search_parameters_interests(self, user_id: int, value: constants.Interests) -> None:
