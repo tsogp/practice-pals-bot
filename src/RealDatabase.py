@@ -1,7 +1,6 @@
 from sqlalchemy import *
 from typing import Optional, List
 
-import choice_fields as mp  # multiple choice
 from database_constants import *
 import constants
 from IDatabase import IDatabase
