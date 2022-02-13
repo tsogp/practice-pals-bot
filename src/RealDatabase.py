@@ -51,10 +51,44 @@ class Database(IDatabase):
             self.metadata,
             Column(ID, Integer, primary_key=True),
             Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True), 
-            Column(AGE, Enum(constants.AgeGroups), default=None),
-            Column(SPOKEN_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
-            Column(PROGRAMMING_LANGUAGES, Enum(constants.ProgrammingLanguages), default=None),
-            Column(INTERESTS, Enum(constants.Interests))
+            
+            # Spoken Languages
+            Column(RUSSIAN, Boolean, default=None),
+            Column(ENGLISH, Boolean, default=None),
+
+            # Programming Languages
+            Column(PYTHON, Boolean, default=None),
+            Column(C, Boolean, default=None),
+            Column(CPP, Boolean, default=None),
+            Column(C_SHARP, Boolean, default=None),
+            Column(JAVA, Boolean, default=None),
+            Column(JAVA_SCRIPT, Boolean, default=None),
+            Column(SQL, Boolean, default=None),
+            Column(PHP, Boolean, default=None),
+            Column(SWIFT, Boolean, default=None),
+            Column(KOTLIN, Boolean, default=None),
+            Column(RUBY, Boolean, default=None),
+            Column(ASSEMBLER, Boolean, default=None),
+            Column(HTML_CSS, Boolean, default=None),
+            Column(NODE_JS, Boolean, default=None),
+
+            # Interests
+            Column(DB_DESIGN, Boolean, default=None),
+            Column(FRONT_END, Boolean, default=None),
+            Column(BACK_END, Boolean, default=None),
+            Column(MACHINE_LEARNING, Boolean, default=None),
+            Column(BIG_DATA, Boolean, default=None),
+            Column(DEV_FOR_ANDROID, Boolean, default=None),
+            Column(DEV_FOR_IOS, Boolean, default=None),
+            Column(DESIGN, Boolean, default=None),
+            Column(PROJECT_MANAGEMENT, Boolean, default=None),
+            Column(TESTING, Boolean, default=None),
+
+            # Age groups
+            Column(YOUNGER_THAN_14, Boolean, default=None),
+            Column(FROM_14_TO_18, Boolean, default=None),
+            Column(FROM_18_TO_25, Boolean, default=None),
+            Column(OLDER_THAN_25, Boolean, default=None)
         )
 
         self.Profile = Table(
@@ -66,69 +100,41 @@ class Database(IDatabase):
             Column(LAST_NAME, String(255), default=None),
             Column(AGE, Integer, default=None),
             Column(PHOTO_URL, String(255), default=None),
-            Column(SPOKEN_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
-            Column(PROGRAMMING_LANGUAGES, Enum(constants.SpokenLanguages), default=None),
-            Column(INTERESTS, Enum(constants.Interests))
+            
+            # Spoken Languages
+            Column(RUSSIAN, Boolean, default=None),
+            Column(ENGLISH, Boolean, default=None),
+
+            # Programming Languages
+            Column(PYTHON, Boolean, default=None),
+            Column(C, Boolean, default=None),
+            Column(CPP, Boolean, default=None),
+            Column(C_SHARP, Boolean, default=None),
+            Column(JAVA, Boolean, default=None),
+            Column(JAVA_SCRIPT, Boolean, default=None),
+            Column(SQL, Boolean, default=None),
+            Column(PHP, Boolean, default=None),
+            Column(SWIFT, Boolean, default=None),
+            Column(KOTLIN, Boolean, default=None),
+            Column(RUBY, Boolean, default=None),
+            Column(ASSEMBLER, Boolean, default=None),
+            Column(HTML_CSS, Boolean, default=None),
+            Column(NODE_JS, Boolean, default=None),
+
+            # Interests
+            Column(DB_DESIGN, Boolean, default=None),
+            Column(FRONT_END, Boolean, default=None),
+            Column(BACK_END, Boolean, default=None),
+            Column(MACHINE_LEARNING, Boolean, default=None),
+            Column(BIG_DATA, Boolean, default=None),
+            Column(DEV_FOR_ANDROID, Boolean, default=None),
+            Column(DEV_FOR_IOS, Boolean, default=None),
+            Column(DESIGN, Boolean, default=None),
+            Column(PROJECT_MANAGEMENT, Boolean, default=None),
+            Column(TESTING, Boolean, default=None)
         )
 
-        self.SpokenLanguages = Table(
-            'SpokenLanguages',
-            self.matadata,
-            Column(ID, Integer, primary_key=True),
-            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
-            Column(RUSSIAN, Boolean, default=False),
-            Column(ENGLISH, Boolean, default=False)
-        )
-
-        self.ProgrammingLanguages = Table(
-            'ProgrammingLanguages',
-            self.matadata,
-            Column(ID, Integer, primary_key=True),
-            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
-            Column(PYTHON, Boolean, default=False),
-            Column(C, Boolean, default=False),
-            Column(CPP, Boolean, default=False),
-            Column(C_SHARP, Boolean, default=False),
-            Column(JAVA, Boolean, default=False),
-            Column(JAVA_SCRIPT, Boolean, default=False),
-            Column(SQL, Boolean, default=False),
-            Column(PHP, Boolean, default=False),
-            Column(SWIFT, Boolean, default=False),
-            Column(KOTLIN, Boolean, default=False),
-            Column(RUBY, Boolean, default=False),
-            Column(ASSEMBLER, Boolean, default=False),
-            Column(HTML_CSS, Boolean, default=False),
-            Column(NODE_JS, Boolean, default=False)
-        )
-
-        self.Interests = Table(
-            'Interests',
-            self.matadata,
-            Column(ID, Integer, primary_key=True),
-            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
-            Column(DB_DESIGN, Boolean, default=False),
-            Column(FRONT_END, Boolean, default=False),
-            Column(BACK_END, Boolean, default=False),
-            Column(MACHINE_LEARNING, Boolean, default=False),
-            Column(BIG_DATA, Boolean, default=False),
-            Column(DEV_FOR_ANDROID, Boolean, default=False),
-            Column(DEV_FOR_IOS, Boolean, default=False),
-            Column(DESIGN, Boolean, default=False),
-            Column(PROJECT_MANAGEMENT, Boolean, default=False),
-            Column(TESTING, Boolean, default=False)
-        )
-
-        self.AgeGroups = Table(
-            'AgeGroups',
-            self.matadata,
-            Column(ID, Integer, primary_key=True),
-            Column(TELEGRAM_ID, ForeignKey('Account.telegram_id'), unique=True),
-            Column(YOUNGER_THAN_14, Boolean, default=False),
-            Column(FROM_14_TO_18, Boolean, default=False),
-            Column(FROM_18_TO_25, Boolean, default=False),
-            Column(OLDER_THAN_25, Boolean, default=False)
-        )
-
+        
         self.metadata.create_all(self.engine)
         self.connection = self.engine.connect()
 
@@ -153,30 +159,6 @@ class Database(IDatabase):
 
         statement = insert(
             self.Profile,
-        ).values({TELEGRAM_ID: user_id})
-
-        result = self.connection.execute(statement)
-
-        statement = insert(
-            self.SpokenLanguages,
-        ).values({TELEGRAM_ID: user_id})
-
-        result = self.connection.execute(statement)
-
-        statement = insert(
-            self.ProgrammingLanguages,
-        ).values({TELEGRAM_ID: user_id})
-
-        result = self.connection.execute(statement)
-
-        statement = insert(
-            self.Interests,
-        ).values({TELEGRAM_ID: user_id})
-
-        result = self.connection.execute(statement)
-
-        statement = insert(
-            self.AgeGroups,
         ).values({TELEGRAM_ID: user_id})
 
         result = self.connection.execute(statement)
@@ -308,12 +290,16 @@ class Database(IDatabase):
 
 
     def get_users_profile_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
-        statement = select(
-            self.Profile.c[SPOKEN_LANGUAGES]
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+        mapped_result = []
+        
+        for column in SPOKEN_LANGUAGES_LIST:
+            statement = select(
+                self.Profile.c[column]
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+            result = self.connection.execute(statement)
+            if result.scalars().all()[0]:
+                mapped_result.append(constants.SpokenLanguages(column))
         
         return mapped_result
         
@@ -321,26 +307,32 @@ class Database(IDatabase):
     def append_to_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
         statement = update(
             self.Profile
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: value})
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: True})
 
         result = self.connection.execute(statement)
 
 
     def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
-        statement = update(
-            self.Profile
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: None})
+        for column in SPOKEN_LANGUAGES_LIST:
+            statement = update(
+                self.Profile.c[column]
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
 
-        result = self.connection.execute(statement)
+            result = self.connection.execute(statement)
+            
 
 
     def get_users_profile_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
-        statement = select(
-            self.Profile.c[PROGRAMMING_LANGUAGES]
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+        mapped_result = []
+        
+        for column in PROGRAMMING_LANGUAGES_LIST:
+            statement = select(
+                self.Profile.c[column]
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+            result = self.connection.execute(statement)
+            if result.scalars().all()[0]:
+                mapped_result.append(constants.ProgrammingLanguages(column))
         
         return mapped_result
 
@@ -348,26 +340,31 @@ class Database(IDatabase):
     def append_to_users_profile_programming_languages(self, user_id: int, value: constants.ProgrammingLanguages) -> None:
         statement = update(
             self.Profile
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: value})
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: True})
 
         result = self.connection.execute(statement)
 
 
     def set_users_profile_programming_languages_null(self, user_id: int) -> None:
-        statement = update(
-            self.Profile
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: None})
+        for column in PROGRAMMING_LANGUAGES_LIST:
+            statement = update(
+                self.Profile.c[column]
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
 
-        result = self.connection.execute(statement)
+            result = self.connection.execute(statement)
 
 
     def get_users_profile_interests(self, user_id: int) -> List[constants.Interests]:
-        statement = select(
-            self.Profile.c[INTERESTS]
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id)
+        mapped_result = []
+        
+        for column in INTERESTS_LIST:
+            statement = select(
+                self.Profile.c[column]
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+            result = self.connection.execute(statement)
+            if result.scalars().all()[0]:
+                mapped_result.append(constants.Interests(column))
         
         return mapped_result
 
@@ -375,17 +372,18 @@ class Database(IDatabase):
     def append_to_users_profile_interests(self, user_id: int, value: constants.Interests) -> None:
         statement = update(
             self.Profile
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({INTERESTS: value})
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: True})
 
         result = self.connection.execute(statement)
 
 
     def set_users_profile_interests_null(self, user_id: int) -> None:
-        statement = update(
-            self.Profile
-        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({INTERESTS: None})
+        for column in INTERESTS_LIST:
+            statement = update(
+                self.Profile.c[column]
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: None})
 
-        result = self.connection.execute(statement)
+            result = self.connection.execute(statement)
 
 
     def are_search_parameters_filled(self, user_id: int) -> bool:
@@ -396,7 +394,7 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
 
 
     def set_search_parameters_filled(self, user_id: int) -> None:
@@ -409,13 +407,13 @@ class Database(IDatabase):
 
     def get_users_search_parameter_item_id(self, user_id: int) -> constants.SearchParametersItemsIds:
         statement = select(
-            self.Account.c[ARE_SEARCH_PARAMETERS_FILLED]
-        ).where(self.Account.c[TELEGRAM_ID] == user_id)
+            self.Navigation.c[ARE_SEARCH_PARAMETERS_FILLED]
+        ).where(self.Navigation.c[TELEGRAM_ID] == user_id)
 
         result = self.connection.execute(statement)
         mapped_result = result.scalars().all()
         
-        return mapped_result.scalars().all()[0]
+        return mapped_result[0]
 
 
     def set_users_search_parameters_item_id(self, user_id: int, new_search_parameter_item_id: constants.SearchParametersItemsIds) -> None:
@@ -427,12 +425,16 @@ class Database(IDatabase):
 
         
     def get_users_search_parameters_age_groups(self, user_id: int) -> List[constants.AgeGroups]:
-        statement = select(
-            self.SearchParameters.c[AGE]
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
+        mapped_result = []
+        
+        for column in AGE_GROUP_LIST:
+            statement = select(
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+            result = self.connection.execute(statement)
+            if result.scalars().all()[0]:
+                mapped_result.append(constants.AgeGroups(column))
         
         return mapped_result
         
@@ -440,26 +442,31 @@ class Database(IDatabase):
     def append_to_users_search_parameters_age_groups(self, user_id: int, value: constants.AgeGroups) -> None:
         statement = update(
             self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({AGE: value})
-        
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: True})
+
         result = self.connection.execute(statement)
 
     
     def set_users_profile_search_parameters_age_groups_null(self, user_id: int) -> None:
-        statement = update(
-            self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({AGE: None})
-        
-        result = self.connection.execute(statement)
+        for column in AGE_GROUP_LIST:
+            statement = update(
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
+
+            result = self.connection.execute(statement)
 
     
     def get_users_search_parameters_spoken_languages(self, user_id: int) -> List[constants.SpokenLanguages]:
-        statement = select(
-            self.SearchParameters.c[SPOKEN_LANGUAGES]
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
+        mapped_result = []
+        
+        for column in SPOKEN_LANGUAGES_LIST:
+            statement = select(
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+            result = self.connection.execute(statement)
+            if result.scalars().all()[0]:
+                mapped_result.append(constants.SpokenLanguages(column))
         
         return mapped_result
 
@@ -468,26 +475,31 @@ class Database(IDatabase):
                                                            value: constants.SpokenLanguages) -> None:
         statement = update(
             self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: value})
-        
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: True})
+
         result = self.connection.execute(statement)
 
     
     def set_users_profile_search_parameters_spoken_languages_null(self, user_id: int) -> None:
-        statement = update(
-            self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({SPOKEN_LANGUAGES: None})
-        
-        result = self.connection.execute(statement)
+        for column in SPOKEN_LANGUAGES_LIST:
+            statement = update(
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
+
+            result = self.connection.execute(statement)
 
     
     def get_users_search_parameters_programming_languages(self, user_id: int) -> List[constants.ProgrammingLanguages]:
-        statement = select(
-            self.SearchParameters.c[PROGRAMMING_LANGUAGES]
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
+        mapped_result = []
+        
+        for column in PROGRAMMING_LANGUAGES_LIST:
+            statement = select(
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+            result = self.connection.execute(statement)
+            if result.scalars().all()[0]:
+                mapped_result.append(constants.ProgrammingLanguages(column))
         
         return mapped_result
 
@@ -496,26 +508,31 @@ class Database(IDatabase):
                                                                 value: constants.ProgrammingLanguages) -> None:
         statement = update(
             self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: value})
-        
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: True})
+
         result = self.connection.execute(statement)
 
     
     def set_users_profile_search_parameters_programming_languages_null(self, user_id: int) -> None:
-        statement = update(
-            self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({PROGRAMMING_LANGUAGES: None})
-        
-        result = self.connection.execute(statement)
+        for column in PROGRAMMING_LANGUAGES_LIST:
+            statement = update(
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
+
+            result = self.connection.execute(statement)
 
     
     def get_users_search_parameters_interests(self, user_id: int) -> List[constants.Interests]:
-        statement = select(
-            self.SearchParameters.c[INTERESTS]
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
+        mapped_result = []
+        
+        for column in INTERESTS_LIST:
+            statement = select(
+                self.Profile.c[column]
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
-        result = self.connection.execute(statement)
-        mapped_result = result.scalars().all()
+            result = self.connection.execute(statement)
+            if result.scalars().all()[0]:
+                mapped_result.append(constants.Interests(column))
         
         return mapped_result
 
@@ -523,49 +540,18 @@ class Database(IDatabase):
     def append_to_users_search_parameters_interests(self, user_id: int, value: constants.Interests) -> None:
         statement = update(
             self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({INTERESTS: value})
-        
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: True})
+
         result = self.connection.execute(statement)
 
     
     def set_users_profile_search_parameters_interests_null(self, user_id: int) -> None:
-        statement = update(
-            self.SearchParameters
-        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({INTERESTS: None})
-        
-        result = self.connection.execute(statement)
+        for column in INTERESTS_LIST:
+            statement = update(
+                self.SearchParameters.c[column]
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: None})
 
-
-    def append_to_users_spoken_languages_unique_parameter(self, user_id: int, language: str, value: bool) -> None:
-        statement = update(
-            self.SpokenLanguages
-        ).where(self.SpokenLanguages.c[TELEGRAM_ID] == user_id).values({language: value})
-        
-        result = self.connection.execute(statement)
-
-
-    def append_to_users_programming_languages_unique_parameter(self, user_id: int, language: str, value: bool) -> None:
-        statement = update(
-            self.ProgrammingLanguages
-        ).where(self.ProgrammingLanguages.c[TELEGRAM_ID] == user_id).values({language: value})
-        
-        result = self.connection.execute(statement)
-    
-
-    def append_to_users_interests_unique_parameter(self, user_id: int, interest: str, value: bool) -> None:
-        statement = update(
-            self.SpokenLanguages
-        ).where(self.SpokenLanguages.c[TELEGRAM_ID] == user_id).values({interest: value})
-        
-        result = self.connection.execute(statement)
-    
-
-    def append_to_users_age_groups_unique_parameter(self, user_id: int, age_group: str, value: bool) -> None:
-        statement = update(
-            self.SpokenLanguages
-        ).where(self.SpokenLanguages.c[TELEGRAM_ID] == user_id).values({age_group: value})
-        
-        result = self.connection.execute(statement)
+            result = self.connection.execute(statement)
 
 
     def get_users_last_shown_profile_id(self, user_id: int) -> Optional[int]:
@@ -677,5 +663,13 @@ class Database(IDatabase):
         mapped_result = result.scalars().all()
 
         return mapped_result
+    
+
+    def activate_subscription(self, user_id: int) -> None:
+        pass
+
+
+    def deactivate_subscription(self, user_id: int) -> None:
+        pass
 
 DATABASE = Database()

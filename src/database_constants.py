@@ -57,3 +57,45 @@ YOUNGER_THAN_14 = "younger_than_14"
 FROM_14_TO_18 = "from_14_to_18"
 FROM_18_TO_25 = "from_18_to_25"
 OLDER_THAN_25 = "older_than_25"
+
+SPOKEN_LANGUAGES_LIST = [
+    RUSSIAN,
+    ENGLISH
+]
+
+PROGRAMMING_LANGUAGES_LIST = [
+    PYTHON,
+    C,
+    CPP,
+    C_SHARP,
+    JAVA,
+    JAVA_SCRIPT,
+    SQL,
+    PHP,
+    SWIFT,
+    KOTLIN,
+    RUBY,
+    ASSEMBLER, 
+    HTML_CSS,
+    NODE_JS
+]
+
+INTERESTS_LIST = [
+    DB_DESIGN,
+    FRONT_END,
+    BACK_END,
+    MACHINE_LEARNING,
+    BIG_DATA,
+    DEV_FOR_ANDROID,
+    DEV_FOR_IOS,
+    DESIGN,
+    PROJECT_MANAGEMENT,
+    TESTING
+]
+
+AGE_GROUP_LIST = [
+    YOUNGER_THAN_14,
+    FROM_14_TO_18,
+    FROM_18_TO_25,
+    OLDER_THAN_25
+]
