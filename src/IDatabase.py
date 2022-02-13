@@ -12,6 +12,14 @@ class IDatabase(ABC):
     # REGISTRATION AND PROFILE
 
     @abstractmethod
+    def is_in_database(self, user_id: int) -> bool:
+        """
+        :param user_id: Telegram's id of user we work with
+        :return: is user with user_id in database
+        """
+        pass
+
+    @abstractmethod
     def initial_user_setup(self, user_id: int) -> None:
         """
         :param user_id: Telegram's id of user we work with

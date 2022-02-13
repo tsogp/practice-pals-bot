@@ -29,7 +29,8 @@ def start(message):
     """
     Processing the command "/start"
     """
-    database.initial_user_setup(message.chat.id)
+    if not database.is_in_database(message.chat.id):
+        database.initial_user_setup(message.chat.id)
     bot.send_message(message.chat.id,
                      text=phrases.welcome_message,
                      reply_markup=telebot.types.ReplyKeyboardRemove())

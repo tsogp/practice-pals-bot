@@ -135,6 +135,9 @@ class FakeDatabase(IDatabase):
     def initial_user_setup(self, user_id: int) -> None:
         pass
 
+    def is_in_database(self, user_id: int) -> bool:
+        return True
+
     def is_registered(self, user_id: int) -> bool:
         return self.__is_registered
 
