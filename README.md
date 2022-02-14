@@ -1,5 +1,3 @@
-# Practice Pals - нетворкинг для программистов
-
 <h1 align="center"> Practice Pals Bot </h1>
 
 <p align="center">
