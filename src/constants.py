@@ -4,7 +4,9 @@ from typing import List
 
 
 class Ids(enum.Enum):
-    "Class for some ID's"
+    """
+    Class for some ID's
+    """
 
     @classmethod
     def get_all_not_null_ids(cls) -> List[enum.Enum]:

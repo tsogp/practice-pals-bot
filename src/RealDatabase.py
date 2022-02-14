@@ -295,14 +295,14 @@ class Database(IDatabase):
     def get_users_profile_spoken_languages(self, user_id: int) -> Optional[List[constants.SpokenLanguages]]:
         mapped_result = []
 
-        for column in SPOKEN_LANGUAGES_LIST:
+        for item in SPOKEN_LANGUAGES_LIST:
             statement = select(
-                self.Profile.c[column]
+                self.Profile.c[item]
             ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
-                mapped_result.append(constants.SpokenLanguages(column))
+                mapped_result.append(constants.SpokenLanguages(item))
         if not mapped_result:
             return None
         return mapped_result
@@ -315,24 +315,24 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
     def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
-        for column in SPOKEN_LANGUAGES_LIST:
+        for item in SPOKEN_LANGUAGES_LIST:
             statement = update(
                 self.Profile
-            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: False})
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({item: False})
 
             result = self.connection.execute(statement)
 
     def get_users_profile_programming_languages(self, user_id: int) -> Optional[List[constants.ProgrammingLanguages]]:
         mapped_result = []
 
-        for column in PROGRAMMING_LANGUAGES_LIST:
+        for item in PROGRAMMING_LANGUAGES_LIST:
             statement = select(
-                self.Profile.c[column]
+                self.Profile.c[item]
             ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
-                mapped_result.append(constants.ProgrammingLanguages(column))
+                mapped_result.append(constants.ProgrammingLanguages(item))
         if not mapped_result:
             return None
         return mapped_result
@@ -346,24 +346,24 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
     def set_users_profile_programming_languages_null(self, user_id: int) -> None:
-        for column in PROGRAMMING_LANGUAGES_LIST:
+        for item in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
                 self.Profile
-            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: False})
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({item: False})
 
             result = self.connection.execute(statement)
 
     def get_users_profile_interests(self, user_id: int) -> Optional[List[constants.Interests]]:
         mapped_result = []
 
-        for column in INTERESTS_LIST:
+        for item in INTERESTS_LIST:
             statement = select(
-                self.Profile.c[column]
+                self.Profile.c[item]
             ).where(self.Profile.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
-                mapped_result.append(constants.Interests(column))
+                mapped_result.append(constants.Interests(item))
         if not mapped_result:
             return None
         return mapped_result
@@ -376,10 +376,10 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
     def set_users_profile_interests_null(self, user_id: int) -> None:
-        for column in INTERESTS_LIST:
+        for item in INTERESTS_LIST:
             statement = update(
                 self.Profile
-            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({column: False})
+            ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({item: False})
 
             result = self.connection.execute(statement)
 
@@ -424,14 +424,14 @@ class Database(IDatabase):
     def get_users_search_parameters_age_groups(self, user_id: int) -> Optional[List[constants.AgeGroups]]:
         mapped_result = []
 
-        for column in AGE_GROUP_LIST:
+        for item in AGE_GROUP_LIST:
             statement = select(
-                self.SearchParameters.c[column]
+                self.SearchParameters.c[item]
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
-                mapped_result.append(constants.AgeGroups(column))
+                mapped_result.append(constants.AgeGroups(item))
 
         if not mapped_result:
             return None
@@ -445,24 +445,24 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
     def set_users_profile_search_parameters_age_groups_null(self, user_id: int) -> None:
-        for column in AGE_GROUP_LIST:
+        for item in AGE_GROUP_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({item: False})
 
             result = self.connection.execute(statement)
 
     def get_users_search_parameters_spoken_languages(self, user_id: int) -> Optional[List[constants.SpokenLanguages]]:
         mapped_result = []
 
-        for column in SPOKEN_LANGUAGES_LIST:
+        for item in SPOKEN_LANGUAGES_LIST:
             statement = select(
-                self.SearchParameters.c[column]
+                self.SearchParameters.c[item]
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
-                mapped_result.append(constants.SpokenLanguages(column))
+                mapped_result.append(constants.SpokenLanguages(item))
 
         if not mapped_result:
             return None
@@ -477,25 +477,25 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
     def set_users_profile_search_parameters_spoken_languages_null(self, user_id: int) -> None:
-        for column in SPOKEN_LANGUAGES_LIST:
+        for item in SPOKEN_LANGUAGES_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({item: False})
 
             result = self.connection.execute(statement)
 
-    def get_users_search_parameters_programming_languages(self, user_id: int) -> Optional[
-        List[constants.ProgrammingLanguages]]:
+    def get_users_search_parameters_programming_languages(self, user_id: int) \
+            -> Optional[List[constants.ProgrammingLanguages]]:
         mapped_result = []
 
-        for column in PROGRAMMING_LANGUAGES_LIST:
+        for item in PROGRAMMING_LANGUAGES_LIST:
             statement = select(
-                self.SearchParameters.c[column]
+                self.SearchParameters.c[item]
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
-                mapped_result.append(constants.ProgrammingLanguages(column))
+                mapped_result.append(constants.ProgrammingLanguages(item))
 
         if not mapped_result:
             return None
@@ -510,24 +510,24 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
     def set_users_profile_search_parameters_programming_languages_null(self, user_id: int) -> None:
-        for column in PROGRAMMING_LANGUAGES_LIST:
+        for item in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({item: False})
 
             result = self.connection.execute(statement)
 
     def get_users_search_parameters_interests(self, user_id: int) -> Optional[List[constants.Interests]]:
         mapped_result = []
 
-        for column in INTERESTS_LIST:
+        for item in INTERESTS_LIST:
             statement = select(
-                self.SearchParameters.c[column]
+                self.SearchParameters.c[item]
             ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id)
 
             result = self.connection.execute(statement)
             if result.scalars().all()[0]:
-                mapped_result.append(constants.Interests(column))
+                mapped_result.append(constants.Interests(item))
 
         if not mapped_result:
             return None
@@ -541,10 +541,10 @@ class Database(IDatabase):
         result = self.connection.execute(statement)
 
     def set_users_profile_search_parameters_interests_null(self, user_id: int) -> None:
-        for column in INTERESTS_LIST:
+        for item in INTERESTS_LIST:
             statement = update(
                 self.SearchParameters
-            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({column: False})
+            ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({item: False})
 
             result = self.connection.execute(statement)
 

@@ -277,10 +277,10 @@ def processing_registration_item_programming_language(message):
     if users_message == phrases.do_not_specify:
         database.set_users_profile_programming_languages_null(user_id)
     elif users_message in constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants):
-        database.append_to_users_profile_programming_languages(user_id,
-                                                               value=constants.ProgrammingLanguages.get_object_by_str_value(
-                                                                   users_message,
-                                                                   phrases.values_of_enums_constants))
+        database.append_to_users_profile_programming_languages(
+            user_id,
+            value=constants.ProgrammingLanguages.get_object_by_str_value(users_message,
+                                                                         phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -348,10 +348,10 @@ def processing_search_parameter_item_spoken_languages(message):
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_spoken_languages_null(user_id)
     elif users_message in constants.SpokenLanguages.get_all_str_vales(phrases.values_of_enums_constants):
-        database.append_to_users_search_parameters_spoken_languages(user_id,
-                                                                    value=constants.SpokenLanguages.get_object_by_str_value(
-                                                                        users_message,
-                                                                        phrases.values_of_enums_constants))
+        database.append_to_users_search_parameters_spoken_languages(
+            user_id,
+            value=constants.SpokenLanguages.get_object_by_str_value(users_message,
+                                                                    phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
@@ -372,10 +372,10 @@ def processing_search_parameter_item_programming_languages(message):
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_programming_languages_null(user_id)
     elif users_message in constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants):
-        database.append_to_users_search_parameters_programming_languages(user_id,
-                                                                         value=constants.ProgrammingLanguages.get_object_by_str_value(
-                                                                             users_message,
-                                                                             phrases.values_of_enums_constants))
+        database.append_to_users_search_parameters_programming_languages(
+            user_id,
+            value=constants.ProgrammingLanguages.get_object_by_str_value(users_message,
+                                                                         phrases.values_of_enums_constants))
     elif users_message != phrases.finish_typing:
         bot.send_message(user_id, text=phrases.select_from_the_list)
 
