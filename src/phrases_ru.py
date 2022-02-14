@@ -93,7 +93,7 @@ item_is_not_specified = "Не указано"
 
 does_not_matter_without_emoji = "Не имеет значения"
 
-no_profiles_more = "Вы просмотрели все профили, удовлетворяющие заданным критериям"
+no_profiles_more = "Вы просмотрели все профили, удовлетворяющие заданным критериям.\n\n\U000023F0 Новые профили будут появляться по мере роста популярности бота, поэтому проверяйте эту вкладку почаще!"
 
 values_of_enums_constants = {
     constants.SpokenLanguages.RUSSIAN: "Русский",
