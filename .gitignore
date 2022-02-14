@@ -128,5 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-src/bottoken.py
+# Ignote PyCharm folder
 .idea/
+
+# Ignore file with private token
+src/bottoken.py
+
+# Ignore file with database
+src/database.db

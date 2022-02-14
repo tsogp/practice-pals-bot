@@ -9,7 +9,7 @@ from IDatabase import IDatabase
 class Database(IDatabase):
     def __init__(self):
         self.engine = create_engine(
-            'sqlite:///testdb.db',
+            'sqlite:///database.db',
             echo=False,
             connect_args={'check_same_thread': False}
         )
