@@ -57,6 +57,8 @@ PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"
 GO_TO_SUBSCRIPTION_MENU_PREFIX = "GO_TO_SUBSCRIPTION_MENU_"
 MAXIMUM_NUMBER_OF_LIKES = 3
 
+link_to_yoomoney = "https://yoomoney.ru/to/410015159768343/0"
+
 
 @enum.unique
 class PossibleAnswers(enum.Enum):

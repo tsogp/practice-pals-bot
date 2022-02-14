@@ -137,4 +137,7 @@ buy = "\U0001F449 Купить!"
 
 go_to_subscription_menu = "\U00002B50 Купить подписку"
 
+press_btn_after_purchase = 'После покупки нажмите кнопку "Оплатил!"'
+paid = "\U00002705 Оплатил!"
+
 after_purchase = "\U0001F44D Спасибо за покупку!"

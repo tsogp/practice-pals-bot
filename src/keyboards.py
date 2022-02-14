@@ -59,6 +59,13 @@ class Keyboards:
                 callback_data=prefix + str(i)))
         return keyboard
 
+    @staticmethod
+    def __create_btn_with_link(text: str, link: str):
+        keyboard = telebot.types.InlineKeyboardMarkup()
+        btn_my_site = telebot.types.InlineKeyboardButton(text=text, url=link)
+        keyboard.add(btn_my_site)
+        return keyboard
+
     profile_do_not_specify = __create_keyboard_with_one_button(phrases.do_not_specify)
     profile_spoken_languages = __create_keyboard_with_multiple_choice(
         items_list=list(constants.SpokenLanguages.get_all_str_vales(phrases.values_of_enums_constants)),
@@ -90,7 +97,9 @@ class Keyboards:
     profile_reaction_menu = __create_inline_keyboard_from_list(
         [phrases.get_contact, phrases.skip_profile, phrases.go_to_main_menu], constants.PROFILE_REACTIONS_MENU_PREFIX)
 
-    subscription_menu = __create_menu_from_list(items_list=[phrases.buy])
+    subscription_menu = __create_menu_from_list(items_list=[phrases.paid])
 
     go_to_subscription_menu_btn = __create_inline_keyboard_from_list(
         [phrases.go_to_subscription_menu], constants.GO_TO_SUBSCRIPTION_MENU_PREFIX)
+
+    button_for_payment = __create_btn_with_link(phrases.buy, constants.link_to_yoomoney)

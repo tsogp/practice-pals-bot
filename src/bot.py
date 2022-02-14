@@ -119,6 +119,10 @@ def activate_search_menu(user_id: int):
 def activate_subscription_menu(user_id: int):
     database.set_users_menu_id(user_id, constants.MenuIds.SUBSCRIPTION_MENU)
     bot.send_message(user_id, text=phrases.about_subscription,
+                     reply_markup=Keyboards.button_for_payment,
+                     parse_mode="Markdown")
+
+    bot.send_message(user_id, text=phrases.press_btn_after_purchase,
                      reply_markup=Keyboards.subscription_menu,
                      parse_mode="Markdown")
 
@@ -431,7 +435,7 @@ def processing_subscription_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
 
-    if users_message == phrases.buy:
+    if users_message == phrases.paid:
         bot.send_message(user_id, text=phrases.after_purchase)
         database.activate_subscription(user_id)
         activate_main_menu(user_id)
