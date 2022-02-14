@@ -1,4 +1,4 @@
-<h1 align="center"> Practice Pals Bot </h1>
+<h1 align="center"> Practice Pals Bot :robot:</h1>
 
 <p align="center">
   <a href="https://github.com/tsogp/practice-pals/blob/main/LICENSE" target="_blank"> <img alt="license" src="https://img.shields.io/github/license/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
@@ -17,7 +17,7 @@
 
 ## :page_facing_up: Описание проекта
 
-Practice Pals Bot (@practice_pals_bot)- Telegram bot сервиса [Practice Pals]("https://t.me/practicepals"), главная цель
+**Practice Pals Bot** ([@practice_pals_bot](https://t.me/practice_pals_bot)) - Telegram-бот сервиса [Practice Pals](https://t.me/practicepals), главная цель
 которого - помочь каждому найти себе друзей по интересам.
 
 <a id="chapter-1"></a>
@@ -43,7 +43,7 @@ pip install -r ./requirements.txt
 3. Создать в папке `./src` файл **bottoken.py**
 
 ```python
-   TOKEN = ""  # Your bot's token from @BotFather
+TOKEN = ""  # Your bot's token from @BotFather
 ```
 
 Где в переменной `TOKEN` должен быть записан токен Вашего Telegram бота, полученный от
