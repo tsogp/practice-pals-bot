@@ -119,7 +119,8 @@ def activate_search_menu(user_id: int):
 def activate_subscription_menu(user_id: int):
     database.set_users_menu_id(user_id, constants.MenuIds.SUBSCRIPTION_MENU)
     bot.send_message(user_id, text=phrases.about_subscription,
-                     reply_markup=Keyboards.subscription_menu)
+                     reply_markup=Keyboards.subscription_menu,
+                     parse_mode="Markdown")
 
 
 def show_users_profile(user_id: int):
