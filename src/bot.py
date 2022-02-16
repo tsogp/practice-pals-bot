@@ -6,14 +6,12 @@ from keyboards import Keyboards
 import bottoken
 
 from IDatabase import IDatabase
-from FakeDatabase import FakeDatabase
 from RealDatabase import Database
 
 from User import User
 
-REAL_DATABASE: bool = True
 bot = telebot.TeleBot(bottoken.TOKEN)  # Telegram bot object
-database: IDatabase = Database() if REAL_DATABASE else FakeDatabase  # Database for bot
+database: IDatabase = Database()
 User.set_database(database)
 
 
