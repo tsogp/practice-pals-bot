@@ -199,6 +199,8 @@ class User:
         """
         if age_intervals is None:
             return True
+        if age is None:
+            return True
         for interval in age_intervals:
             if interval[0] <= age <= interval[1]:
                 return True
