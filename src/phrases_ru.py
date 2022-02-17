@@ -70,7 +70,7 @@ finish_enter_search_parameters = "\U0001F3C1 Заполнение парамет
 
 your_search_parameters = "Ваши параметры для поиска единомышленников:"
 
-search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Возрастная группа",
+search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Возрастные группы",
                            constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: "Языки",
                            constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES: "Языки программирования",
                            constants.SearchParametersItemsIds.INTERESTS: "Интересы"}
