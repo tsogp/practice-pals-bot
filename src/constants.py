@@ -63,7 +63,7 @@ link_to_yoomoney = "https://yoomoney.ru/to/410015159768343/0"
 
 
 @enum.unique
-class PossibleAnswers(enum.Enum):
+class Items(enum.Enum):
 
     def get_str_value(self, dictionary: dict) -> str:
         return dictionary.get(self, "ERROR")
@@ -84,13 +84,13 @@ class PossibleAnswers(enum.Enum):
 
 
 @enum.unique
-class SpokenLanguages(PossibleAnswers):
+class SpokenLanguages(Items):
     RUSSIAN = "russian"
     ENGLISH = "english"
 
 
 @enum.unique
-class ProgrammingLanguages(PossibleAnswers):
+class ProgrammingLanguages(Items):
     PYTHON = "python"
     C = "c"
     CPP = "cpp"
@@ -108,7 +108,7 @@ class ProgrammingLanguages(PossibleAnswers):
 
 
 @enum.unique
-class Interests(PossibleAnswers):
+class Interests(Items):
     DB_DESIGN = "db_design"
     FRONT_END = "front_end"
     BACK_END = "back_end"
@@ -122,8 +122,16 @@ class Interests(PossibleAnswers):
 
 
 @enum.unique
-class AgeGroups(PossibleAnswers):
+class AgeGroups(Items):
     YOUNGER_THAN_14 = "younger_than_14"
     FROM_14_TO_18 = "from_14_to_18"
     FROM_18_TO_25 = "from_18_to_25"
     OLDER_THAN_25 = "older_than_25"
+
+
+@enum.unique
+class MainMenuItems(Items):
+    FIND_PEOPLE = "find_people"
+    SUBSCRIPTION = "subscription"
+    FIND_PROJECT = "find_project"
+    FIND_PEOPLE_TO_THE_PROJECT = "find_people_to_the_project"

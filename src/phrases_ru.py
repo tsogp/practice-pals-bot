@@ -8,10 +8,20 @@ welcome_message = "\U0001F44B Привет! Я Practice Pals Bot.\nПомогу 
 
 main_menu_title = "\U0001F3E0 Вы находитесь в главном меню"
 
+'''
 main_menu_list = ["\U0001F91D Найти единомышленников",
                   "\U00002B50 Подписка",
                   "\U0001F5C2 Найти проект",
                   "\U0001F46C Найти людей в свой проект"]
+
+'''
+
+values_of_main_menu_items = {
+    constants.MainMenuItems.FIND_PEOPLE: "\U0001F91D Найти единомышленников",
+    constants.MainMenuItems.SUBSCRIPTION: "\U00002B50 Подписка",
+    constants.MainMenuItems.FIND_PROJECT: "\U0001F5C2 Найти проект",
+    constants.MainMenuItems.FIND_PEOPLE_TO_THE_PROJECT: "\U0001F46C Найти людей в свой проект"
+}
 
 not_ready_yet = "\U00002639 Выбранный пункт меню пока не доступен"
 

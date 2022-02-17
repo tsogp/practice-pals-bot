@@ -77,7 +77,8 @@ class Keyboards:
         items_list=list(constants.Interests.get_all_str_vales(phrases.values_of_enums_constants)),
         skip_button=phrases.do_not_specify)
     profile_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
-    main_menu = __create_menu_from_list_width_2(phrases.main_menu_list)
+    main_menu = __create_menu_from_list_width_2(
+        constants.MainMenuItems.get_all_str_vales(phrases.values_of_main_menu_items))
     search_parameters_does_not_matter = __create_keyboard_with_one_button(phrases.does_not_matter)
     search_parameters_age_groups = __create_keyboard_with_multiple_choice(
         items_list=list(constants.AgeGroups.get_all_str_vales(phrases.values_of_enums_constants)),

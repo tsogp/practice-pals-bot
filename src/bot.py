@@ -153,13 +153,14 @@ def processing_main_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
 
-    if users_message == phrases.main_menu_list[0]:
+    if users_message == constants.MainMenuItems.FIND_PEOPLE.get_str_value(phrases.values_of_main_menu_items):
         check_search_parameters(user_id)
-    elif users_message == phrases.main_menu_list[1]:
+    elif users_message == constants.MainMenuItems.SUBSCRIPTION.get_str_value(phrases.values_of_main_menu_items):
         activate_subscription_menu(user_id)
-    elif users_message == phrases.main_menu_list[2]:
+    elif users_message == constants.MainMenuItems.FIND_PROJECT.get_str_value(phrases.values_of_main_menu_items):
         bot.send_message(user_id, text=phrases.not_ready_yet)
-    elif users_message == phrases.main_menu_list[3]:
+    elif users_message == constants.MainMenuItems.FIND_PEOPLE_TO_THE_PROJECT.get_str_value(
+            phrases.values_of_main_menu_items):
         bot.send_message(user_id, text=phrases.not_ready_yet)
 
 

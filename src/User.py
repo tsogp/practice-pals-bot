@@ -74,7 +74,7 @@ class User:
         return profile
 
     @staticmethod
-    def __get_str_from_list(raw_value: Optional[List[constants.PossibleAnswers]], mode: int):
+    def __get_str_from_list(raw_value: Optional[List[constants.Items]], mode: int):
         if raw_value is None:
             values = "_" + (phrases.item_is_not_specified if mode == 0 else phrases.does_not_matter_without_emoji) + "_"
         else:
@@ -205,8 +205,8 @@ class User:
         return False
 
     @staticmethod
-    def __check_multiply_choice(criteria: Optional[List[constants.PossibleAnswers]],
-                                candidate: Optional[List[constants.PossibleAnswers]]) -> bool:
+    def __check_multiply_choice(criteria: Optional[List[constants.Items]],
+                                candidate: Optional[List[constants.Items]]) -> bool:
         """
         :return: is at least one of the candidate's parameters included in the list of criteria
         """
