@@ -416,15 +416,16 @@ def processing_search_menu_items(message):
     users_message = message.text
     user_id = message.chat.id
 
-    if users_message == phrases.search_menu_list[0]:
+    if users_message == constants.SearchMenuItems.FIND.get_str_value(phrases.values_of_search_menu_items):
         database.set_users_menu_id(user_id, constants.MenuIds.PROFILE_REACTIONS_MENU)
         bot.send_message(user_id, text=phrases.candidates_profiles,
                          reply_markup=telebot.types.ReplyKeyboardRemove())
         User(message.chat.id).create_candidates_list()
         show_candidates_profile(user_id)
-    elif users_message == phrases.search_menu_list[1]:
+    elif users_message == constants.SearchMenuItems.EDIT_SEARCH_PARAMETERS.get_str_value(
+            phrases.values_of_search_menu_items):
         bot.send_message(user_id, text=phrases.not_ready_yet)
-    elif users_message == phrases.search_menu_list[2]:
+    elif users_message == constants.SearchMenuItems.EDIT_PROFILE.get_str_value(phrases.values_of_search_menu_items):
         bot.send_message(user_id, text=phrases.not_ready_yet)
 
 

@@ -8,14 +8,6 @@ welcome_message = "\U0001F44B Привет! Я Practice Pals Bot.\nПомогу 
 
 main_menu_title = "\U0001F3E0 Вы находитесь в главном меню"
 
-'''
-main_menu_list = ["\U0001F91D Найти единомышленников",
-                  "\U00002B50 Подписка",
-                  "\U0001F5C2 Найти проект",
-                  "\U0001F46C Найти людей в свой проект"]
-
-'''
-
 values_of_main_menu_items = {
     constants.MainMenuItems.FIND_PEOPLE: "\U0001F91D Найти единомышленников",
     constants.MainMenuItems.SUBSCRIPTION: "\U00002B50 Подписка",
@@ -85,9 +77,11 @@ search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Воз
 
 search_menu_title = "\U0001F50E Вы находитесь в меню поиска единомышленников"
 
-search_menu_list = ["\U0001F50E Искать единомышленников",
-                    "\U00002699 Редактировать параметры поиска",
-                    "\U0001F600 Редактировать профиль"]
+values_of_search_menu_items = {
+    constants.SearchMenuItems.FIND: "\U0001F50E Искать единомышленников",
+    constants.SearchMenuItems.EDIT_SEARCH_PARAMETERS: "\U00002699 Редактировать параметры поиска",
+    constants.SearchMenuItems.EDIT_PROFILE: "\U0001F600 Редактировать профиль"
+}
 
 get_contact = "\U0001F44D Начать общение"
 skip_profile = "\U0001F50E Искать далее"

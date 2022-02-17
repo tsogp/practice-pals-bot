@@ -135,3 +135,10 @@ class MainMenuItems(Items):
     SUBSCRIPTION = "subscription"
     FIND_PROJECT = "find_project"
     FIND_PEOPLE_TO_THE_PROJECT = "find_people_to_the_project"
+
+
+@enum.unique
+class SearchMenuItems(Items):
+    FIND = "find"
+    EDIT_SEARCH_PARAMETERS = "edit_search_parameters"
+    EDIT_PROFILE = "edit_profile"

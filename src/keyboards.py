@@ -93,7 +93,8 @@ class Keyboards:
         items_list=list(constants.Interests.get_all_str_vales(phrases.values_of_enums_constants)),
         skip_button=phrases.does_not_matter)
     search_parameters_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
-    search_menu = __create_menu_from_list(items_list=phrases.search_menu_list)
+    search_menu = __create_menu_from_list(
+        constants.SearchMenuItems.get_all_str_vales(phrases.values_of_search_menu_items))
 
     profile_reaction_menu = __create_inline_keyboard_from_list(
         [phrases.get_contact, phrases.skip_profile, phrases.go_to_main_menu], constants.PROFILE_REACTIONS_MENU_PREFIX)
