@@ -66,7 +66,11 @@ link_to_yoomoney = "https://yoomoney.ru/to/410015159768343/0"
 class Items(enum.Enum):
 
     def get_str_value(self, dictionary: dict) -> str:
-        return dictionary.get(self, "ERROR")
+        try:
+            return dictionary[self]
+        except KeyError:
+            print("ERROR")
+            return self.value
 
     @staticmethod
     def get_object_by_str_value(str_value: str, dictionary: dict):
@@ -80,7 +84,14 @@ class Items(enum.Enum):
         """
         :return: list with all str values of enum's constants
         """
-        return [dictionary.get(member, "ERROR") for member in cls.__members__.values()]
+        result = []
+        for member in cls.__members__.values():
+            try:
+                result.append(dictionary[member])
+            except KeyError:
+                print("ERROR")
+                result.append(member.value)
+        return result
 
 
 @enum.unique

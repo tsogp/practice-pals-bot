@@ -80,8 +80,19 @@ class User:
         else:
             values = ""
             for i in range(len(raw_value) - 1):
-                values += (phrases.values_of_enums_constants.get(raw_value[i], "ERROR") + ", ")
-            values += (phrases.values_of_enums_constants.get(raw_value[-1], "ERROR"))
+                try:
+                    item_str = phrases.values_of_enums_constants[raw_value[i]]
+                except KeyError:
+                    item_str = raw_value[i].value
+                    print("ERROR")
+                values += (item_str + ", ")
+
+            try:
+                item_str = phrases.values_of_enums_constants[raw_value[-1]]
+            except KeyError:
+                item_str = raw_value[-1].value
+                print("ERROR")
+            values += (item_str + ", ")
 
         return values
 
