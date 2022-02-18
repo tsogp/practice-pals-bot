@@ -154,3 +154,14 @@ refuse = "\U0000274C Отказаться"
 
 personal_data_you_agree = "\U00002705 Вы согласились на обработку персональных данных"
 personal_data_you_refuse = "\U0000274C Вы не согласились на обработку персональных данных"
+
+profile_reaction_menu_items = {
+    constants.ProfileReactionsMenu.LIKE: "\U0001F44D Начать общение",
+    constants.ProfileReactionsMenu.SKIP: "\U0001F50E Искать далее",
+    constants.ProfileReactionsMenu.GO_TO_MAIN_MENU: "\U0001F3E0 Вернуться в главное меню",
+}
+
+ask_personal_data_menu_items = {
+    constants.AskPersonalData.AGREE: "\U00002705 Согласиться",
+    constants.AskPersonalData.REFUSE: "\U0000274C Отказаться"
+}

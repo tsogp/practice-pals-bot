@@ -56,9 +56,7 @@ class SearchParametersItemsIds(Ids):
     INTERESTS = enum.auto()
 
 
-PROFILE_REACTIONS_MENU_PREFIX = "PROFILE_REACTIONS_"
-GO_TO_SUBSCRIPTION_MENU_PREFIX = "GO_TO_SUBSCRIPTION_MENU_"
-PERSONAL_DATA_PREFIX = "PERSONAL_DATA_PREFIX_"
+GO_TO_SUBSCRIPTION_MENU = "GO_TO_SUBSCRIPTION_MENU"
 
 MAXIMUM_NUMBER_OF_LIKES = 100
 
@@ -74,6 +72,9 @@ class Items(enum.Enum):
         except KeyError:
             print("ERROR")
             return self.value
+
+    def get_source_value(self) -> str:
+        return self.value
 
     @staticmethod
     def get_object_by_str_value(str_value: str, dictionary: dict):
@@ -157,3 +158,16 @@ class SearchMenuItems(Items):
     EDIT_SEARCH_PARAMETERS = "edit_search_parameters"
     GO_TO_MAIN_MENU = "go_to_main_menu"
     EDIT_PROFILE = "edit_profile"
+
+
+@enum.unique
+class ProfileReactionsMenu(Items):
+    LIKE = "like"
+    SKIP = "skip"
+    GO_TO_MAIN_MENU = "go_to_main_menu"
+
+
+@enum.unique
+class AskPersonalData(Items):
+    AGREE = "agree"
+    REFUSE = "refuse"

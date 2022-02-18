@@ -3,6 +3,7 @@ import telebot
 
 import constants
 import phrases_ru as phrases
+from typing import Type
 
 
 class Keyboards:
@@ -51,12 +52,20 @@ class Keyboards:
         return keyboard
 
     @staticmethod
-    def __create_inline_keyboard_from_list(items_list: list, prefix: str):
+    def __create_inline_button(text_value: str, source_value: str):
         keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)  # Create inline-keyboard
-        for i in range(len(items_list)):
+        keyboard.add(telebot.types.InlineKeyboardButton(
+            text=text_value,
+            callback_data=source_value))
+        return keyboard
+
+    @staticmethod
+    def __create_inline_keyboard_from_list(items_list: Type[constants.Items], dictionary: dict):
+        keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)  # Create inline-keyboard
+        for item in list(items_list):
             keyboard.add(telebot.types.InlineKeyboardButton(
-                text=items_list[i],
-                callback_data=prefix + str(i)))
+                text=item.get_str_value(dictionary),
+                callback_data=item.get_source_value()))
         return keyboard
 
     @staticmethod
@@ -96,15 +105,15 @@ class Keyboards:
     search_menu = __create_menu_from_list_width_2(
         constants.SearchMenuItems.get_all_str_vales(phrases.values_of_search_menu_items))
 
-    profile_reaction_menu = __create_inline_keyboard_from_list(
-        [phrases.get_contact, phrases.skip_profile, phrases.go_to_main_menu], constants.PROFILE_REACTIONS_MENU_PREFIX)
+    profile_reaction_menu = __create_inline_keyboard_from_list(constants.ProfileReactionsMenu,
+                                                               phrases.profile_reaction_menu_items)
 
     subscription_menu = __create_menu_from_list(items_list=[phrases.paid])
 
-    go_to_subscription_menu_btn = __create_inline_keyboard_from_list(
-        [phrases.go_to_subscription_menu], constants.GO_TO_SUBSCRIPTION_MENU_PREFIX)
+    go_to_subscription_menu_btn = __create_inline_button(phrases.go_to_subscription_menu,
+                                                         constants.GO_TO_SUBSCRIPTION_MENU)
 
     button_for_payment = __create_btn_with_link(phrases.buy, constants.link_to_yoomoney)
 
-    ask_personal_data = __create_inline_keyboard_from_list(
-        [phrases.agree, phrases.refuse], constants.PERSONAL_DATA_PREFIX)
+    ask_personal_data = __create_inline_keyboard_from_list(constants.AskPersonalData,
+                                                           phrases.ask_personal_data_menu_items)

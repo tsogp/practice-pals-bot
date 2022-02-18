@@ -50,17 +50,17 @@ def query_handler(call):
     users_active_menu_id = database.get_users_menu_id(call.message.chat.id)
     bot.answer_callback_query(callback_query_id=call.id, text='')
     if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
-        if call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "0":
+        if call.data == constants.ProfileReactionsMenu.LIKE.get_source_value():
             processing_like_button(call.message.chat.id)
-        elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "1":
+        elif call.data == constants.ProfileReactionsMenu.SKIP.get_source_value():
             show_candidates_profile(call.message.chat.id)
-        elif call.data == constants.PROFILE_REACTIONS_MENU_PREFIX + "2":
+        elif call.data == constants.ProfileReactionsMenu.GO_TO_MAIN_MENU.get_source_value():
             activate_main_menu(call.message.chat.id)
-        elif call.data == constants.GO_TO_SUBSCRIPTION_MENU_PREFIX + "0":
+        elif call.data == constants.GO_TO_SUBSCRIPTION_MENU:
             activate_subscription_menu(call.message.chat.id)
 
     elif users_active_menu_id == constants.MenuIds.PERSONAL_DATA_MENU:
-        if call.data == constants.PERSONAL_DATA_PREFIX + "0":
+        if call.data == constants.AskPersonalData.AGREE.get_source_value():
             bot.send_message(call.message.chat.id, text=phrases.personal_data_you_agree)
             bot.send_message(call.message.chat.id, text=phrases.user_not_registered_yet)
             bot.send_message(call.message.chat.id, text=phrases.enter_your_first_name,
@@ -68,7 +68,7 @@ def query_handler(call):
             database.set_users_menu_id(call.message.chat.id, constants.MenuIds.REGISTRATION_MENU)
             database.set_users_registration_item_id(call.message.chat.id, constants.ProfileItemsIds.FIRST_NAME)
 
-        elif call.data == constants.PERSONAL_DATA_PREFIX + "1":
+        elif call.data == constants.AskPersonalData.REFUSE.get_source_value():
             bot.send_message(call.message.chat.id, text=phrases.personal_data_you_refuse)
             bot.send_message(call.message.chat.id, text=phrases.user_not_registered_yet)
             database.set_users_menu_id(call.message.chat.id, constants.MenuIds.REGISTRATION_MENU)
