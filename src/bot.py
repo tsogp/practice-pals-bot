@@ -41,7 +41,18 @@ def main_menu(message):
     """
     Processing the command "/main_menu"
     """
-    activate_main_menu(message.chat.id)
+    check_registration(message.chat.id)
+
+
+@bot.message_handler(commands=['people_search_menu'])
+def people_search_menu(message):
+    """
+    Processing the command "/people_search_menu"
+    """
+    if database.is_registered(message.chat.id):
+        check_search_parameters(message.chat.id)
+    else:
+        check_registration(message.chat.id)
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -102,7 +113,6 @@ def check_registration(user_id: int):
     if database.is_registered(user_id):
         activate_main_menu(user_id)
     else:  # Start registration procedure
-
         bot.send_message(user_id, text=phrases.we_ask_personal_data,
                          reply_markup=Keyboards.ask_personal_data)
         database.set_users_menu_id(user_id, constants.MenuIds.PERSONAL_DATA_MENU)
