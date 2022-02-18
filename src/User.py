@@ -84,14 +84,14 @@ class User:
                     item_str = phrases.values_of_enums_constants[raw_value[i]]
                 except KeyError:
                     item_str = raw_value[i].value
-                    print("ERROR")
+                    constants.logger.error(f"Can't find value for {raw_value[i]} in dictionary")
                 values += (item_str + ", ")
 
             try:
                 item_str = phrases.values_of_enums_constants[raw_value[-1]]
             except KeyError:
                 item_str = raw_value[-1].value
-                print("ERROR")
+                constants.logger.error(f"Can't find value for {raw_value[-1]} in dictionary")
             values += item_str
 
         return values
@@ -260,7 +260,7 @@ class User:
             elif a_g == constants.AgeGroups.OLDER_THAN_25:
                 result.append((25, 100))
             else:
-                print("ERROR")
+                constants.logger.error(f"Can't create interval for age_group={a_g}")
         return result
 
     def get_candidate_id(self) -> Optional[int]:

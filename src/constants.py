@@ -84,7 +84,7 @@ class Items(enum.Enum):
         for key, value in dictionary.items():
             if value == str_value:
                 return key
-        logger.error(f"Can't find object with value='{str_value}'")
+        logger.error(f"Can't find object with value={str_value}")
         return None
 
     @classmethod
