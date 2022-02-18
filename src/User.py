@@ -92,7 +92,7 @@ class User:
             except KeyError:
                 item_str = raw_value[-1].value
                 print("ERROR")
-            values += (item_str + ", ")
+            values += item_str
 
         return values
 
