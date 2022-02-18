@@ -1,6 +1,9 @@
 # File with constants for bot
 import enum
 from typing import List
+from loguru import logger
+
+logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
 
 
 class Ids(enum.Enum):
@@ -70,7 +73,7 @@ class Items(enum.Enum):
         try:
             return dictionary[self]
         except KeyError:
-            print("ERROR")
+            logger.error(f"Can't find value for {self} in dictionary")
             return self.value
 
     def get_source_value(self) -> str:
@@ -81,7 +84,8 @@ class Items(enum.Enum):
         for key, value in dictionary.items():
             if value == str_value:
                 return key
-        return None  # Error
+        logger.error(f"Can't find object with value='{str_value}'")
+        return None
 
     @classmethod
     def get_all_str_vales(cls, dictionary: dict) -> List[str]:
@@ -93,7 +97,7 @@ class Items(enum.Enum):
             try:
                 result.append(dictionary[member])
             except KeyError:
-                print("ERROR")
+                logger.error(f"Can't find value for {member} in dictionary")
                 result.append(member.value)
         return result
 
