@@ -59,6 +59,24 @@ def query_handler(call):
         elif call.data == constants.GO_TO_SUBSCRIPTION_MENU_PREFIX + "0":
             activate_subscription_menu(call.message.chat.id)
 
+    elif users_active_menu_id == constants.MenuIds.PERSONAL_DATA_MENU:
+        if call.data == constants.PERSONAL_DATA_PREFIX + "0":
+            bot.send_message(call.message.chat.id, text=phrases.personal_data_you_agree)
+            bot.send_message(call.message.chat.id, text=phrases.user_not_registered_yet)
+            bot.send_message(call.message.chat.id, text=phrases.enter_your_first_name,
+                             reply_markup=Keyboards.profile_do_not_specify)
+            database.set_users_menu_id(call.message.chat.id, constants.MenuIds.REGISTRATION_MENU)
+            database.set_users_registration_item_id(call.message.chat.id, constants.ProfileItemsIds.FIRST_NAME)
+
+        elif call.data == constants.PERSONAL_DATA_PREFIX + "1":
+            bot.send_message(call.message.chat.id, text=phrases.personal_data_you_refuse)
+            bot.send_message(call.message.chat.id, text=phrases.user_not_registered_yet)
+            database.set_users_menu_id(call.message.chat.id, constants.MenuIds.REGISTRATION_MENU)
+            database.set_users_registration_item_id(call.message.chat.id,
+                                                    constants.ProfileItemsIds.SPOKEN_LANGUAGES)
+            bot.send_message(call.message.chat.id, text=phrases.enter_your_spoken_languages,
+                             reply_markup=Keyboards.profile_spoken_languages)
+
 
 def processing_like_button(user_id: int):
     candidate_id = database.get_users_last_shown_profile_id(user_id)
@@ -84,11 +102,10 @@ def check_registration(user_id: int):
     if database.is_registered(user_id):
         activate_main_menu(user_id)
     else:  # Start registration procedure
-        bot.send_message(user_id, text=phrases.user_not_registered_yet)
-        bot.send_message(user_id, text=phrases.enter_your_first_name,
-                         reply_markup=Keyboards.profile_do_not_specify)
-        database.set_users_menu_id(user_id, constants.MenuIds.REGISTRATION_MENU)
-        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.FIRST_NAME)
+
+        bot.send_message(user_id, text=phrases.we_ask_personal_data,
+                         reply_markup=Keyboards.ask_personal_data)
+        database.set_users_menu_id(user_id, constants.MenuIds.PERSONAL_DATA_MENU)
 
 
 def check_search_parameters(user_id: int):

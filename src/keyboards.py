@@ -105,3 +105,6 @@ class Keyboards:
         [phrases.go_to_subscription_menu], constants.GO_TO_SUBSCRIPTION_MENU_PREFIX)
 
     button_for_payment = __create_btn_with_link(phrases.buy, constants.link_to_yoomoney)
+
+    ask_personal_data = __create_inline_keyboard_from_list(
+        [phrases.agree, phrases.refuse], constants.PERSONAL_DATA_PREFIX)
