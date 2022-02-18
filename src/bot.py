@@ -44,17 +44,6 @@ def main_menu(message):
     check_registration(message.chat.id)
 
 
-@bot.message_handler(commands=['people_search_menu'])
-def people_search_menu(message):
-    """
-    Processing the command "/people_search_menu"
-    """
-    if database.is_registered(message.chat.id):
-        check_search_parameters(message.chat.id)
-    else:
-        check_registration(message.chat.id)
-
-
 @bot.callback_query_handler(func=lambda call: True)
 def query_handler(call):
     """Inline-keyboards button's click handler"""
