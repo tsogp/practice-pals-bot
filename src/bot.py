@@ -444,6 +444,8 @@ def processing_search_menu_items(message):
         bot.send_message(user_id, text=phrases.not_ready_yet)
     elif users_message == constants.SearchMenuItems.EDIT_PROFILE.get_str_value(phrases.values_of_search_menu_items):
         bot.send_message(user_id, text=phrases.not_ready_yet)
+    elif users_message == constants.SearchMenuItems.GO_TO_MAIN_MENU.get_str_value(phrases.values_of_search_menu_items):
+        activate_main_menu(user_id)
 
 
 @bot.message_handler(content_types=["text"],

@@ -80,7 +80,8 @@ search_menu_title = "\U0001F50E Вы находитесь в меню поиск
 values_of_search_menu_items = {
     constants.SearchMenuItems.FIND: "\U0001F50E Искать единомышленников",
     constants.SearchMenuItems.EDIT_SEARCH_PARAMETERS: "\U00002699 Редактировать параметры поиска",
-    constants.SearchMenuItems.EDIT_PROFILE: "\U0001F600 Редактировать профиль"
+    constants.SearchMenuItems.EDIT_PROFILE: "\U0001F600 Редактировать профиль",
+    constants.SearchMenuItems.GO_TO_MAIN_MENU: "\U0001F3E0 Вернуться в главное меню"
 }
 
 get_contact = "\U0001F44D Начать общение"

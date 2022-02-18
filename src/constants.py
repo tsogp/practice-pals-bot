@@ -155,4 +155,5 @@ class MainMenuItems(Items):
 class SearchMenuItems(Items):
     FIND = "find"
     EDIT_SEARCH_PARAMETERS = "edit_search_parameters"
+    GO_TO_MAIN_MENU = "go_to_main_menu"
     EDIT_PROFILE = "edit_profile"
