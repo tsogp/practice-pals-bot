@@ -352,6 +352,14 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+    def remove_from_users_profile_programming_languages(self, user_id: int,
+                                                        value: constants.ProgrammingLanguages) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: False})
+
+        result = self.connection.execute(statement)
+
     def set_users_profile_programming_languages_null(self, user_id: int) -> None:
         for item in PROGRAMMING_LANGUAGES_LIST:
             statement = update(

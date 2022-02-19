@@ -50,6 +50,7 @@ def query_handler(call):
     users_active_menu_id = database.get_users_menu_id(call.message.chat.id)
     users_registration_item_id = database.get_users_registration_item_id(call.message.chat.id)
     bot.answer_callback_query(callback_query_id=call.id, text='')
+
     if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
         if call.data == constants.ProfileReactionsMenu.LIKE.get_source_value():
             processing_like_button(call.message.chat.id)
@@ -73,14 +74,14 @@ def query_handler(call):
             bot.send_message(call.message.chat.id, text=phrases.personal_data_you_refuse)
             bot.send_message(call.message.chat.id, text=phrases.user_not_registered_yet)
             database.set_users_menu_id(call.message.chat.id, constants.MenuIds.REGISTRATION_MENU)
-            database.set_users_registration_item_id(call.message.chat.id,
-                                                    constants.ProfileItemsIds.SPOKEN_LANGUAGES)
-            bot.send_message(call.message.chat.id, text=phrases.enter_your_spoken_languages,
-                             reply_markup=Keyboards.profile_spoken_languages)
+            ask_profile_spoken_languages(call.message.chat.id)
+
 
     elif users_active_menu_id == constants.MenuIds.REGISTRATION_MENU:
         if users_registration_item_id == constants.ProfileItemsIds.SPOKEN_LANGUAGES:
             processing_profile_spoken_languages_inline(call)
+        elif users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES:
+            processing_profile_programming_languages_inline(call)
 
 
 def processing_profile_spoken_languages_inline(call):
@@ -96,8 +97,28 @@ def processing_profile_spoken_languages_inline(call):
     bot.edit_message_text(chat_id=call.message.chat.id,
                           message_id=call.message.message_id,
                           text=phrases.enter_your_spoken_languages,
-                          reply_markup=Keyboards.generate_profile_spoken_languages_keyboard(
+                          reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                              constants.SpokenLanguages,
                               database.get_users_profile_spoken_languages(call.message.chat.id),
+                              phrases.values_of_enums_constants))
+
+
+def processing_profile_programming_languages_inline(call):
+    item = constants.ProgrammingLanguages.get_object_by_source_value(call.data)
+
+    s_l = database.get_users_profile_programming_languages(call.message.chat.id)
+    s_l = [] if s_l is None else s_l
+    if item in s_l:
+        database.remove_from_users_profile_programming_languages(call.message.chat.id, item)
+    else:
+        database.append_to_users_profile_programming_languages(call.message.chat.id, item)
+
+    bot.edit_message_text(chat_id=call.message.chat.id,
+                          message_id=call.message.message_id,
+                          text=phrases.enter_your_spoken_languages,
+                          reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                              constants.ProgrammingLanguages,
+                              database.get_users_profile_programming_languages(call.message.chat.id),
                               phrases.values_of_enums_constants))
 
 
@@ -120,6 +141,8 @@ def processing_like_button(user_id: int):
 
     database.set_users_last_shown_profile_id(user_id, None)
 
+
+# =====
 
 def check_registration(user_id: int):
     if database.is_registered(user_id):
@@ -162,6 +185,32 @@ def activate_subscription_menu(user_id: int):
     bot.send_message(user_id, text=phrases.press_btn_after_purchase,
                      reply_markup=Keyboards.subscription_menu,
                      parse_mode="Markdown")
+
+
+def ask_profile_spoken_languages(user_id: int):
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.SPOKEN_LANGUAGES)
+
+    bot.send_message(user_id, text=phrases.enter_your_spoken_languages,
+                     reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                         constants.SpokenLanguages,
+                         database.get_users_profile_spoken_languages(user_id),
+                         phrases.values_of_enums_constants))
+
+    bot.send_message(user_id, text=phrases.after_choice,
+                     reply_markup=Keyboards.profile_finish_and_skip)
+
+
+def ask_profile_programming_languages(user_id: int):
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.PROGRAMMING_LANGUAGES)
+
+    bot.send_message(user_id, text=phrases.enter_your_programming_languages,
+                     reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                         constants.ProgrammingLanguages,
+                         database.get_users_profile_programming_languages(user_id),
+                         phrases.values_of_enums_constants))
+
+    bot.send_message(user_id, text=phrases.after_choice,
+                     reply_markup=Keyboards.profile_finish_and_skip)
 
 
 def show_users_profile(user_id: int):
@@ -278,15 +327,7 @@ def processing_registration_item_age(message):
         bot.send_message(user_id, text=phrases.enter_correct_age)
 
     if users_message == phrases.do_not_specify or users_message.isdigit():
-        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.SPOKEN_LANGUAGES)
-
-        bot.send_message(user_id, text=phrases.enter_your_spoken_languages,
-                         reply_markup=Keyboards.generate_profile_spoken_languages_keyboard(
-                             database.get_users_profile_spoken_languages(message.chat.id),
-                             phrases.values_of_enums_constants))
-
-        bot.send_message(user_id, text=phrases.after_choice,
-                         reply_markup=Keyboards.profile_finish_and_skip)
+        ask_profile_spoken_languages(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -300,9 +341,7 @@ def processing_registration_item_spoken_language(message):
         database.set_users_profile_spoken_languages_null(user_id)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
-        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.PROGRAMMING_LANGUAGES)
-        bot.send_message(user_id, text=phrases.enter_your_programming_languages,
-                         reply_markup=Keyboards.profile_programming_languages)
+        ask_profile_programming_languages(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -314,15 +353,10 @@ def processing_registration_item_programming_language(message):
 
     if users_message == phrases.do_not_specify:
         database.set_users_profile_programming_languages_null(user_id)
-    elif users_message in constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants):
-        database.append_to_users_profile_programming_languages(
-            user_id,
-            value=constants.ProgrammingLanguages.get_object_by_str_value(users_message,
-                                                                         phrases.values_of_enums_constants))
-    elif users_message != phrases.finish_typing:
-        bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
+
+
         database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.INTERESTS)
         bot.send_message(user_id, text=phrases.enter_your_interests,
                          reply_markup=Keyboards.profile_interests)

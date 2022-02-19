@@ -76,12 +76,13 @@ class Keyboards:
         return keyboard
 
     @staticmethod
-    def generate_profile_spoken_languages_keyboard(active_items: Optional[List[constants.SpokenLanguages]],
-                                                   dictionary: dict):
+    def create_inline_keyboard_with_multiple_choice(field: Type[constants.Items],
+                                                    active_items: Optional[List[constants.Items]],
+                                                    dictionary: dict):
         if active_items is None:
             active_items = []
         keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)  # Create inline-keyboard
-        for item in constants.SpokenLanguages:
+        for item in field:
             btn_text = ("\U00002705 " if item in active_items else "") + item.get_str_value(dictionary)
             keyboard.add(telebot.types.InlineKeyboardButton(
                 text=btn_text,
