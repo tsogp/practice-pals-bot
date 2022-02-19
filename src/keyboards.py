@@ -3,7 +3,7 @@ import telebot
 
 import constants
 import phrases_ru as phrases
-from typing import Type
+from typing import Type, Optional, List
 
 
 class Keyboards:
@@ -75,32 +75,28 @@ class Keyboards:
         keyboard.add(btn_my_site)
         return keyboard
 
+    @staticmethod
+    def create_inline_keyboard_with_multiple_choice(field: Type[constants.Items],
+                                                    active_items: Optional[List[constants.Items]],
+                                                    dictionary: dict):
+        if active_items is None:
+            active_items = []
+        keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)  # Create inline-keyboard
+        for item in field:
+            btn_text = ("\U00002705 " if item in active_items else "") + item.get_str_value(dictionary)
+            keyboard.add(telebot.types.InlineKeyboardButton(
+                text=btn_text,
+                callback_data=item.get_source_value()))
+        return keyboard
+
     profile_do_not_specify = __create_keyboard_with_one_button(phrases.do_not_specify)
-    profile_spoken_languages = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.SpokenLanguages.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.do_not_specify)
-    profile_programming_languages = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.do_not_specify)
-    profile_interests = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.Interests.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.do_not_specify)
+    profile_finish_and_skip = __create_keyboard_with_multiple_choice(items_list=[], skip_button=phrases.do_not_specify)
     profile_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
     main_menu = __create_menu_from_list_width_2(
         constants.MainMenuItems.get_all_str_vales(phrases.values_of_main_menu_items))
     search_parameters_does_not_matter = __create_keyboard_with_one_button(phrases.does_not_matter)
-    search_parameters_age_groups = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.AgeGroups.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.does_not_matter)
-    search_parameters_spoken_languages = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.SpokenLanguages.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.does_not_matter)
-    search_parameters_programming_languages = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.does_not_matter)
-    search_parameters_interests = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.Interests.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.does_not_matter)
+    search_parameters_finish_and_skip = __create_keyboard_with_multiple_choice(items_list=[],
+                                                                               skip_button=phrases.does_not_matter)
     search_parameters_ok_edit = __create_keyboard_ok_edit(phrases.ok_edit[0], phrases.ok_edit[1])
     search_menu = __create_menu_from_list_width_2(
         constants.SearchMenuItems.get_all_str_vales(phrases.values_of_search_menu_items))

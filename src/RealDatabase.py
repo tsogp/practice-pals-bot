@@ -314,6 +314,13 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+    def remove_from_users_profile_spoken_languages(self, user_id: int, value: constants.SpokenLanguages) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: False})
+
+        result = self.connection.execute(statement)
+
     def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
         for item in SPOKEN_LANGUAGES_LIST:
             statement = update(
@@ -345,6 +352,14 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+    def remove_from_users_profile_programming_languages(self, user_id: int,
+                                                        value: constants.ProgrammingLanguages) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: False})
+
+        result = self.connection.execute(statement)
+
     def set_users_profile_programming_languages_null(self, user_id: int) -> None:
         for item in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
@@ -372,6 +387,14 @@ class Database(IDatabase):
         statement = update(
             self.Profile
         ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: True})
+
+        result = self.connection.execute(statement)
+
+    def remove_from_users_profile_interests(self, user_id: int,
+                                            value: constants.Interests) -> None:
+        statement = update(
+            self.Profile
+        ).where(self.Profile.c[TELEGRAM_ID] == user_id).values({value.value: False})
 
         result = self.connection.execute(statement)
 
@@ -444,6 +467,14 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+    def remove_from_users_search_parameters_age_groups(self, user_id: int,
+                                                       value: constants.AgeGroups) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: False})
+
+        result = self.connection.execute(statement)
+
     def set_users_profile_search_parameters_age_groups_null(self, user_id: int) -> None:
         for item in AGE_GROUP_LIST:
             statement = update(
@@ -473,6 +504,14 @@ class Database(IDatabase):
         statement = update(
             self.SearchParameters
         ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: True})
+
+        result = self.connection.execute(statement)
+
+    def remove_from_users_search_parameters_spoken_languages(self, user_id: int,
+                                                             value: constants.SpokenLanguages) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: False})
 
         result = self.connection.execute(statement)
 
@@ -509,6 +548,14 @@ class Database(IDatabase):
 
         result = self.connection.execute(statement)
 
+    def remove_from_users_search_parameters_programming_languages(self, user_id: int,
+                                                                  value: constants.ProgrammingLanguages) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: False})
+
+        result = self.connection.execute(statement)
+
     def set_users_profile_search_parameters_programming_languages_null(self, user_id: int) -> None:
         for item in PROGRAMMING_LANGUAGES_LIST:
             statement = update(
@@ -537,6 +584,14 @@ class Database(IDatabase):
         statement = update(
             self.SearchParameters
         ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: True})
+
+        result = self.connection.execute(statement)
+
+    def remove_from_users_search_parameters_interests(self, user_id: int,
+                                                      value: constants.Interests) -> None:
+        statement = update(
+            self.SearchParameters
+        ).where(self.SearchParameters.c[TELEGRAM_ID] == user_id).values({value.value: False})
 
         result = self.connection.execute(statement)
 
