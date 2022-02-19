@@ -63,25 +63,51 @@ def query_handler(call):
 
     elif users_active_menu_id == constants.MenuIds.PERSONAL_DATA_MENU:
         if call.data == constants.AskPersonalData.AGREE.get_source_value():
-            bot.send_message(call.message.chat.id, text=phrases.personal_data_you_agree)
-            bot.send_message(call.message.chat.id, text=phrases.user_not_registered_yet)
-            bot.send_message(call.message.chat.id, text=phrases.enter_your_first_name,
-                             reply_markup=Keyboards.profile_do_not_specify)
-            database.set_users_menu_id(call.message.chat.id, constants.MenuIds.REGISTRATION_MENU)
-            database.set_users_registration_item_id(call.message.chat.id, constants.ProfileItemsIds.FIRST_NAME)
-
+            processing_personal_data_agree(call.message.chat.id)
         elif call.data == constants.AskPersonalData.REFUSE.get_source_value():
-            bot.send_message(call.message.chat.id, text=phrases.personal_data_you_refuse)
-            bot.send_message(call.message.chat.id, text=phrases.user_not_registered_yet)
-            database.set_users_menu_id(call.message.chat.id, constants.MenuIds.REGISTRATION_MENU)
-            ask_profile_spoken_languages(call.message.chat.id)
-
+            processing_personal_data_refuse(call.message.chat.id)
 
     elif users_active_menu_id == constants.MenuIds.REGISTRATION_MENU:
         if users_registration_item_id == constants.ProfileItemsIds.SPOKEN_LANGUAGES:
             processing_profile_spoken_languages_inline(call)
         elif users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES:
             processing_profile_programming_languages_inline(call)
+
+
+def processing_like_button(user_id: int):
+    candidate_id = database.get_users_last_shown_profile_id(user_id)
+    if candidate_id is None:
+        return
+
+    if User(user_id).is_like_acceptable():
+        candidate_login = database.get_users_telegram_login_by_id(candidate_id)
+        if candidate_login is None:
+            msg_with_login = phrases.telegram_login + "_" + phrases.item_is_not_specified + "_"
+        else:
+            msg_with_login = phrases.telegram_login + "@" + candidate_login
+        bot.send_message(user_id, text=msg_with_login, parse_mode="Markdown")
+
+        database.inc_number_of_likes(user_id)
+    else:
+        bot.send_message(user_id, text=phrases.likes_blocked, reply_markup=Keyboards.go_to_subscription_menu_btn)
+
+    database.set_users_last_shown_profile_id(user_id, None)
+
+
+def processing_personal_data_agree(user_id):
+    bot.send_message(user_id, text=phrases.personal_data_you_agree)
+    bot.send_message(user_id, text=phrases.user_not_registered_yet)
+    bot.send_message(user_id, text=phrases.enter_your_first_name,
+                     reply_markup=Keyboards.profile_do_not_specify)
+    database.set_users_menu_id(user_id, constants.MenuIds.REGISTRATION_MENU)
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.FIRST_NAME)
+
+
+def processing_personal_data_refuse(user_id):
+    bot.send_message(user_id, text=phrases.personal_data_you_refuse)
+    bot.send_message(user_id, text=phrases.user_not_registered_yet)
+    database.set_users_menu_id(user_id, constants.MenuIds.REGISTRATION_MENU)
+    ask_profile_spoken_languages(user_id)
 
 
 def processing_profile_spoken_languages_inline(call):
@@ -120,26 +146,6 @@ def processing_profile_programming_languages_inline(call):
                               constants.ProgrammingLanguages,
                               database.get_users_profile_programming_languages(call.message.chat.id),
                               phrases.values_of_enums_constants))
-
-
-def processing_like_button(user_id: int):
-    candidate_id = database.get_users_last_shown_profile_id(user_id)
-    if candidate_id is None:
-        return
-
-    if User(user_id).is_like_acceptable():
-        candidate_login = database.get_users_telegram_login_by_id(candidate_id)
-        if candidate_login is None:
-            msg_with_login = phrases.telegram_login + "_" + phrases.item_is_not_specified + "_"
-        else:
-            msg_with_login = phrases.telegram_login + "@" + candidate_login
-        bot.send_message(user_id, text=msg_with_login, parse_mode="Markdown")
-
-        database.inc_number_of_likes(user_id)
-    else:
-        bot.send_message(user_id, text=phrases.likes_blocked, reply_markup=Keyboards.go_to_subscription_menu_btn)
-
-    database.set_users_last_shown_profile_id(user_id, None)
 
 
 # =====
@@ -355,8 +361,6 @@ def processing_registration_item_programming_language(message):
         database.set_users_profile_programming_languages_null(user_id)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
-
-
         database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.INTERESTS)
         bot.send_message(user_id, text=phrases.enter_your_interests,
                          reply_markup=Keyboards.profile_interests)
