@@ -174,6 +174,16 @@ def processing_search_parameters_item_inline(call, field: Type[constants.Items])
         deleter = None
         appender = database.append_to_users_search_parameters_spoken_languages
         phrase = phrases.enter_spoken_languages
+    elif field == constants.ProgrammingLanguages:
+        getter = database.get_users_search_parameters_programming_languages
+        deleter = None
+        appender = database.append_to_users_search_parameters_programming_languages
+        phrase = phrases.enter_programming_languages
+    elif field == constants.Interests:
+        getter = database.get_users_search_parameters_interests
+        deleter = None
+        appender = database.append_to_users_search_parameters_interests
+        phrase = phrases.enter_interests
     else:
         getter = deleter = appender = phrase = None
 
@@ -295,6 +305,32 @@ def ask_search_parameters_spoken_languages(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.SpokenLanguages,
                          database.get_users_search_parameters_spoken_languages(user_id),
+                         phrases.values_of_enums_constants))
+
+    bot.send_message(user_id, text=phrases.after_choice,
+                     reply_markup=Keyboards.search_parameters_finish_and_skip)
+
+
+def ask_search_parameters_programming_languages(user_id: int):
+    database.set_users_search_parameters_item_id(user_id, constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
+
+    bot.send_message(user_id, text=phrases.enter_programming_languages,
+                     reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                         constants.ProgrammingLanguages,
+                         database.get_users_search_parameters_programming_languages(user_id),
+                         phrases.values_of_enums_constants))
+
+    bot.send_message(user_id, text=phrases.after_choice,
+                     reply_markup=Keyboards.search_parameters_finish_and_skip)
+
+
+def ask_search_parameters_interests(user_id: int):
+    database.set_users_search_parameters_item_id(user_id, constants.SearchParametersItemsIds.INTERESTS)
+
+    bot.send_message(user_id, text=phrases.enter_interests,
+                     reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                         constants.Interests,
+                         database.get_users_search_parameters_interests(user_id),
                          phrases.values_of_enums_constants))
 
     bot.send_message(user_id, text=phrases.after_choice,
@@ -489,10 +525,7 @@ def processing_search_parameter_item_spoken_languages(message):
         database.set_users_profile_search_parameters_spoken_languages_null(user_id)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        database.set_users_search_parameters_item_id(user_id,
-                                                     constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES)
-        bot.send_message(user_id, text=phrases.enter_programming_languages,
-                         reply_markup=Keyboards.search_parameters_programming_languages)
+        ask_search_parameters_programming_languages(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -504,19 +537,9 @@ def processing_search_parameter_item_programming_languages(message):
 
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_programming_languages_null(user_id)
-    elif users_message in constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants):
-        database.append_to_users_search_parameters_programming_languages(
-            user_id,
-            value=constants.ProgrammingLanguages.get_object_by_str_value(users_message,
-                                                                         phrases.values_of_enums_constants))
-    elif users_message != phrases.finish_typing:
-        bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        database.set_users_search_parameters_item_id(user_id,
-                                                     constants.SearchParametersItemsIds.INTERESTS)
-        bot.send_message(user_id, text=phrases.enter_interests,
-                         reply_markup=Keyboards.search_parameters_interests)
+        ask_search_parameters_interests(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -528,12 +551,6 @@ def processing_search_parameter_item_interests(message):
 
     if users_message == phrases.does_not_matter:
         database.set_users_profile_search_parameters_interests_null(user_id)
-    elif users_message in constants.Interests.get_all_str_vales(phrases.values_of_enums_constants):
-        database.append_to_users_search_parameters_interests(user_id, value=constants.Interests.get_object_by_str_value(
-            users_message,
-            phrases.values_of_enums_constants))
-    elif users_message != phrases.finish_typing:
-        bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
         database.set_users_search_parameters_item_id(user_id,
