@@ -155,6 +155,16 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def remove_from_users_profile_spoken_languages(self, user_id: int,
+                                                   value: constants.SpokenLanguages) -> None:
+        """
+        Remove value from "Spoken languages" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: removed value
+        """
+        pass
+
+    @abstractmethod
     def set_users_profile_spoken_languages_null(self, user_id: int) -> None:
         """
         Set "Spoken languages" field in user's profile = Null
@@ -181,6 +191,16 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
+    def remove_from_users_profile_programming_languages(self, user_id: int,
+                                                        value: constants.ProgrammingLanguages) -> None:
+        """
+        Remove value from "Programming languages" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: removed value
+        """
+        pass
+
+    @abstractmethod
     def set_users_profile_programming_languages_null(self, user_id: int) -> None:
         """
         Set "Programming languages" field in user's profile = Null
@@ -202,6 +222,16 @@ class IDatabase(ABC):
         Append value to "Interests" field in user's profile
         :param user_id: Telegram's id of user we work with
         :param value: appended value
+        """
+        pass
+
+    @abstractmethod
+    def remove_from_users_profile_interests(self, user_id: int,
+                                            value: constants.Interests) -> None:
+        """
+        Remove value from "Interests" field in user's profile
+        :param user_id: Telegram's id of user we work with
+        :param value: removed value
         """
         pass
 
@@ -294,16 +324,6 @@ class IDatabase(ABC):
         pass
 
     @abstractmethod
-    def remove_from_users_profile_spoken_languages(self, user_id: int,
-                                                   value: constants.SpokenLanguages) -> None:
-        """
-        Remove value from "Spoken languages" field in user's search parameters
-        :param user_id: Telegram's id of user we work with
-        :param value: removed value
-        """
-        pass
-
-    @abstractmethod
     def set_users_profile_search_parameters_spoken_languages_null(self, user_id: int) -> None:
         """
         Set "Spoken Languages" field in user's search parameters = Null
@@ -326,16 +346,6 @@ class IDatabase(ABC):
         Append value to "Programming languages" field in user's search parameters
         :param user_id: Telegram's id of user we work with
         :param value: appended value
-        """
-        pass
-
-    @abstractmethod
-    def remove_from_users_profile_programming_languages(self, user_id: int,
-                                                        value: constants.ProgrammingLanguages) -> None:
-        """
-        Remove value from "Programming languages" field in user's search parameters
-        :param user_id: Telegram's id of user we work with
-        :param value: removed value
         """
         pass
 

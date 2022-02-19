@@ -72,6 +72,8 @@ def query_handler(call):
             processing_profile_spoken_languages_inline(call)
         elif users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES:
             processing_profile_programming_languages_inline(call)
+        elif users_registration_item_id == constants.ProfileItemsIds.INTERESTS:
+            processing_profile_interests_inline(call)
 
 
 def processing_like_button(user_id: int):
@@ -148,6 +150,25 @@ def processing_profile_programming_languages_inline(call):
                               phrases.values_of_enums_constants))
 
 
+def processing_profile_interests_inline(call):
+    item = constants.Interests.get_object_by_source_value(call.data)
+
+    s_l = database.get_users_profile_interests(call.message.chat.id)
+    s_l = [] if s_l is None else s_l
+    if item in s_l:
+        database.remove_from_users_profile_interests(call.message.chat.id, item)
+    else:
+        database.append_to_users_profile_interests(call.message.chat.id, item)
+
+    bot.edit_message_text(chat_id=call.message.chat.id,
+                          message_id=call.message.message_id,
+                          text=phrases.enter_your_spoken_languages,
+                          reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                              constants.Interests,
+                              database.get_users_profile_interests(call.message.chat.id),
+                              phrases.values_of_enums_constants))
+
+
 # =====
 
 def check_registration(user_id: int):
@@ -213,6 +234,19 @@ def ask_profile_programming_languages(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.ProgrammingLanguages,
                          database.get_users_profile_programming_languages(user_id),
+                         phrases.values_of_enums_constants))
+
+    bot.send_message(user_id, text=phrases.after_choice,
+                     reply_markup=Keyboards.profile_finish_and_skip)
+
+
+def ask_profile_interests(user_id: int):
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.INTERESTS)
+
+    bot.send_message(user_id, text=phrases.enter_your_interests,
+                     reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
+                         constants.Interests,
+                         database.get_users_profile_interests(user_id),
                          phrases.values_of_enums_constants))
 
     bot.send_message(user_id, text=phrases.after_choice,
@@ -361,9 +395,7 @@ def processing_registration_item_programming_language(message):
         database.set_users_profile_programming_languages_null(user_id)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
-        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.INTERESTS)
-        bot.send_message(user_id, text=phrases.enter_your_interests,
-                         reply_markup=Keyboards.profile_interests)
+        ask_profile_interests(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -375,12 +407,6 @@ def processing_registration_item_interests(message):
 
     if users_message == phrases.do_not_specify:
         database.set_users_profile_interests_null(user_id)
-    elif users_message in constants.Interests.get_all_str_vales(phrases.values_of_enums_constants):
-        database.append_to_users_profile_interests(user_id, value=constants.Interests.get_object_by_str_value(
-            users_message,
-            phrases.values_of_enums_constants))
-    elif users_message != phrases.finish_typing:
-        bot.send_message(user_id, text=phrases.select_from_the_list)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
         database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
