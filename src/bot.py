@@ -166,22 +166,22 @@ def processing_search_parameters_item_inline(call, field: Type[constants.Items])
 
     if field == constants.AgeGroups:
         getter = database.get_users_search_parameters_age_groups
-        deleter = None
+        deleter = database.remove_from_users_search_parameters_age_groups
         appender = database.append_to_users_search_parameters_age_groups
         phrase = phrases.enter_age_group_for_search
     elif field == constants.SpokenLanguages:
         getter = database.get_users_search_parameters_spoken_languages
-        deleter = None
+        deleter = database.remove_from_users_search_parameters_spoken_languages
         appender = database.append_to_users_search_parameters_spoken_languages
         phrase = phrases.enter_spoken_languages
     elif field == constants.ProgrammingLanguages:
         getter = database.get_users_search_parameters_programming_languages
-        deleter = None
+        deleter = database.remove_from_users_search_parameters_programming_languages
         appender = database.append_to_users_search_parameters_programming_languages
         phrase = phrases.enter_programming_languages
     elif field == constants.Interests:
         getter = database.get_users_search_parameters_interests
-        deleter = None
+        deleter = database.remove_from_users_search_parameters_interests
         appender = database.append_to_users_search_parameters_interests
         phrase = phrases.enter_interests
     else:
