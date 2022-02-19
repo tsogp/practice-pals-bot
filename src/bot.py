@@ -4,6 +4,7 @@ import phrases_ru as phrases
 import constants
 from keyboards import Keyboards
 import bottoken
+from typing import Type
 
 from IDatabase import IDatabase
 from RealDatabase import Database
@@ -69,11 +70,11 @@ def query_handler(call):
 
     elif users_active_menu_id == constants.MenuIds.REGISTRATION_MENU:
         if users_registration_item_id == constants.ProfileItemsIds.SPOKEN_LANGUAGES:
-            processing_profile_spoken_languages_inline(call)
+            processing_profile_item_inline(call, constants.SpokenLanguages)
         elif users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES:
-            processing_profile_programming_languages_inline(call)
+            processing_profile_item_inline(call, constants.ProgrammingLanguages)
         elif users_registration_item_id == constants.ProfileItemsIds.INTERESTS:
-            processing_profile_interests_inline(call)
+            processing_profile_item_inline(call, constants.Interests)
 
 
 def processing_like_button(user_id: int):
@@ -112,60 +113,40 @@ def processing_personal_data_refuse(user_id):
     ask_profile_spoken_languages(user_id)
 
 
-def processing_profile_spoken_languages_inline(call):
-    item = constants.SpokenLanguages.get_object_by_source_value(call.data)
+def processing_profile_item_inline(call, field: Type[constants.Items]):
+    item = field.get_object_by_source_value(call.data)
 
-    s_l = database.get_users_profile_spoken_languages(call.message.chat.id)
-    s_l = [] if s_l is None else s_l
-    if item in s_l:
-        database.remove_from_users_profile_spoken_languages(call.message.chat.id, item)
+    if field == constants.SpokenLanguages:
+        getter = database.get_users_profile_spoken_languages
+        deleter = database.remove_from_users_profile_spoken_languages
+        appender = database.append_to_users_profile_spoken_languages
+        phrase = phrases.enter_your_spoken_languages
+    elif field == constants.ProgrammingLanguages:
+        getter = database.get_users_profile_programming_languages
+        deleter = database.remove_from_users_profile_programming_languages
+        appender = database.append_to_users_profile_programming_languages
+        phrase = phrases.enter_your_programming_languages
+    elif field == constants.Interests:
+        getter = database.get_users_profile_interests
+        deleter = database.remove_from_users_profile_interests
+        appender = database.append_to_users_profile_interests
+        phrase = phrases.enter_your_interests
     else:
-        database.append_to_users_profile_spoken_languages(call.message.chat.id, item)
+        getter = deleter = appender = phrase = None
+
+    user_items = getter(call.message.chat.id)
+    user_items = [] if user_items is None else user_items
+    if item in user_items:
+        deleter(call.message.chat.id, item)
+    else:
+        appender(call.message.chat.id, item)
 
     bot.edit_message_text(chat_id=call.message.chat.id,
                           message_id=call.message.message_id,
-                          text=phrases.enter_your_spoken_languages,
+                          text=phrase,
                           reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
-                              constants.SpokenLanguages,
-                              database.get_users_profile_spoken_languages(call.message.chat.id),
-                              phrases.values_of_enums_constants))
-
-
-def processing_profile_programming_languages_inline(call):
-    item = constants.ProgrammingLanguages.get_object_by_source_value(call.data)
-
-    s_l = database.get_users_profile_programming_languages(call.message.chat.id)
-    s_l = [] if s_l is None else s_l
-    if item in s_l:
-        database.remove_from_users_profile_programming_languages(call.message.chat.id, item)
-    else:
-        database.append_to_users_profile_programming_languages(call.message.chat.id, item)
-
-    bot.edit_message_text(chat_id=call.message.chat.id,
-                          message_id=call.message.message_id,
-                          text=phrases.enter_your_spoken_languages,
-                          reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
-                              constants.ProgrammingLanguages,
-                              database.get_users_profile_programming_languages(call.message.chat.id),
-                              phrases.values_of_enums_constants))
-
-
-def processing_profile_interests_inline(call):
-    item = constants.Interests.get_object_by_source_value(call.data)
-
-    s_l = database.get_users_profile_interests(call.message.chat.id)
-    s_l = [] if s_l is None else s_l
-    if item in s_l:
-        database.remove_from_users_profile_interests(call.message.chat.id, item)
-    else:
-        database.append_to_users_profile_interests(call.message.chat.id, item)
-
-    bot.edit_message_text(chat_id=call.message.chat.id,
-                          message_id=call.message.message_id,
-                          text=phrases.enter_your_spoken_languages,
-                          reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
-                              constants.Interests,
-                              database.get_users_profile_interests(call.message.chat.id),
+                              field,
+                              getter(call.message.chat.id),
                               phrases.values_of_enums_constants))
 
 
