@@ -48,6 +48,7 @@ def main_menu(message):
 def query_handler(call):
     """Inline-keyboards button's click handler"""
     users_active_menu_id = database.get_users_menu_id(call.message.chat.id)
+    users_registration_item_id = database.get_users_registration_item_id(call.message.chat.id)
     bot.answer_callback_query(callback_query_id=call.id, text='')
     if users_active_menu_id == constants.MenuIds.PROFILE_REACTIONS_MENU:
         if call.data == constants.ProfileReactionsMenu.LIKE.get_source_value():
@@ -76,6 +77,25 @@ def query_handler(call):
                                                     constants.ProfileItemsIds.SPOKEN_LANGUAGES)
             bot.send_message(call.message.chat.id, text=phrases.enter_your_spoken_languages,
                              reply_markup=Keyboards.profile_spoken_languages)
+
+    elif users_active_menu_id == constants.MenuIds.REGISTRATION_MENU:
+        if users_registration_item_id == constants.ProfileItemsIds.SPOKEN_LANGUAGES:
+
+            item = constants.SpokenLanguages.get_object_by_source_value(call.data)
+
+            s_l = database.get_users_profile_spoken_languages(call.message.chat.id)
+            s_l = [] if s_l is None else s_l
+            if item in s_l:
+                database.remove_from_users_profile_spoken_languages(call.message.chat.id, item)
+            else:
+                database.append_to_users_profile_spoken_languages(call.message.chat.id, item)
+
+            bot.edit_message_text(chat_id=call.message.chat.id,
+                                  message_id=call.message.message_id,
+                                  text=phrases.enter_your_spoken_languages,
+                                  reply_markup=Keyboards.generate_profile_spoken_languages_keyboard(
+                                      database.get_users_profile_spoken_languages(call.message.chat.id),
+                                      phrases.values_of_enums_constants))
 
 
 def processing_like_button(user_id: int):
@@ -256,8 +276,14 @@ def processing_registration_item_age(message):
 
     if users_message == phrases.do_not_specify or users_message.isdigit():
         database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.SPOKEN_LANGUAGES)
+
         bot.send_message(user_id, text=phrases.enter_your_spoken_languages,
-                         reply_markup=Keyboards.profile_spoken_languages)
+                         reply_markup=Keyboards.generate_profile_spoken_languages_keyboard(
+                             database.get_users_profile_spoken_languages(message.chat.id),
+                             phrases.values_of_enums_constants))
+
+        bot.send_message(user_id, text=phrases.after_choice,
+                         reply_markup=Keyboards.profile_finish_and_skip)
 
 
 @bot.message_handler(content_types=["text"],

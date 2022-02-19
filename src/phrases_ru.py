@@ -165,3 +165,5 @@ ask_personal_data_menu_items = {
     constants.AskPersonalData.AGREE: "\U00002705 Согласиться",
     constants.AskPersonalData.REFUSE: "\U0000274C Отказаться"
 }
+
+after_choice = 'После выбора всех необходимых пунктов нажмите кнопку "Закончить и перейти на следующий пункт"'

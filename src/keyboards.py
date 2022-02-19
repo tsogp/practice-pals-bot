@@ -3,7 +3,7 @@ import telebot
 
 import constants
 import phrases_ru as phrases
-from typing import Type
+from typing import Type, Optional, List
 
 
 class Keyboards:
@@ -75,10 +75,21 @@ class Keyboards:
         keyboard.add(btn_my_site)
         return keyboard
 
+    @staticmethod
+    def generate_profile_spoken_languages_keyboard(active_items: Optional[List[constants.SpokenLanguages]],
+                                                   dictionary: dict):
+        if active_items is None:
+            active_items = []
+        keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)  # Create inline-keyboard
+        for item in constants.SpokenLanguages:
+            btn_text = ("+" if item in active_items else "-") + " " + item.get_str_value(dictionary)
+            keyboard.add(telebot.types.InlineKeyboardButton(
+                text=btn_text,
+                callback_data=item.get_source_value()))
+        return keyboard
+
     profile_do_not_specify = __create_keyboard_with_one_button(phrases.do_not_specify)
-    profile_spoken_languages = __create_keyboard_with_multiple_choice(
-        items_list=list(constants.SpokenLanguages.get_all_str_vales(phrases.values_of_enums_constants)),
-        skip_button=phrases.do_not_specify)
+    profile_finish_and_skip = __create_keyboard_with_multiple_choice(items_list=[], skip_button=phrases.do_not_specify)
     profile_programming_languages = __create_keyboard_with_multiple_choice(
         items_list=list(constants.ProgrammingLanguages.get_all_str_vales(phrases.values_of_enums_constants)),
         skip_button=phrases.do_not_specify)

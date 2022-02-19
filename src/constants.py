@@ -88,6 +88,14 @@ class Items(enum.Enum):
         return None
 
     @classmethod
+    def get_object_by_source_value(cls, source_value: str):
+        for member in cls.__members__.values():
+            if member.value == source_value:
+                return member
+        logger.error(f"Can't find object with value={source_value}")
+        return None
+
+    @classmethod
     def get_all_str_vales(cls, dictionary: dict) -> List[str]:
         """
         :return: list with all str values of enum's constants
