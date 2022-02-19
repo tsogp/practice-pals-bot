@@ -82,7 +82,7 @@ class Keyboards:
             active_items = []
         keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)  # Create inline-keyboard
         for item in constants.SpokenLanguages:
-            btn_text = ("+" if item in active_items else "-") + " " + item.get_str_value(dictionary)
+            btn_text = ("\U00002705 " if item in active_items else "") + item.get_str_value(dictionary)
             keyboard.add(telebot.types.InlineKeyboardButton(
                 text=btn_text,
                 callback_data=item.get_source_value()))
