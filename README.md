@@ -1,12 +1,5 @@
 <h1 align="center"> Practice Pals Bot :robot:</h1>
 
-<p align="center">
-  <a href="https://github.com/tsogp/practice-pals/blob/main/LICENSE" target="_blank"> <img alt="license" src="https://img.shields.io/github/license/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-  <a href="https://github.com/tsogp/practice-pals/releases/latest" target="_blank"> <img alt="last release" src="https://img.shields.io/github/v/release/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-  <a href="https://github.com/tsogp/practice-pals/commits/main" target="_blank"> <img alt="last commit" src="https://img.shields.io/github/last-commit/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-  <a href="https://github.com/tsogp/practice-pals/graphs/contributors" target="_blank"> <img alt="commit activity" src="https://img.shields.io/github/commit-activity/m/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-</p>
-
 ## Навигация
 
 * [Описание проекта](#chapter-0)
