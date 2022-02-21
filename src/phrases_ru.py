@@ -68,7 +68,7 @@ does_not_matter = "\U0000274C Не имеет значения"
 
 finish_enter_search_parameters = "\U0001F3C1 Заполнение параметров для поиска единомышленников завершено!"
 
-your_search_parameters = "Ваши параметры для поиска единомышленников:"
+your_search_parameters = "\U00002699 Ваши параметры для поиска единомышленников:"
 
 search_parameters_items = {constants.SearchParametersItemsIds.AGE_GROUP: "Возрастные группы",
                            constants.SearchParametersItemsIds.SPOKEN_LANGUAGES: "Языки",
@@ -166,7 +166,7 @@ ask_personal_data_menu_items = {
     constants.AskPersonalData.REFUSE: "\U0000274C Отказаться"
 }
 
-after_choice = 'После выбора всех необходимых пунктов нажмите кнопку "Закончить и перейти на следующий пункт"'
+after_choice = '\U000027A1 После выбора всех необходимых пунктов нажмите кнопку "Закончить и перейти на следующий пункт"'
 
 edit_profile_menu = "\U0000270F Вы находитесь в меню редактирования профиля"
 
