@@ -30,7 +30,7 @@ class User:
         Check, is user filling registration_item with profile_item_id
         """
         menu_id = User.__DATABASE.get_users_menu_id(self.__id)
-        check_menu_id = menu_id == constants.MenuIds.REGISTRATION_MENU
+        check_menu_id = menu_id in (constants.MenuIds.REGISTRATION_MENU, constants.MenuIds.EDIT_PROFILE_MENU)
 
         __registration_item_id = User.__DATABASE.get_users_registration_item_id(self.__id)
         check_registration_item_id = __registration_item_id == profile_item_id
