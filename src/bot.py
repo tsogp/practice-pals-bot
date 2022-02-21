@@ -69,7 +69,7 @@ def query_handler(call):
         elif call.data == constants.AskPersonalData.REFUSE.get_source_value():
             processing_personal_data_refuse(call.message.chat.id)
 
-    elif users_active_menu_id == constants.MenuIds.REGISTRATION_MENU:
+    elif users_active_menu_id in (constants.MenuIds.REGISTRATION_MENU, constants.MenuIds.EDIT_PROFILE_MENU):
         if users_registration_item_id == constants.ProfileItemsIds.SPOKEN_LANGUAGES:
             processing_profile_item_inline(call, constants.SpokenLanguages)
         elif users_registration_item_id == constants.ProfileItemsIds.PROGRAMMING_LANGUAGES:
@@ -86,6 +86,21 @@ def query_handler(call):
             processing_search_parameters_item_inline(call, constants.ProgrammingLanguages)
         elif users_search_parameter_item_id == constants.SearchParametersItemsIds.INTERESTS:
             processing_search_parameters_item_inline(call, constants.Interests)
+
+    elif users_active_menu_id == constants.MenuIds.SELECT_PROFILE_ITEM_TO_EDIT_MENU:
+        database.set_users_menu_id(call.message.chat.id, constants.MenuIds.EDIT_PROFILE_MENU)
+        if call.data == str(constants.ProfileItemsIds.FIRST_NAME.get_source_value()):
+            ask_profile_first_name(call.message.chat.id)
+        elif call.data == str(constants.ProfileItemsIds.LAST_NAME.get_source_value()):
+            ask_profile_last_name(call.message.chat.id)
+        elif call.data == str(constants.ProfileItemsIds.AGE.get_source_value()):
+            ask_profile_age(call.message.chat.id)
+        elif call.data == str(constants.ProfileItemsIds.SPOKEN_LANGUAGES.get_source_value()):
+            ask_profile_spoken_languages(call.message.chat.id)
+        elif call.data == str(constants.ProfileItemsIds.PROGRAMMING_LANGUAGES.get_source_value()):
+            ask_profile_programming_languages(call.message.chat.id)
+        elif call.data == str(constants.ProfileItemsIds.INTERESTS.get_source_value()):
+            ask_profile_interests(call.message.chat.id)
 
 
 def processing_like_button(user_id: int):
@@ -111,10 +126,9 @@ def processing_like_button(user_id: int):
 def processing_personal_data_agree(user_id):
     bot.send_message(user_id, text=phrases.personal_data_you_agree)
     bot.send_message(user_id, text=phrases.user_not_registered_yet)
-    bot.send_message(user_id, text=phrases.enter_your_first_name,
-                     reply_markup=Keyboards.profile_do_not_specify)
+
     database.set_users_menu_id(user_id, constants.MenuIds.REGISTRATION_MENU)
-    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.FIRST_NAME)
+    ask_profile_first_name(user_id)
 
 
 def processing_personal_data_refuse(user_id):
@@ -244,6 +258,22 @@ def activate_subscription_menu(user_id: int):
     bot.send_message(user_id, text=phrases.press_btn_after_purchase,
                      reply_markup=Keyboards.subscription_menu,
                      parse_mode="Markdown")
+
+
+def ask_profile_first_name(user_id: int):
+    bot.send_message(user_id, text=phrases.enter_your_first_name,
+                     reply_markup=Keyboards.profile_do_not_specify)
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.FIRST_NAME)
+
+
+def ask_profile_last_name(user_id: int):
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.LAST_NAME)
+    bot.send_message(user_id, text=phrases.enter_your_last_name)
+
+
+def ask_profile_age(user_id: int):
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.AGE)
+    bot.send_message(user_id, text=phrases.enter_your_age)
 
 
 def ask_profile_spoken_languages(user_id: int):
@@ -386,8 +416,16 @@ def processing_check_profile_items_menu(message):
     if users_message == phrases.ok_edit[0]:
         activate_main_menu(user_id)
     elif users_message == phrases.ok_edit[1]:
-        bot.send_message(user_id, text=phrases.not_ready_yet)
-        activate_main_menu(user_id)
+        database.set_users_menu_id(user_id, constants.MenuIds.SELECT_PROFILE_ITEM_TO_EDIT_MENU)
+        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
+        bot.send_message(user_id,
+                         text=phrases.edit_profile_menu,
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
+        bot.send_message(user_id,
+                         text=phrases.select_the_profile_item_to_edit,
+                         reply_markup=Keyboards.create_inline_keyboard_from_list(
+                             constants.ProfileItemsIds.get_all_not_null_ids(),
+                             phrases.profile_items))
 
 
 @bot.message_handler(content_types=["text"],
@@ -416,8 +454,10 @@ def processing_registration_item_first_name(message):
     else:
         database.set_users_profile_first_name(user_id, value=users_message)
 
-    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.LAST_NAME)
-    bot.send_message(user_id, text=phrases.enter_your_last_name)
+    if database.get_users_menu_id(user_id) == constants.MenuIds.REGISTRATION_MENU:
+        ask_profile_last_name(user_id)
+    elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_PROFILE_MENU:
+        show_users_profile(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -432,8 +472,10 @@ def processing_registration_item_last_name(message):
     else:
         database.set_users_profile_last_name(user_id, value=users_message)
 
-    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.AGE)
-    bot.send_message(user_id, text=phrases.enter_your_age)
+    if database.get_users_menu_id(user_id) == constants.MenuIds.REGISTRATION_MENU:
+        ask_profile_age(user_id)
+    elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_PROFILE_MENU:
+        show_users_profile(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -451,7 +493,10 @@ def processing_registration_item_age(message):
         bot.send_message(user_id, text=phrases.enter_correct_age)
 
     if users_message == phrases.do_not_specify or users_message.isdigit():
-        ask_profile_spoken_languages(user_id)
+        if database.get_users_menu_id(user_id) == constants.MenuIds.REGISTRATION_MENU:
+            ask_profile_spoken_languages(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_PROFILE_MENU:
+            show_users_profile(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -465,7 +510,10 @@ def processing_registration_item_spoken_language(message):
         database.set_users_profile_spoken_languages_null(user_id)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
-        ask_profile_programming_languages(user_id)
+        if database.get_users_menu_id(user_id) == constants.MenuIds.REGISTRATION_MENU:
+            ask_profile_programming_languages(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_PROFILE_MENU:
+            show_users_profile(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -479,7 +527,10 @@ def processing_registration_item_programming_language(message):
         database.set_users_profile_programming_languages_null(user_id)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
-        ask_profile_interests(user_id)
+        if database.get_users_menu_id(user_id) == constants.MenuIds.REGISTRATION_MENU:
+            ask_profile_interests(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_PROFILE_MENU:
+            show_users_profile(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -493,11 +544,14 @@ def processing_registration_item_interests(message):
         database.set_users_profile_interests_null(user_id)
 
     if users_message in (phrases.do_not_specify, phrases.finish_typing):
-        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
-        database.register_user(user_id)
-        bot.send_message(user_id, text=phrases.finish_registration,
-                         reply_markup=telebot.types.ReplyKeyboardRemove())
-        show_users_profile(user_id)
+        if database.get_users_menu_id(user_id) == constants.MenuIds.REGISTRATION_MENU:
+            database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
+            database.register_user(user_id)
+            bot.send_message(user_id, text=phrases.finish_registration,
+                             reply_markup=telebot.types.ReplyKeyboardRemove())
+            show_users_profile(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_PROFILE_MENU:
+            show_users_profile(user_id)
 
 
 @bot.message_handler(content_types=["text"],
