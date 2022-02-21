@@ -292,7 +292,7 @@ def activate_select_search_parameters_item_to_edit_menu(user_id: int):
     database.set_users_search_parameters_item_id(user_id, constants.SearchParametersItemsIds.NULL)
 
     bot.send_message(user_id,
-                     text=phrases.edit_profile_menu,
+                     text=phrases.edit_search_parameters_menu,
                      reply_markup=telebot.types.ReplyKeyboardRemove())
     bot.send_message(user_id,
                      text=phrases.select_the_search_parameters_item_to_edit,
