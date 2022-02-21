@@ -109,10 +109,6 @@ class SearchParametersItemsIds(Ids, Items):
 
 GO_TO_SUBSCRIPTION_MENU = "GO_TO_SUBSCRIPTION_MENU"
 
-MAXIMUM_NUMBER_OF_LIKES = 100
-
-link_to_yoomoney = "https://yoomoney.ru/to/410015159768343/0"
-
 
 @enum.unique
 class SpokenLanguages(Items):

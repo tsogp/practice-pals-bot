@@ -3,13 +3,14 @@ from typing import Optional, List
 
 from database_constants import *
 import constants
+import config
 from IDatabase import IDatabase
 
 
 class Database(IDatabase):
     def __init__(self):
         self.engine = create_engine(
-            'sqlite:///database.db',
+            f'sqlite:///{config.DATABASE_FILE_NAME}',
             echo=False,
             connect_args={'check_same_thread': False}
         )

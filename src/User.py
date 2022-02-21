@@ -2,6 +2,7 @@ from IDatabase import IDatabase
 import constants
 import phrases_ru as phrases
 from typing import Optional, List
+import config
 
 
 class User:
@@ -57,7 +58,7 @@ class User:
         if User.__DATABASE.have_subscription(self.__id):
             return True
         else:
-            return User.__DATABASE.get_number_of_likes(self.__id) < constants.MAXIMUM_NUMBER_OF_LIKES
+            return User.__DATABASE.get_number_of_likes(self.__id) < config.MAXIMUM_NUMBER_OF_LIKES
 
     # GET PROFILE
 

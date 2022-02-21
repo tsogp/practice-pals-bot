@@ -1,6 +1,5 @@
 import enum
 from typing import Optional, List
-import bottoken
 from IDatabase import IDatabase
 
 import constants
@@ -8,7 +7,7 @@ import constants
 # SETTINGS FOR DEVELOPMENT AND MANUAL TESTING
 
 
-TELEGRAM_ID: int = bottoken.ID  # Set your Telegram ID for manual testsing
+TELEGRAM_ID: int = 0  # Set your Telegram ID for manual testsing
 IS_REGISTERED: bool = True
 ARE_SEARCH_PARAMETERS_FILLED: bool = True
 HAVE_SUBSCRIPTION: bool = False

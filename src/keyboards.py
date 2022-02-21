@@ -2,6 +2,7 @@
 import telebot
 
 import constants
+import config
 import phrases_ru as phrases
 from typing import Type, Optional, List
 
@@ -120,7 +121,7 @@ class Keyboards:
     go_to_subscription_menu_btn = __create_inline_button(phrases.go_to_subscription_menu,
                                                          constants.GO_TO_SUBSCRIPTION_MENU)
 
-    button_for_payment = __create_btn_with_link(phrases.buy, constants.link_to_yoomoney)
+    button_for_payment = __create_btn_with_link(phrases.buy, config.LINK_TO_YOOMONEY)
 
     ask_personal_data = __create_inline_keyboard_from_list(constants.AskPersonalData,
                                                            phrases.ask_personal_data_menu_items)
