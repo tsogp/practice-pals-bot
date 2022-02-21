@@ -83,14 +83,14 @@ class User:
             values = ""
             for i in range(len(raw_value) - 1):
                 try:
-                    item_str = phrases.values_of_enums_constants[raw_value[i]]
+                    item_str = phrases.values_of_possible_answers[raw_value[i]]
                 except KeyError:
                     item_str = raw_value[i].value
                     constants.logger.error(f"Can't find value for {raw_value[i]} in dictionary")
                 values += (item_str + ", ")
 
             try:
-                item_str = phrases.values_of_enums_constants[raw_value[-1]]
+                item_str = phrases.values_of_possible_answers[raw_value[-1]]
             except KeyError:
                 item_str = raw_value[-1].value
                 constants.logger.error(f"Can't find value for {raw_value[-1]} in dictionary")

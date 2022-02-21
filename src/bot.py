@@ -184,7 +184,7 @@ def processing_profile_item_inline(call, field: Type[constants.Items]):
                           reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                               field,
                               getter(call.message.chat.id),
-                              phrases.values_of_enums_constants))
+                              phrases.values_of_possible_answers))
 
 
 def processing_search_parameters_item_inline(call, field: Type[constants.Items]):
@@ -226,7 +226,7 @@ def processing_search_parameters_item_inline(call, field: Type[constants.Items])
                           reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                               field,
                               getter(call.message.chat.id),
-                              phrases.values_of_enums_constants))
+                              phrases.values_of_possible_answers))
 
 
 # =====
@@ -324,7 +324,7 @@ def ask_profile_spoken_languages(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.SpokenLanguages,
                          database.get_users_profile_spoken_languages(user_id),
-                         phrases.values_of_enums_constants))
+                         phrases.values_of_possible_answers))
 
     bot.send_message(user_id, text=phrases.after_choice,
                      reply_markup=Keyboards.profile_finish_and_skip)
@@ -337,7 +337,7 @@ def ask_profile_programming_languages(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.ProgrammingLanguages,
                          database.get_users_profile_programming_languages(user_id),
-                         phrases.values_of_enums_constants))
+                         phrases.values_of_possible_answers))
 
     bot.send_message(user_id, text=phrases.after_choice,
                      reply_markup=Keyboards.profile_finish_and_skip)
@@ -350,7 +350,7 @@ def ask_profile_interests(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.Interests,
                          database.get_users_profile_interests(user_id),
-                         phrases.values_of_enums_constants))
+                         phrases.values_of_possible_answers))
 
     bot.send_message(user_id, text=phrases.after_choice,
                      reply_markup=Keyboards.profile_finish_and_skip)
@@ -363,7 +363,7 @@ def ask_search_parameters_age_groups(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.AgeGroups,
                          database.get_users_search_parameters_age_groups(user_id),
-                         phrases.values_of_enums_constants))
+                         phrases.values_of_possible_answers))
 
     bot.send_message(user_id, text=phrases.after_choice,
                      reply_markup=Keyboards.search_parameters_finish_and_skip)
@@ -376,7 +376,7 @@ def ask_search_parameters_spoken_languages(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.SpokenLanguages,
                          database.get_users_search_parameters_spoken_languages(user_id),
-                         phrases.values_of_enums_constants))
+                         phrases.values_of_possible_answers))
 
     bot.send_message(user_id, text=phrases.after_choice,
                      reply_markup=Keyboards.search_parameters_finish_and_skip)
@@ -389,7 +389,7 @@ def ask_search_parameters_programming_languages(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.ProgrammingLanguages,
                          database.get_users_search_parameters_programming_languages(user_id),
-                         phrases.values_of_enums_constants))
+                         phrases.values_of_possible_answers))
 
     bot.send_message(user_id, text=phrases.after_choice,
                      reply_markup=Keyboards.search_parameters_finish_and_skip)
@@ -402,7 +402,7 @@ def ask_search_parameters_interests(user_id: int):
                      reply_markup=Keyboards.create_inline_keyboard_with_multiple_choice(
                          constants.Interests,
                          database.get_users_search_parameters_interests(user_id),
-                         phrases.values_of_enums_constants))
+                         phrases.values_of_possible_answers))
 
     bot.send_message(user_id, text=phrases.after_choice,
                      reply_markup=Keyboards.search_parameters_finish_and_skip)

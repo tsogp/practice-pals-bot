@@ -1,7 +1,4 @@
 # File with phrases for the interface in Russian
-from typing import List
-import enum
-
 import constants
 
 welcome_message = "\U0001F44B Привет! Я Practice Pals Bot.\nПомогу Вам найти друзей по интересам в IT-сфере"
@@ -50,10 +47,6 @@ profile_items = {constants.ProfileItemsIds.FIRST_NAME: "Имя",
 
 ok_edit = ["\U00002705 Всё верно", "\U0000270F Редактировать"]
 
-select_from_the_list = "Пожалуйста, выберите один или несколько пунктов из списка"
-
-call_main_menu = "/main_menu, чтобы перейти в главное меню бота"
-
 user_have_not_search_parameters_yet = "Пожалуйста, укажите параметры для поиска единомышленников"
 
 enter_age_group_for_search = "Выберите возрастные группы (можно указывать несколько)"
@@ -84,8 +77,6 @@ values_of_search_menu_items = {
     constants.SearchMenuItems.GO_TO_MAIN_MENU: "\U0001F3E0 Вернуться в главное меню"
 }
 
-get_contact = "\U0001F44D Начать общение"
-skip_profile = "\U0001F50E Искать далее"
 go_to_main_menu = "\U0001F3E0 Вернуться в главное меню"
 
 candidates_profiles = "\U0001F4DC Профили согласно Вашим критериям поиска: "
@@ -100,7 +91,7 @@ does_not_matter_without_emoji = "Не имеет значения"
 
 no_profiles_more = "Вы просмотрели все профили, удовлетворяющие заданным критериям.\n\n\U000023F0 Новые профили будут появляться по мере роста популярности бота, поэтому проверяйте эту вкладку почаще!"
 
-values_of_enums_constants = {
+values_of_possible_answers = {
     constants.SpokenLanguages.RUSSIAN: "Русский",
     constants.SpokenLanguages.ENGLISH: "Английский",
 
@@ -148,9 +139,6 @@ paid = "\U00002705 Оплатил!"
 after_purchase = "\U0001F44D Спасибо за покупку!"
 
 we_ask_personal_data = "\U00002755 Для лучшей работы бота Вы можете ввести свои персональные данные (имя, фамилию и возраст).\n\nОни не передаются третьим лицам и используются только внутри самого бота.\n\n\U00002754 Соглашаетесь ли Вы на их обработку? (при желинии каждый из критерив можно будет не указывать отдельно)"
-
-agree = "\U00002705 Согласиться"
-refuse = "\U0000274C Отказаться"
 
 personal_data_you_agree = "\U00002705 Вы согласились на обработку персональных данных"
 personal_data_you_refuse = "\U0000274C Вы не согласились на обработку персональных данных"
