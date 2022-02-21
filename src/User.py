@@ -42,7 +42,8 @@ class User:
         Check, is user filling search parameter with search_parameters_item_id
         """
         menu_id = User.__DATABASE.get_users_menu_id(self.__id)
-        check_menu_id = menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU
+        check_menu_id = menu_id in (
+            constants.MenuIds.SEARCH_PARAMETERS_MENU, constants.MenuIds.EDIT_SEARCH_PARAMETERS_MENU)
 
         __search_parameter_item_id = User.__DATABASE.get_users_search_parameter_item_id(self.__id)
         check_search_parameter_item_id = __search_parameter_item_id == search_parameters_item_id

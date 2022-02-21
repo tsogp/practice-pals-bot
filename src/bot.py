@@ -77,7 +77,8 @@ def query_handler(call):
         elif users_registration_item_id == constants.ProfileItemsIds.INTERESTS:
             processing_profile_item_inline(call, constants.Interests)
 
-    elif users_active_menu_id == constants.MenuIds.SEARCH_PARAMETERS_MENU:
+    elif users_active_menu_id in (
+            constants.MenuIds.SEARCH_PARAMETERS_MENU, constants.MenuIds.EDIT_SEARCH_PARAMETERS_MENU):
         if users_search_parameter_item_id == constants.SearchParametersItemsIds.AGE_GROUP:
             processing_search_parameters_item_inline(call, constants.AgeGroups)
         elif users_search_parameter_item_id == constants.SearchParametersItemsIds.SPOKEN_LANGUAGES:
@@ -101,6 +102,17 @@ def query_handler(call):
             ask_profile_programming_languages(call.message.chat.id)
         elif call.data == str(constants.ProfileItemsIds.INTERESTS.get_source_value()):
             ask_profile_interests(call.message.chat.id)
+
+    elif users_active_menu_id == constants.MenuIds.SELECT_SEARCH_PARAMETERS_ITEM_TO_EDIT_MENU:
+        database.set_users_menu_id(call.message.chat.id, constants.MenuIds.EDIT_SEARCH_PARAMETERS_MENU)
+        if call.data == str(constants.SearchParametersItemsIds.AGE_GROUP.get_source_value()):
+            ask_search_parameters_age_groups(call.message.chat.id)
+        elif call.data == str(constants.SearchParametersItemsIds.SPOKEN_LANGUAGES.get_source_value()):
+            ask_search_parameters_spoken_languages(call.message.chat.id)
+        elif call.data == str(constants.SearchParametersItemsIds.PROGRAMMING_LANGUAGES.get_source_value()):
+            ask_search_parameters_programming_languages(call.message.chat.id)
+        elif call.data == str(constants.SearchParametersItemsIds.INTERESTS.get_source_value()):
+            ask_search_parameters_interests(call.message.chat.id)
 
 
 def processing_like_button(user_id: int):
@@ -274,6 +286,21 @@ def activate_select_profile_item_to_edit_menu(user_id: int):
                          phrases.profile_items))
 
 
+def activate_select_search_parameters_item_to_edit_menu(user_id: int):
+    show_users_search_parameters(user_id)
+    database.set_users_menu_id(user_id, constants.MenuIds.SELECT_SEARCH_PARAMETERS_ITEM_TO_EDIT_MENU)
+    database.set_users_search_parameters_item_id(user_id, constants.SearchParametersItemsIds.NULL)
+
+    bot.send_message(user_id,
+                     text=phrases.edit_profile_menu,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.send_message(user_id,
+                     text=phrases.select_the_search_parameters_item_to_edit,
+                     reply_markup=Keyboards.create_inline_keyboard_from_list(
+                         constants.SearchParametersItemsIds.get_all_not_null_ids(),
+                         phrases.search_parameters_items))
+
+
 def ask_profile_first_name(user_id: int):
     bot.send_message(user_id, text=phrases.enter_your_first_name,
                      reply_markup=Keyboards.profile_do_not_specify)
@@ -443,8 +470,7 @@ def processing_check_search_parameters_items_menu(message):
     if users_message == phrases.ok_edit[0]:
         activate_search_menu(user_id)
     elif users_message == phrases.ok_edit[1]:
-        bot.send_message(user_id, text=phrases.not_ready_yet)
-        activate_search_menu(user_id)
+        activate_select_search_parameters_item_to_edit_menu(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -570,7 +596,11 @@ def processing_search_parameter_item_age_group(message):
         database.set_users_profile_search_parameters_age_groups_null(user_id)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        ask_search_parameters_spoken_languages(user_id)
+
+        if database.get_users_menu_id(user_id) == constants.MenuIds.SEARCH_PARAMETERS_MENU:
+            ask_search_parameters_spoken_languages(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_SEARCH_PARAMETERS_MENU:
+            show_users_search_parameters(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -584,7 +614,10 @@ def processing_search_parameter_item_spoken_languages(message):
         database.set_users_profile_search_parameters_spoken_languages_null(user_id)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        ask_search_parameters_programming_languages(user_id)
+        if database.get_users_menu_id(user_id) == constants.MenuIds.SEARCH_PARAMETERS_MENU:
+            ask_search_parameters_programming_languages(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_SEARCH_PARAMETERS_MENU:
+            show_users_search_parameters(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -598,7 +631,10 @@ def processing_search_parameter_item_programming_languages(message):
         database.set_users_profile_search_parameters_programming_languages_null(user_id)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        ask_search_parameters_interests(user_id)
+        if database.get_users_menu_id(user_id) == constants.MenuIds.SEARCH_PARAMETERS_MENU:
+            ask_search_parameters_interests(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_SEARCH_PARAMETERS_MENU:
+            show_users_search_parameters(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -612,12 +648,15 @@ def processing_search_parameter_item_interests(message):
         database.set_users_profile_search_parameters_interests_null(user_id)
 
     if users_message in (phrases.does_not_matter, phrases.finish_typing):
-        database.set_users_search_parameters_item_id(user_id,
-                                                     constants.SearchParametersItemsIds.NULL)
-        database.set_search_parameters_filled(user_id)
-        bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
-                         reply_markup=telebot.types.ReplyKeyboardRemove())
-        show_users_search_parameters(user_id)
+        if database.get_users_menu_id(user_id) == constants.MenuIds.SEARCH_PARAMETERS_MENU:
+            database.set_users_search_parameters_item_id(user_id,
+                                                         constants.SearchParametersItemsIds.NULL)
+            database.set_search_parameters_filled(user_id)
+            bot.send_message(user_id, text=phrases.finish_enter_search_parameters,
+                             reply_markup=telebot.types.ReplyKeyboardRemove())
+            show_users_search_parameters(user_id)
+        elif database.get_users_menu_id(user_id) == constants.MenuIds.EDIT_SEARCH_PARAMETERS_MENU:
+            show_users_search_parameters(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -634,7 +673,7 @@ def processing_search_menu_items(message):
         show_candidates_profile(user_id)
     elif users_message == constants.SearchMenuItems.EDIT_SEARCH_PARAMETERS.get_str_value(
             phrases.values_of_search_menu_items):
-        bot.send_message(user_id, text=phrases.not_ready_yet)
+        activate_select_search_parameters_item_to_edit_menu(user_id)
     elif users_message == constants.SearchMenuItems.EDIT_PROFILE.get_str_value(phrases.values_of_search_menu_items):
         activate_select_profile_item_to_edit_menu(user_id)
     elif users_message == constants.SearchMenuItems.GO_TO_MAIN_MENU.get_str_value(phrases.values_of_search_menu_items):

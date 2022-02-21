@@ -74,6 +74,8 @@ class MenuIds(Ids):
     EDIT_PROFILE_MENU = enum.auto()
     SEARCH_PARAMETERS_MENU = enum.auto()
     CHECK_SEARCH_PARAMETERS_MENU = enum.auto()
+    SELECT_SEARCH_PARAMETERS_ITEM_TO_EDIT_MENU = enum.auto()
+    EDIT_SEARCH_PARAMETERS_MENU = enum.auto()
     SEARCH_MENU = enum.auto()
     PROFILE_REACTIONS_MENU = enum.auto()
     SUBSCRIPTION_MENU = enum.auto()
@@ -94,7 +96,7 @@ class ProfileItemsIds(Ids, Items):
 
 
 @enum.unique
-class SearchParametersItemsIds(Ids):
+class SearchParametersItemsIds(Ids, Items):
     """
     IDs of user's search parameters items
     """
