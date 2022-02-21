@@ -29,27 +29,38 @@
         1. Установить [Git](https://git-scm.com/download)
         2. Клонировать репозиторий
        ```bash
-       git clone https://github.com/tsogp/practice-pals.git
-       cd practice-pals
+       $ git clone https://github.com/tsogp/practice-pals.git
+       $ cd practice-pals
        ```
     * Вариант 2 - [Скачать ZIP](https://github.com/tsogp/practice-pals/archive/refs/heads/main.zip)
-
-2. Установить все зависимости:
-
-```commandline
-pip install -r ./requirements.txt
+ 
+2. Создать виртуальное окружение
+```bash
+$ python3 -m venv venv
 ```
 
-3. Создать в папке `./src` файл **bottoken.py**
-
-```python
-TOKEN = ""  # Your bot's token from @BotFather
+3. Активировать виртуальное окружение
+```bash
+$ source venv/bin/activate
 ```
 
-Где в переменной `TOKEN` должен быть записан токен Вашего Telegram бота, полученный от
-[@BotFather](https://t.me/botfather). [Подробнее](https://tlgrm.ru/docs/bots#botfather)
+4. Установить все зависимости:
+```bash
+(venv)$ pip install -r ./requirements.txt
+```
 
-4.Запустить `./main.py`
+5. Создать файл `./.env`. В переменной `BOT_TOKEN` должен быть записан токен Вашего Telegram бота, полученный от
+[@BotFather](https://t.me/botfather) ([подробнее](https://tlgrm.ru/docs/bots#botfather))
+```text
+BOT_TOKEN = "your_token"
+```
+
+6. Запустить `./src/main.py`
+
+7. Деактивация виртуального окружения:
+```bash
+(venv)$ deactivate
+```
 
 <a id="chapter-5"></a>
 
