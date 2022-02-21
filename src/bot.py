@@ -3,7 +3,7 @@ import telebot
 import phrases_ru as phrases
 import constants
 from keyboards import Keyboards
-import bottoken
+import config
 from typing import Type
 
 from IDatabase import IDatabase
@@ -11,7 +11,7 @@ from RealDatabase import Database
 
 from User import User
 
-bot = telebot.TeleBot(bottoken.TOKEN)  # Telegram bot object
+bot = telebot.TeleBot(config.TOKEN)  # Telegram bot object
 database: IDatabase = Database()
 User.set_database(database)
 
