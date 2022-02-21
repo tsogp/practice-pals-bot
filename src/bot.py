@@ -260,6 +260,20 @@ def activate_subscription_menu(user_id: int):
                      parse_mode="Markdown")
 
 
+def activate_select_profile_item_to_edit_menu(user_id: int):
+    show_users_profile(user_id)
+    database.set_users_menu_id(user_id, constants.MenuIds.SELECT_PROFILE_ITEM_TO_EDIT_MENU)
+    database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
+    bot.send_message(user_id,
+                     text=phrases.edit_profile_menu,
+                     reply_markup=telebot.types.ReplyKeyboardRemove())
+    bot.send_message(user_id,
+                     text=phrases.select_the_profile_item_to_edit,
+                     reply_markup=Keyboards.create_inline_keyboard_from_list(
+                         constants.ProfileItemsIds.get_all_not_null_ids(),
+                         phrases.profile_items))
+
+
 def ask_profile_first_name(user_id: int):
     bot.send_message(user_id, text=phrases.enter_your_first_name,
                      reply_markup=Keyboards.profile_do_not_specify)
@@ -416,16 +430,7 @@ def processing_check_profile_items_menu(message):
     if users_message == phrases.ok_edit[0]:
         activate_main_menu(user_id)
     elif users_message == phrases.ok_edit[1]:
-        database.set_users_menu_id(user_id, constants.MenuIds.SELECT_PROFILE_ITEM_TO_EDIT_MENU)
-        database.set_users_registration_item_id(user_id, constants.ProfileItemsIds.NULL)
-        bot.send_message(user_id,
-                         text=phrases.edit_profile_menu,
-                         reply_markup=telebot.types.ReplyKeyboardRemove())
-        bot.send_message(user_id,
-                         text=phrases.select_the_profile_item_to_edit,
-                         reply_markup=Keyboards.create_inline_keyboard_from_list(
-                             constants.ProfileItemsIds.get_all_not_null_ids(),
-                             phrases.profile_items))
+        activate_select_profile_item_to_edit_menu(user_id)
 
 
 @bot.message_handler(content_types=["text"],
@@ -631,7 +636,7 @@ def processing_search_menu_items(message):
             phrases.values_of_search_menu_items):
         bot.send_message(user_id, text=phrases.not_ready_yet)
     elif users_message == constants.SearchMenuItems.EDIT_PROFILE.get_str_value(phrases.values_of_search_menu_items):
-        bot.send_message(user_id, text=phrases.not_ready_yet)
+        activate_select_profile_item_to_edit_menu(user_id)
     elif users_message == constants.SearchMenuItems.GO_TO_MAIN_MENU.get_str_value(phrases.values_of_search_menu_items):
         activate_main_menu(user_id)
 
