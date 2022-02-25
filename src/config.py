@@ -1,10 +1,6 @@
-# File with config for bot
-
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
-TOKEN = os.environ.get('BOT_TOKEN')
+TOKEN = "5005216647:AAFi6u68xGyqtvnTwC4BL9NlPprWTDGG6U8"
 
 MAXIMUM_NUMBER_OF_LIKES = 100
 
