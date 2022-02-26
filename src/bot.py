@@ -8,6 +8,7 @@ from typing import Type
 
 from IDatabase import IDatabase
 from RealDatabase import Database
+import sys
 
 from User import User
 
@@ -20,7 +21,11 @@ def run_bot() -> None:
     """
     Call to run bot
     """
-    bot.polling(none_stop=True)
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except:
+            logginng.error('error: {}'.format(sys.exc_info()[0]))
 
 
 @bot.message_handler(commands=['start'])
