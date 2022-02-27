@@ -1,4 +1,5 @@
 import telebot
+import os
 
 import phrases_ru as phrases
 import constants
