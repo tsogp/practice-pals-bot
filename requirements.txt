@@ -3,3 +3,4 @@ SQLAlchemy~=1.4.29
 python-dotenv~=0.19.2
 psycopg2
 flask
+loguru
