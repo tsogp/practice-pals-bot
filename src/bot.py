@@ -15,32 +15,29 @@ import logging
 from User import User
 
 bot = telebot.TeleBot(config.TOKEN)  # Telegram bot object
+server = Flask(__name__)
 database: IDatabase = Database()
 User.set_database(database)
 
+@server.route('/' + config.TOKEN, methods=['POST'])
+def getMessage():
+    json_string = request.get_data().decode('utf-8')
+    update = telebot.types.Update.de_json(json_string)
+    bot.process_new_updates([update])
+    return "!", 200
+
+
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://practice-pals.herokuapp.com/' + config.TOKEN)
+    return "!", 200
 
 def run_bot() -> None:
     """
     Call to run bot
     """
-    if "HEROKU" in list(os.environ.keys()):
-        logger = telebot.logger
-        telebot.logger.setLevel(logging.INFO)
-
-        server = Flask(__name__)
-        @server.route("/bot", methods=['POST'])
-        def getMessage():
-            bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-            return "!", 200
-        @server.route("/")
-        def webhook():
-            bot.remove_webhook()
-            bot.set_webhook(url="https://practice-pals.herokuapp.com/bot") # этот url нужно заменить на url вашего Хероку приложения
-            return "?", 200
-        server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
-    else:
-        bot.remove_webhook()
-        bot.polling(none_stop=True)
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 
 
 @bot.message_handler(commands=['start'])
