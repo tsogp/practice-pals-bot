@@ -37,7 +37,7 @@ def run_bot() -> None:
     """
     Call to run bot
     """
-    server.run(port=int(os.environ.get('PORT', 5000)))
+    server.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
 
 @bot.message_handler(commands=['start'])
