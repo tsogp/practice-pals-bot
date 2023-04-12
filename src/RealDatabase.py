@@ -9,9 +9,8 @@ from IDatabase import IDatabase
 class Database(IDatabase):
     def __init__(self):
         self.engine = create_engine(
-            f'sqlite:///{config.DATABASE_FILE_NAME}',
-            echo=False,
-            connect_args={'check_same_thread': False}
+            config.DATABASE_URI,
+            echo=True
         )
 
         self.metadata = MetaData()

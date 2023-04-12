@@ -150,10 +150,10 @@ class Interests(Items):
 
 @enum.unique
 class AgeGroups(Items):
-    YOUNGER_THAN_14 = "younger_than_14"
-    FROM_14_TO_18 = "from_14_to_18"
-    FROM_18_TO_25 = "from_18_to_25"
-    OLDER_THAN_25 = "older_than_25"
+    FROM_18_TO_21 = "from_18_to_21"
+    FROM_22_TO_24 = "from_22_to_24"
+    FROM_25_TO_26 = "from_25_to_26"
+    OLDER_THAN_27 = "older_than_27"
 
 
 @enum.unique
