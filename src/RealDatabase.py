@@ -5,16 +5,13 @@ from database_constants import *
 import constants
 import config
 from IDatabase import IDatabase
-import psycopg2
-
 
 class Database(IDatabase):
     def __init__(self):
-        self.uri = 'postgresql+psycopg2://ciyqxlpltmtxlb:db175cc98032a294660c24ea16897653cd392cda4b185486a40faa2cefef5e32@ec2-52-50-171-4.eu-west-1.compute.amazonaws.com:5432/ddvv1h954jsnor'
-
         self.engine = create_engine(
-            self.uri,
-            echo=True
+            f'sqlite:///{config.DATABASE_FILE_NAME}',
+            echo=False,
+            connect_args={'check_same_thread': False}
         )
 
         self.metadata = MetaData()
