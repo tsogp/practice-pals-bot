@@ -1,80 +1,66 @@
 <h1 align="center"> Practice Pals Bot :robot:</h1>
 
-<p align="center">
-  <a href="https://github.com/tsogp/practice-pals/blob/main/LICENSE" target="_blank"> <img alt="license" src="https://img.shields.io/github/license/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-  <a href="https://github.com/tsogp/practice-pals/releases/latest" target="_blank"> <img alt="last release" src="https://img.shields.io/github/v/release/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-  <a href="https://github.com/tsogp/practice-pals/commits/main" target="_blank"> <img alt="last commit" src="https://img.shields.io/github/last-commit/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-  <a href="https://github.com/tsogp/practice-pals/graphs/contributors" target="_blank"> <img alt="commit activity" src="https://img.shields.io/github/commit-activity/m/tsogp/practice-pals?style=for-the-badge&labelColor=090909"></a>
-</p>
+## Contents
 
-## Навигация
-
-* [Описание проекта](#chapter-0)
-* [Как начать](#chapter-1)
-* [Лицензия](#chapter-5)
+* [Project Description](#chapter-0)
+* [Build](#chapter-1)
+* [Licence](#chapter-5)
 
 <a id="chapter-0"></a>
 
-## :page_facing_up: Описание проекта
+## :page_facing_up: Project Description
 
-**Practice Pals Bot** ([@practice_pals_bot](https://t.me/practice_pals_bot)) - Telegram-бот
-сервиса [Practice Pals](https://t.me/practicepals), главная цель которого - помочь каждому найти себе друзей по
-интересам.
+**Practice Pals Bot** ([@practice_pals_bot](https://t.me/test_practice_pals_bot)) - Telegram-bot
+that aims to help you find friends and future colleagues in IT.
+
 
 <a id="chapter-1"></a>
 
-## :hammer: Как начать
+## :hammer: Build
 
-1. Скачать данный репозиторий
-    * Вариант 1
-        1. Установить [Git](https://git-scm.com/download)
-        2. Клонировать репозиторий
-       ```bash
-       $ git clone https://github.com/tsogp/practice-pals.git
-       $ cd practice-pals
-       ```
-    * Вариант 2 - [Скачать ZIP](https://github.com/tsogp/practice-pals/archive/refs/heads/main.zip)
+1. Download this repo
+```bash
+$ git clone https://github.com/tsogp/practice-pals-bot.git
+````
 
-2. Создать виртуальное окружение
+2. Create virtual environment
 
 ```bash
 $ python3 -m venv venv
 ```
 
-3. Активировать виртуальное окружение
+3. Activate virtual environment
 
 ```bash
 $ source venv/bin/activate
 ```
 
-4. Установить все зависимости:
+4. Install the dependencies
 
 ```bash
 (venv)$ pip install -r ./requirements.txt
 ```
 
-5. Создать файл `./.env`. В переменной `BOT_TOKEN` должен быть записан токен Вашего Telegram бота, полученный от
-   [@BotFather](https://t.me/botfather) ([подробнее](https://tlgrm.ru/docs/bots#botfather))
+5. Create a .env file `./.env`. Provide a `TOKEN` variable. More on how to get this one here
+   [@BotFather](https://t.me/botfather)
 
 ```text
-BOT_TOKEN = "your_token"
+TOKEN = "your_token"
 ```
 
-6. Запустить `./src/main.py`
+6. Run `./src/main.py`
 
-7. Деактивация виртуального окружения:
+7. Deactivate virtual environment
 
 ```bash
 (venv)$ deactivate
 ```
 
-<a id="chapter-5"></a>
+<a id="chapter-3"></a>
 
-## :open_hands: Лицензия
-
-Ставьте звёздочку ⭐️ на репозиторий
+## :open_hands: Licence
 
 GNU General Public License v3.0
 
-Полный текст в [LICENSE](LICENSE)
+Full text in [LICENSE](LICENSE)
 
