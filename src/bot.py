@@ -1,7 +1,7 @@
 import telebot
 import os
 
-import phrases_ru as phrases
+import phrases_en as phrases
 import constants
 from keyboards import Keyboards
 import config

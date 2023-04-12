@@ -1,6 +1,6 @@
 from IDatabase import IDatabase
 import constants
-import phrases_ru as phrases
+import phrases_en as phrases
 from typing import Optional, List
 import config
 

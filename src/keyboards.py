@@ -3,7 +3,7 @@ import telebot
 
 import constants
 import config
-import phrases_ru as phrases
+import phrases_en as phrases
 from typing import Type, Optional, List
 
 
