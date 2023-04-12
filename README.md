@@ -1,5 +1,7 @@
 <h1 align="center"> Practice Pals Bot :robot:</h1>
 
+![Welcome Message](https://i.imgur.com/DurjTwK)
+
 ## Contents
 
 * [Project Description](#chapter-0)
