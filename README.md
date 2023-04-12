@@ -10,7 +10,7 @@
 
 ## :page_facing_up: Project Description
 
-**Practice Pals Bot** ([@practice_pals_bot](https://t.me/test_practice_pals_bot)) - Telegram-bot
+**Practice Pals Bot** ([@test_practice_pals_bot](https://t.me/test_practice_pals_bot)) - Telegram-bot
 that aims to help you find friends and future colleagues in IT.
 
 
