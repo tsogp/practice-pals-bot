@@ -121,10 +121,10 @@ values_of_possible_answers = {
     constants.Interests.PROJECT_MANAGEMENT: "Управление проектами",
     constants.Interests.TESTING: "Тестирование",
 
-    constants.AgeGroups.YOUNGER_THAN_14: "до 14 лет",
-    constants.AgeGroups.FROM_14_TO_18: "от 14 до 18 лет",
-    constants.AgeGroups.FROM_18_TO_25: "от 18 до 25 лет",
-    constants.AgeGroups.OLDER_THAN_25: "старше 25 лет"
+    constants.AgeGroups.FROM_18_TO_21: "до 14 лет",
+    constants.AgeGroups.FROM_22_TO_24: "от 14 до 18 лет",
+    constants.AgeGroups.FROM_25_TO_26: "от 18 до 25 лет",
+    constants.AgeGroups.OLDER_THAN_27: "старше 25 лет"
 }
 
 about_subscription = """\U0001F60E *Преимущества подписки:*\n- Cнятие ограничения на количество лайков\n- Продвижение вашего аккаунта на сервисе\n\n\U0001F4B3 Цена: *99 руб/мес*"""

@@ -36,7 +36,7 @@ finish_typing = '\U000027A1 Go to the next section'
 
 finish_registration = "\U0001F3C1 Registration complete!"
 
-your_profile = "\U0001F600 Ваш профиль:"
+your_profile = "\U0001F600 Your profile:"
 
 profile_items = {constants.ProfileItemsIds.FIRST_NAME: "Name",
                  constants.ProfileItemsIds.LAST_NAME: "Last Name",
@@ -121,10 +121,10 @@ values_of_possible_answers = {
     constants.Interests.PROJECT_MANAGEMENT: "Project Management",
     constants.Interests.TESTING: "Testing",
 
-    constants.AgeGroups.YOUNGER_THAN_14: "less than 14 years old",
-    constants.AgeGroups.FROM_14_TO_18: "from 14 to 18 years old",
-    constants.AgeGroups.FROM_18_TO_25: "from 18 to 25 years old",
-    constants.AgeGroups.OLDER_THAN_25: "more that 25 years old"
+    constants.AgeGroups.FROM_18_TO_21: "from 18 to 21 years old",
+    constants.AgeGroups.FROM_22_TO_24: "from 22 to 24 years old",
+    constants.AgeGroups.FROM_25_TO_26: "from 25 to 27 years old",
+    constants.AgeGroups.OLDER_THAN_27: "more that 27 years old"
 }
 
 about_subscription = """\U0001F60E *Why you should consider subscribing:*\n- unlimited likes\n- Higher priority for your profile\n\n\U0001F4B3 Price: 2$/month*"""
