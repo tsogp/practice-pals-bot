@@ -29,8 +29,9 @@ def getMessage():
 
 @server.route("/")
 def webhook():
+    # bot.polling(none_stop=True)
     bot.remove_webhook()
-    bot.set_webhook(url='https://practice-pals.herokuapp.com/' + config.TOKEN)
+    bot.set_webhook(url='tsogp.pythonanywhere.com/' + config.TOKEN)
     return "!", 200
 
 def run_bot() -> None:

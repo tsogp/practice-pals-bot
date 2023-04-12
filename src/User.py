@@ -253,14 +253,14 @@ class User:
             return None
         result = []
         for a_g in age_groups:
-            if a_g == constants.AgeGroups.YOUNGER_THAN_14:
-                result.append((0, 14))
-            elif a_g == constants.AgeGroups.FROM_14_TO_18:
-                result.append((14, 18))
-            elif a_g == constants.AgeGroups.FROM_18_TO_25:
-                result.append((18, 25))
-            elif a_g == constants.AgeGroups.OLDER_THAN_25:
-                result.append((25, 100))
+            if a_g == constants.AgeGroups.FROM_18_TO_21:
+                result.append((18, 21))
+            elif a_g == constants.AgeGroups.FROM_22_TO_24:
+                result.append((22, 24))
+            elif a_g == constants.AgeGroups.FROM_25_TO_26:
+                result.append((25, 26))
+            elif a_g == constants.AgeGroups.OLDER_THAN_27:
+                result.append((27, 100))
             else:
                 constants.logger.error(f"Can't create interval for age_group={a_g}")
         return result
