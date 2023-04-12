@@ -1,6 +1,6 @@
 <h1 align="center"> Practice Pals Bot :robot:</h1>
 
-![Welcome Message](https://i.imgur.com/DurjTwK)
+![Welcome Message](https://i.imgur.com/DurjTwK.png)
 
 ## Contents
 
