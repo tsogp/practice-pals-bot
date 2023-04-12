@@ -135,3 +135,5 @@ src/bottoken.py
 
 # Ignore file with database
 src/database.db
+
+.env
